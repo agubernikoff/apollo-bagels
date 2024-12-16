@@ -9,12 +9,38 @@ import {
   useRouteLoaderData,
   ScrollRestoration,
   isRouteErrorResponse,
+  useLocation,
 } from '@remix-run/react';
 import favicon from '~/assets/favicon.svg';
 import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import {PageLayout} from '~/components/PageLayout';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
+import {AnimatePresence, motion} from 'framer-motion';
+
+const variants = {
+  initial: {opacity: 0},
+  animate: {opacity: 1},
+  // exit: {opacity: 0},
+};
+
+export function PageTransition({children}) {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        initial="initial"
+        animate="animate"
+        // exit="exit"
+        variants={variants}
+        transition={{duration: 0.8}}
+        key={location.pathname}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -155,7 +181,9 @@ export function Layout({children}) {
             shop={data.shop}
             consent={data.consent}
           >
-            <PageLayout {...data}>{children}</PageLayout>
+            <PageLayout {...data}>
+              <PageTransition>{children}</PageTransition>
+            </PageLayout>
           </Analytics.Provider>
         ) : (
           children
