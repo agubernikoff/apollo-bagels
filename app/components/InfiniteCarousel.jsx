@@ -4,7 +4,6 @@ import {motion, useAnimationFrame} from 'framer-motion';
 const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   const trackRef = useRef(null);
   const [offset, setOffset] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const [itemHeight, setItemHeight] = useState(1); // Height of each carousel item set to 100vh
   const totalHeight = images.length * itemHeight; // Total height of the carousel
   const speed = 2; // Scrolling speed
@@ -13,21 +12,18 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
     setItemHeight(window?.innerHeight);
   }, []);
   useAnimationFrame(() => {
-    if (!isPaused) {
-      setOffset((prevOffset) => {
-        const newOffset =
-          scrollDirection === 'down'
-            ? (prevOffset + speed) % totalHeight
-            : (prevOffset - speed + totalHeight) % totalHeight;
-        return newOffset;
-      });
-    }
+    setOffset((prevOffset) => {
+      const newOffset =
+        scrollDirection === 'down'
+          ? (prevOffset + speed) % totalHeight
+          : (prevOffset - speed + totalHeight) % totalHeight;
+      return newOffset;
+    });
   });
 
   const visibleImages = [...images, ...images]; // Duplicate images for infinite scrolling
 
   const handleScroll = (e) => {
-    setIsPaused(false);
     const delta = e.deltaY;
     setOffset((prevOffset) => {
       const newOffset = (prevOffset + delta + totalHeight) % totalHeight;
@@ -39,8 +35,6 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
     <div
       className="carousel"
       style={{overflow: 'hidden', height: `100vh`}}
-      // onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
       onWheel={handleScroll}
     >
       <motion.div
