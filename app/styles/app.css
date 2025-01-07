@@ -222,7 +222,6 @@ button.reset:hover:not(:has(> *)) {
 * --------------------------------------------------
 */
 .hours-container {
-  color: var(--color-creme);
   text-align: right;
   width: fit-content;
   padding-top: 1rem;
@@ -233,7 +232,9 @@ button.reset:hover:not(:has(> *)) {
   z-index: 10;
 }
 .hours-container p {
+  color: var(--color-creme);
   font-size: 11px;
+  transition: border-color 1s ease-in-out, color 1s ease-in-out;
 }
 .hours-container p:first-of-type {
   padding-bottom: 0.5rem;
