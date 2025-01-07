@@ -17,7 +17,6 @@ import Hours from './Hours';
 export function PageLayout({
   cart,
   children = null,
-  footer,
   header,
   isLoggedIn,
   publicStoreDomain,
@@ -38,9 +37,7 @@ export function PageLayout({
       <Hours />
       <main>{children}</main>
       <Footer
-        footer={footer}
-        header={header}
-        publicStoreDomain={publicStoreDomain}
+        
       />
     </Aside.Provider>
   );
