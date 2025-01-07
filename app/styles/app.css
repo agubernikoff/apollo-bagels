@@ -248,7 +248,7 @@ footer.footer {
   height: 100vh;
   display: flex;
   pointer-events: none;
-  font-size: 1rem;
+  font-size: 11px;
 }
 
 .footer-left {
@@ -262,6 +262,7 @@ footer.footer {
 .footer-left p {
   margin: 0;
   color: var(--creme);
+  font-size: 11px;
 }
 
 .footer-right {
@@ -277,7 +278,7 @@ footer.footer {
 
 .footer-right .clock {
   text-align: left;
-  font-size: 1rem;
+  font-size: 11px;
   color: var(--blue);
 }
 
