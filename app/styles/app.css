@@ -7,6 +7,12 @@
   --color-dark: #000;
   --color-light: #fff;
   --color-creme: #f1f0e4;
+  --blue: #1d428a;
+  --creme: #f1f0e4;
+  --yellow: #ffc72c;
+  --green: #7bba76;
+  --red: #da291c;
+  --scarlet: #d44424;
 }
 
 img {
@@ -255,7 +261,7 @@ footer.footer {
 
 .footer-left p {
   margin: 0;
-  color: rgb(194, 193, 199);
+  color: var(--creme);
 }
 
 .footer-right {
@@ -266,25 +272,25 @@ footer.footer {
   align-items: flex-end;
   padding: 1rem;
   pointer-events: auto;
-  color: #1d428a;
+  color: var(--blue);
 }
 
 .footer-right .clock {
   text-align: left;
   font-size: 1rem;
-  color: #1d428a;
+  color: var(--blue);
 }
 
 .footer-right .links {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  color: #1d428a;
+  color: var(--blue);
 }
 
 .footer-right .links a {
   text-decoration: none;
-  color: #1d428a;
+  color: var(--blue);
 }
 
 .footer-right .links a:hover {
