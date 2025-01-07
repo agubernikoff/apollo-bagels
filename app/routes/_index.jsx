@@ -103,8 +103,10 @@ function Announcement({data}) {
   }
   return (
     <div className="announcement-container">
-      <p>{formatDateToMmDdYyyy(data.date)}</p>
-      <h3>{data.title}</h3>
+      <p style={{fontWeight: 'bold'}}>{formatDateToMmDdYyyy(data.date)}</p>
+      <h3 style={{marginBottom: '.25rem', marginTop: '.25rem'}}>
+        {data.title}
+      </h3>
       <p>{data.description}</p>
     </div>
   );

@@ -466,6 +466,7 @@ footer.footer {
 }
 .announcement-container p:first-of-type {
   font-size: 9px;
+  font-weight: 800 !important;
 }
 .announcement-container h3 {
   font-size: 18px;
