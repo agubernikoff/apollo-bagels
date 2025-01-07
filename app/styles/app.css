@@ -255,6 +255,7 @@ footer.footer {
 
 .footer-left p {
   margin: 0;
+  color: rgb(194, 193, 199);
 }
 
 .footer-right {
@@ -265,21 +266,25 @@ footer.footer {
   align-items: flex-end;
   padding: 1rem;
   pointer-events: auto;
+  color: #1d428a;
 }
 
 .footer-right .clock {
   text-align: left;
   font-size: 1rem;
+  color: #1d428a;
 }
 
 .footer-right .links {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+  color: #1d428a;
 }
 
 .footer-right .links a {
   text-decoration: none;
+  color: #1d428a;
 }
 
 .footer-right .links a:hover {
