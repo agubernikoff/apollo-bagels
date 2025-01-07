@@ -299,9 +299,11 @@ footer.footer {
   gap: 1rem;
 }
 
-.footer-right .links a {
+.footer-right .links a,
+.footer-right .links a:visited {
   text-decoration: none;
   font-family: 'HAL';
+  color: var(--blue);
   transition: color 1s ease-in-out;
 }
 

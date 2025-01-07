@@ -22,9 +22,7 @@ export function Footer() {
   function style() {
     return {
       color:
-        pathname === '/' || pathname === '/info'
-          ? 'var(--color-creme)'
-          : `var(--blue)`,
+        pathname === '/' || pathname === '/info' ? 'var(--color-creme)' : null,
     };
   }
   return (
