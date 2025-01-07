@@ -166,11 +166,10 @@ button.reset:hover:not(:has(> *)) {
 */
 .header {
   align-items: center;
-  background: #fff;
   display: flex;
   height: var(--header-height);
   padding: 0 1rem;
-  position: sticky;
+  position: fixed;
   top: 0;
   z-index: 1;
 }
@@ -219,7 +218,7 @@ button.reset:hover:not(:has(> *)) {
   width: fit-content;
   padding-top: 1rem;
   padding-right: 1rem;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   z-index: 10;
@@ -241,7 +240,7 @@ button.reset:hover:not(:has(> *)) {
 * --------------------------------------------------
 */
 footer.footer {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -410,6 +409,11 @@ footer.footer {
 * routes/__index
 * --------------------------------------------------
 */
+.home {
+  position: absolute;
+  inset: 0;
+  background: pink;
+}
 .featured-collection {
   display: block;
   margin-bottom: 2rem;
