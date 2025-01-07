@@ -236,11 +236,7 @@ button.reset:hover:not(:has(> *)) {
   right: 0;
   z-index: 10;
 }
-@media (max-width: 44em) {
-  .hours-container {
-    display: none;
-  }
-}
+
 .hours-container p {
   color: var(--color-creme);
   font-size: 11px;
@@ -481,14 +477,7 @@ footer.footer {
   padding: 1rem;
   pointer-events: none;
 }
-@media (max-width: 44em) {
-  .announcement-container {
-    width: 84%;
-    max-width: none;
-    padding: 1rem;
-    margin-bottom: 1.25rem;
-  }
-}
+
 .announcement-container p:first-of-type {
   font-size: 9px;
   font-family: 'HAL-BOLD';
@@ -674,4 +663,15 @@ footer.footer {
 
 .account-logout {
   display: inline-block;
+}
+@media (max-width: 44em) {
+  .hours-container {
+    display: none;
+  }
+  .announcement-container {
+    width: 84%;
+    max-width: none;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
 }
