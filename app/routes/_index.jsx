@@ -2,19 +2,8 @@ import {defer} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
-import l1 from '../assets/homeScroll/left-1.png';
-import l2 from '../assets/homeScroll/left-2.png';
-import l3 from '../assets/homeScroll/left-3.png';
-import l4 from '../assets/homeScroll/left-4.png';
-import l5 from '../assets/homeScroll/left-5.png';
-import l6 from '../assets/homeScroll/left-6.png';
-import r1 from '../assets/homeScroll/right-1.png';
-import r2 from '../assets/homeScroll/right-2.png';
-import r3 from '../assets/homeScroll/right-3.png';
-import r4 from '../assets/homeScroll/right-4.png';
-import r5 from '../assets/homeScroll/right-5.png';
-import r6 from '../assets/homeScroll/right-6.png';
 import InfiniteCarousel from '~/components/InfiniteCarousel';
+import {sanityClient} from '~/sanity/SanityClient';
 
 /**
  * @type {MetaFunction}
@@ -47,8 +36,15 @@ async function loadCriticalData({context}) {
     // Add other queries here, so that they are loaded in parallel
   ]);
 
+  const homePage = await sanityClient
+    .fetch(
+      "*[_type == 'home'][0]{...,leftSideImages[]{...,asset->{url}},rightSideImages[]{...,asset->{url}}}",
+    )
+    .then((response) => response);
+
   return {
     featuredCollection: collections.nodes[0],
+    sanityData: homePage,
   };
 }
 
@@ -75,23 +71,41 @@ function loadDeferredData({context}) {
 export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
-  console.log(data);
   return (
     <div className="home">
       <div className="home-left">
         <InfiniteCarousel
-          images={[l1, l2, l3, l4, l5, l6]}
+          images={data.sanityData.leftSideImages.map(
+            (image) => image.asset.url,
+          )}
           scrollDirection="down"
         />
       </div>
       <div className="home-right">
         <InfiniteCarousel
-          images={[r1, r2, r3, r4, r5, r6]}
+          images={data.sanityData.rightSideImages.map(
+            (image) => image.asset.url,
+          )}
           scrollDirection="up"
         />
       </div>
+      <Announcement data={data.sanityData.announcement} />
       {/* <FeaturedCollection collection={data.featuredCollection} />
       <RecommendedProducts products={data.recommendedProducts} /> */}
+    </div>
+  );
+}
+
+function Announcement({data}) {
+  function formatDateToMmDdYyyy(dateString) {
+    const [year, month, day] = dateString.split('-');
+    return `${month}/${day}/${year}`;
+  }
+  return (
+    <div className="announcement-container">
+      <p>{formatDateToMmDdYyyy(data.date)}</p>
+      <h3>{data.title}</h3>
+      <p>{data.description}</p>
     </div>
   );
 }

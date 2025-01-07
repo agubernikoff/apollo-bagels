@@ -22,6 +22,7 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
+    imgSrc: ["'self'", 'https://cdn.sanity.io/images/gnnsqgu6/production/'],
   });
 
   const body = await renderToReadableStream(
