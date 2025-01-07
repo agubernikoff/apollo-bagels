@@ -2,6 +2,19 @@ import {defer} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
+import l1 from '../assets/homeScroll/left-1.png';
+import l2 from '../assets/homeScroll/left-2.png';
+import l3 from '../assets/homeScroll/left-3.png';
+import l4 from '../assets/homeScroll/left-4.png';
+import l5 from '../assets/homeScroll/left-5.png';
+import l6 from '../assets/homeScroll/left-6.png';
+import r1 from '../assets/homeScroll/right-1.png';
+import r2 from '../assets/homeScroll/right-2.png';
+import r3 from '../assets/homeScroll/right-3.png';
+import r4 from '../assets/homeScroll/right-4.png';
+import r5 from '../assets/homeScroll/right-5.png';
+import r6 from '../assets/homeScroll/right-6.png';
+import InfiniteCarousel from '~/components/InfiniteCarousel';
 
 /**
  * @type {MetaFunction}
@@ -62,10 +75,23 @@ function loadDeferredData({context}) {
 export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
+  console.log(data);
   return (
     <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} />
+      <div className="home-left">
+        <InfiniteCarousel
+          images={[l1, l2, l3, l4, l5, l6]}
+          scrollDirection="down"
+        />
+      </div>
+      <div className="home-right">
+        <InfiniteCarousel
+          images={[r1, r2, r3, r4, r5, r6]}
+          scrollDirection="up"
+        />
+      </div>
+      {/* <FeaturedCollection collection={data.featuredCollection} />
+      <RecommendedProducts products={data.recommendedProducts} /> */}
     </div>
   );
 }
