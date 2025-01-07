@@ -19,6 +19,14 @@ img {
   border-radius: 4px;
 }
 
+@font-face {
+  font-family: 'HAL';
+  src: url('../assets/fonts/HALFourGrotesk-Medium.woff') format('woff');
+}
+
+body {
+  font-family: 'HAL' !important;
+}
 /*
 * --------------------------------------------------
 * Non anchor links
@@ -172,6 +180,7 @@ button.reset:hover:not(:has(> *)) {
   position: fixed;
   top: 0;
   z-index: 1;
+  font-family: 'HAL';
 }
 
 .header-menu-mobile-toggle {
@@ -247,6 +256,7 @@ footer.footer {
   display: flex;
   pointer-events: none;
   font-size: 11px;
+  font-family: 'HAL';
 }
 
 .footer-left {
@@ -261,6 +271,7 @@ footer.footer {
   margin: 0;
   color: var(--creme);
   font-size: 11px;
+  font-family: 'HAL';
 }
 
 .footer-right {
@@ -272,12 +283,14 @@ footer.footer {
   padding: 1rem;
   pointer-events: auto;
   color: var(--blue);
+  font-family: 'HAL';
 }
 
 .footer-right .clock {
   text-align: left;
   font-size: 11px;
   color: var(--blue);
+  font-family: 'HAL';
 }
 
 .footer-right .links {
@@ -290,6 +303,7 @@ footer.footer {
 .footer-right .links a {
   text-decoration: none;
   color: var(--blue);
+  font-family: 'HAL';
 }
 
 .footer-right .links a:hover {
