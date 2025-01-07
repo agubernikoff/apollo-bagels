@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {NavLink} from '@remix-run/react';
+import {NavLink, useLocation} from '@remix-run/react';
 
 export function Footer() {
   const [time, setTime] = useState('');
@@ -12,23 +12,45 @@ export function Footer() {
     return () => clearInterval(interval);
   }, []);
 
+  const {pathname} = useLocation();
+  function activeLinkStyle({isActive, isPending}) {
+    return {
+      fontWeight: isActive ? 'bold' : undefined,
+      color: isPending ? 'grey' : 'black',
+    };
+  }
+  function style() {
+    return {
+      color:
+        pathname === '/' || pathname === '/info'
+          ? 'var(--color-creme)'
+          : `var(--blue)`,
+    };
+  }
   return (
     <footer className="footer">
       <div className="footer-left">
-        <p>© Apollo Bagels 2024, All Rights Reserved.</p>
+        {pathname !== '/' && <p>© Apollo Bagels 2024, All Rights Reserved.</p>}
       </div>
       <div className="footer-right">
-        <div className="clock">{time}</div>
+        <div className="clock" style={style()}>
+          {time}
+        </div>
         <div className="links">
           <a
             href="https://www.instagram.com/apollobagels/"
             target="_blank"
             rel="noopener noreferrer"
+            style={style()}
           >
             ig. @apollobagels
           </a>
-          <a href="mailto:hello@apollobagels.com">e. hello@apollobagels.com</a>
-          <a href="#">SUBSCRIBE</a>
+          <a href="mailto:hello@apollobagels.com" style={style()}>
+            e. hello@apollobagels.com
+          </a>
+          <a href="#" style={style()}>
+            SUBSCRIBE
+          </a>
         </div>
       </div>
     </footer>
