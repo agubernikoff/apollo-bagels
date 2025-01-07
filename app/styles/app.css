@@ -143,7 +143,7 @@ button.reset > * {
   margin: 0;
 }
 
-button.reset:not(:has(> *)) {
+/* button.reset:not(:has(> *)) {
   height: 1.5rem;
   line-height: 1.5rem;
 }
@@ -151,7 +151,7 @@ button.reset:not(:has(> *)) {
 button.reset:hover:not(:has(> *)) {
   text-decoration: underline;
   cursor: pointer;
-}
+} */
 
 /*
 * --------------------------------------------------
@@ -234,20 +234,56 @@ button.reset:hover:not(:has(> *)) {
 * components/Footer
 * --------------------------------------------------
 */
-.footer {
-  background: var(--color-dark);
-  margin-top: auto;
-}
-
-.footer-menu {
-  align-items: center;
+footer.footer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
   display: flex;
-  grid-gap: 1rem;
-  padding: 1rem;
+  pointer-events: none;
+  font-size: 1rem;
 }
 
-.footer-menu a {
-  color: var(--color-light);
+.footer-left {
+  width: 50%;
+  display: flex;
+  align-items: flex-end;
+  padding: 1rem;
+  pointer-events: auto;
+}
+
+.footer-left p {
+  margin: 0;
+}
+
+.footer-right {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 1rem;
+  pointer-events: auto;
+}
+
+.footer-right .clock {
+  text-align: left;
+  font-size: 1rem;
+}
+
+.footer-right .links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.footer-right .links a {
+  text-decoration: none;
+}
+
+.footer-right .links a:hover {
+  /* text-decoration: underline; */
 }
 
 /*
