@@ -9,6 +9,7 @@ import {
   SearchFormPredictive,
 } from '~/components/SearchFormPredictive';
 import {SearchResultsPredictive} from '~/components/SearchResultsPredictive';
+import Hours from './Hours';
 
 /**
  * @param {PageLayoutProps}
@@ -34,6 +35,7 @@ export function PageLayout({
           publicStoreDomain={publicStoreDomain}
         />
       )}
+      <Hours />
       <main>{children}</main>
       <Footer
         footer={footer}
