@@ -24,6 +24,11 @@ img {
   src: url('../assets/fonts/HALFourGrotesk-Medium.woff') format('woff');
 }
 
+@font-face {
+  font-family: 'HAL-BOLD';
+  src: url('../assets/fonts/halbold.otf');
+}
+
 body {
   font-family: 'HAL' !important;
 }
@@ -312,6 +317,13 @@ footer.footer {
   /* text-decoration: underline; */
 }
 
+.links-mobile {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
 /*
 * --------------------------------------------------
 * components/Cart
@@ -464,13 +476,21 @@ footer.footer {
   padding: 1rem;
   pointer-events: none;
 }
+@media (max-width: 44em) {
+  .announcement-container {
+    width: 83%;
+    max-width: none;
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+}
 .announcement-container p:first-of-type {
   font-size: 9px;
-  font-weight: 800 !important;
+  font-family: 'HAL-BOLD';
 }
 .announcement-container h3 {
   font-size: 18px;
-  font-weight: 800;
+  font-family: 'HAL-BOLD';
 }
 .announcement-container p:last-of-type {
   font-size: 12px;
