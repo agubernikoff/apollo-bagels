@@ -674,4 +674,21 @@ footer.footer {
     padding: 1rem;
     margin-bottom: 1.25rem;
   }
+  .clock {
+    display: none;
+  }
+  .footer-left {
+    width: 0;
+    padding: 0;
+  }
+  .footer-right {
+    width: 100%;
+    padding: 0;
+  }
+  .footer-right .links {
+    width: 100%;
+    justify-content: space-around;
+    gap: 0;
+    margin-bottom: 0.75rem;
+  }
 }

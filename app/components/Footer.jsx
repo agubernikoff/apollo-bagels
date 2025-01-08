@@ -1,14 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {NavLink, useLocation} from '@remix-run/react';
+import {useLocation} from '@remix-run/react';
 
 export function Footer() {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    window
-      .matchMedia('(max-width:44em)')
-      .addEventListener('change', (e) => setIsMobile(e.matches));
-    if (window.matchMedia('(max-width:44em)').matches) setIsMobile(true);
-  }, []);
   const [time, setTime] = useState('');
 
   useEffect(() => {
@@ -29,8 +22,14 @@ export function Footer() {
   }
   return (
     <footer className="footer">
-      {isMobile ? (
-        <div className="links-mobile">
+      <div className="footer-left">
+        {pathname !== '/' && <p>© Apollo Bagels 2024, All Rights Reserved.</p>}
+      </div>
+      <div className="footer-right">
+        <div className="clock" style={style()}>
+          {time}
+        </div>
+        <div className="links">
           <a
             href="https://www.instagram.com/apollobagels/"
             target="_blank"
@@ -46,36 +45,7 @@ export function Footer() {
             SUBSCRIBE
           </a>
         </div>
-      ) : (
-        <>
-          <div className="footer-left">
-            {pathname !== '/' && (
-              <p>© Apollo Bagels 2024, All Rights Reserved.</p>
-            )}
-          </div>
-          <div className="footer-right">
-            <div className="clock" style={style()}>
-              {time}
-            </div>
-            <div className="links">
-              <a
-                href="https://www.instagram.com/apollobagels/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={style()}
-              >
-                ig. @apollobagels
-              </a>
-              <a href="mailto:hello@apollobagels.com" style={style()}>
-                e. hello@apollobagels.com
-              </a>
-              <a href="#" style={style()}>
-                SUBSCRIBE
-              </a>
-            </div>
-          </div>
-        </>
-      )}
+      </div>
     </footer>
   );
 }
