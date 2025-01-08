@@ -8,6 +8,13 @@ import {useAside} from '~/components/Aside';
  */
 export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    window
+      .matchMedia('(max-width:44em)')
+      .addEventListener('change', (e) => setIsMobile(e.matches));
+    if (window.matchMedia('(max-width:44em)').matches) setIsMobile(true);
+  }, []);
   return (
     <header className="header">
       <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
