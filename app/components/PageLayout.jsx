@@ -20,6 +20,7 @@ export function PageLayout({
   header,
   isLoggedIn,
   publicStoreDomain,
+  hours,
 }) {
   return (
     <Aside.Provider>
@@ -34,11 +35,9 @@ export function PageLayout({
           publicStoreDomain={publicStoreDomain}
         />
       )}
-      <Hours />
+      <Hours hours={hours} />
       <main>{children}</main>
-      <Footer
-        
-      />
+      <Footer />
     </Aside.Provider>
   );
 }

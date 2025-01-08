@@ -17,6 +17,7 @@ import appStyles from '~/styles/app.css?url';
 import {PageLayout} from '~/components/PageLayout';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import {AnimatePresence, motion} from 'framer-motion';
+import {sanityClient} from './sanity/SanityClient';
 
 const variants = {
   initial: {opacity: 0},
@@ -126,7 +127,11 @@ async function loadCriticalData({context}) {
     // Add other queries here, so that they are loaded in parallel
   ]);
 
-  return {header};
+  const hours = await sanityClient
+    .fetch("*[_type == 'storeHours'][0]")
+    .then((response) => response);
+
+  return {header, hours};
 }
 
 /**
@@ -139,7 +144,7 @@ function loadDeferredData({context}) {
   const {storefront, customerAccount, cart} = context;
   return {
     cart: cart.get(),
-    isLoggedIn: customerAccount.isLoggedIn()
+    isLoggedIn: customerAccount.isLoggedIn(),
   };
 }
 
