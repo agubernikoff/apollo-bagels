@@ -20,12 +20,7 @@ export function Footer() {
   }, []);
 
   const {pathname} = useLocation();
-  function activeLinkStyle({isActive, isPending}) {
-    return {
-      fontWeight: isActive ? 'bold' : undefined,
-      color: isPending ? 'grey' : 'black',
-    };
-  }
+
   function style() {
     return {
       color:
