@@ -5,12 +5,14 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   const trackRef = useRef(null);
   const [offset, setOffset] = useState(0);
   const [itemHeight, setItemHeight] = useState(1); // Height of each carousel item set to 100vh
+  const [startY, setStartY] = useState(0); // Track touch start position
   const totalHeight = images.length * itemHeight; // Total height of the carousel
   const speed = 2; // Scrolling speed
 
   useEffect(() => {
     setItemHeight(window?.innerHeight);
   }, []);
+
   useAnimationFrame(() => {
     setOffset((prevOffset) => {
       const newOffset =
@@ -31,11 +33,28 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
     });
   };
 
+  const handleTouchStart = (e) => {
+    setStartY(e.touches[0].clientY); // Capture the initial touch position
+  };
+
+  const handleTouchMove = (e) => {
+    const currentY = e.touches[0].clientY; // Get the current touch position
+    const deltaY = startY - currentY; // Calculate the distance moved
+    setStartY(currentY); // Update startY for continuous scrolling
+
+    setOffset((prevOffset) => {
+      const newOffset = (prevOffset + deltaY + totalHeight) % totalHeight;
+      return newOffset;
+    });
+  };
+
   return (
     <div
       className="carousel"
       style={{overflow: 'hidden', height: `100vh`}}
-      onWheel={handleScroll}
+      onWheel={handleScroll} // For desktop
+      onTouchStart={handleTouchStart} // For mobile touch start
+      onTouchMove={handleTouchMove} // For mobile touch move
     >
       <motion.div
         ref={trackRef}
