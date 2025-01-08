@@ -81,6 +81,8 @@ export default function Homepage() {
 
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
+
+  console.log(!isMobile);
   return (
     <div className="home">
       {!isMobile ? (
@@ -103,13 +105,15 @@ export default function Homepage() {
           </div>
         </>
       ) : (
-        <InfiniteCarousel
-          images={[
-            ...data.sanityData.leftSideImages,
-            ...data.sanityData.rightSideImages,
-          ].map((image) => image.asset.url)}
-          scrollDirection="down"
-        />
+        <div className="home-mobile">
+          <InfiniteCarousel
+            images={[
+              ...data.sanityData.leftSideImages,
+              ...data.sanityData.rightSideImages,
+            ].map((image) => image.asset.url)}
+            scrollDirection="down"
+          />
+        </div>
       )}
       <Announcement data={data.sanityData.announcement} />
       {/* <FeaturedCollection collection={data.featuredCollection} />

@@ -447,6 +447,9 @@ footer.footer {
 .home-right {
   width: 50%;
 }
+.home-mobile {
+  width: 100%;
+}
 
 .carousel {
   position: relative;
