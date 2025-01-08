@@ -4,6 +4,8 @@ import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import InfiniteCarousel from '~/components/InfiniteCarousel';
 import {sanityClient} from '~/sanity/SanityClient';
+import {useState} from 'react';
+import {useEffect} from 'react';
 
 /**
  * @type {MetaFunction}
@@ -69,26 +71,46 @@ function loadDeferredData({context}) {
 }
 
 export default function Homepage() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    window
+      .matchMedia('(max-width:44em)')
+      .addEventListener('change', (e) => setIsMobile(e.matches));
+    if (window.matchMedia('(max-width:44em)').matches) setIsMobile(true);
+  }, []);
+
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
   return (
     <div className="home">
-      <div className="home-left">
+      {!isMobile ? (
+        <>
+          <div className="home-left">
+            <InfiniteCarousel
+              images={data.sanityData.leftSideImages.map(
+                (image) => image.asset.url,
+              )}
+              scrollDirection="down"
+            />
+          </div>
+          <div className="home-right">
+            <InfiniteCarousel
+              images={data.sanityData.rightSideImages.map(
+                (image) => image.asset.url,
+              )}
+              scrollDirection="up"
+            />
+          </div>
+        </>
+      ) : (
         <InfiniteCarousel
-          images={data.sanityData.leftSideImages.map(
-            (image) => image.asset.url,
-          )}
+          images={[
+            ...data.sanityData.leftSideImages,
+            ...data.sanityData.rightSideImages,
+          ].map((image) => image.asset.url)}
           scrollDirection="down"
         />
-      </div>
-      <div className="home-right">
-        <InfiniteCarousel
-          images={data.sanityData.rightSideImages.map(
-            (image) => image.asset.url,
-          )}
-          scrollDirection="up"
-        />
-      </div>
+      )}
       <Announcement data={data.sanityData.announcement} />
       {/* <FeaturedCollection collection={data.featuredCollection} />
       <RecommendedProducts products={data.recommendedProducts} /> */}

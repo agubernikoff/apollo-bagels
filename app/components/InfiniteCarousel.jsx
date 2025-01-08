@@ -2,13 +2,6 @@ import React, {useRef, useEffect, useState} from 'react';
 import {motion, useAnimationFrame} from 'framer-motion';
 
 const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    window
-      .matchMedia('(max-width:44em)')
-      .addEventListener('change', (e) => setIsMobile(e.matches));
-    if (window.matchMedia('(max-width:44em)').matches) setIsMobile(true);
-  }, []);
   const trackRef = useRef(null);
   const [offset, setOffset] = useState(0);
   const [itemHeight, setItemHeight] = useState(1); // Height of each carousel item set to 100vh
