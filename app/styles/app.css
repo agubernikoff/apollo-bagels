@@ -243,7 +243,7 @@ button.reset:hover:not(:has(> *)) {
   transition: border-color 1s ease-in-out, color 1s ease-in-out;
 }
 .hours-container p:first-of-type {
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
 }
 .hours-container p:last-of-type {
   padding-top: 0.5rem;
