@@ -213,7 +213,7 @@ button.reset:hover:not(:has(> *)) {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  width: 792px;
+  width: 796px;
   padding-left: 1rem;
   padding-top: 1rem;
 }
