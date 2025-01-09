@@ -3,6 +3,7 @@ import {motion, useAnimationFrame} from 'framer-motion';
 
 const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   const trackRef = useRef(null);
+  const carouselRef = useRef(null); // Reference to the carousel container
   const [offset, setOffset] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [velocity, setVelocity] = useState(0); // Track swipe velocity
@@ -13,7 +14,23 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   const deceleration = 0.95; // Deceleration factor for swipe momentum
 
   useEffect(() => {
-    setItemHeight(window?.innerHeight);
+    const updateItemHeight = () => {
+      if (carouselRef.current) {
+        const height = carouselRef.current.offsetHeight; // Accurate height of the container
+        setItemHeight(height);
+      }
+    };
+
+    // Use ResizeObserver for dynamic resizing
+    const observer = new ResizeObserver(updateItemHeight);
+    if (carouselRef.current) observer.observe(carouselRef.current);
+
+    // Initial height calculation
+    updateItemHeight();
+
+    return () => {
+      if (carouselRef.current) observer.unobserve(carouselRef.current);
+    };
   }, []);
 
   useAnimationFrame(() => {
@@ -79,6 +96,7 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   return (
     <div
       className="carousel"
+      ref={carouselRef} // Reference to the carousel container
       style={{overflow: 'hidden', height: `100vh`, touchAction: 'none'}}
       onWheel={handleScroll} // For desktop
       onTouchStart={handleTouchStart} // For mobile touch start
