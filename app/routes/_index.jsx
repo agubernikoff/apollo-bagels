@@ -74,9 +74,9 @@ export default function Homepage() {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     window
-      .matchMedia('(max-width:44em)')
+      .matchMedia('(max-width: 57.5em)') // 920px ÷ 16 = 57.5em
       .addEventListener('change', (e) => setIsMobile(e.matches));
-    if (window.matchMedia('(max-width:44em)').matches) setIsMobile(true);
+    if (window.matchMedia('(max-width: 57.5em)').matches) setIsMobile(true);
   }, []);
 
   /** @type {LoaderReturnData} */

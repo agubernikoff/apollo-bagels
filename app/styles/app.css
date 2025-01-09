@@ -213,7 +213,7 @@ button.reset:hover:not(:has(> *)) {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  width: 55vw;
+  width: 792px;
   padding-left: 1rem;
   padding-top: 1rem;
 }
@@ -694,7 +694,7 @@ footer.footer {
 .account-logout {
   display: inline-block;
 }
-@media (max-width: 44em) {
+@media (max-width: 57.5em) {
   .hours-container {
     display: none;
   }
@@ -720,5 +720,11 @@ footer.footer {
     justify-content: space-around;
     gap: 0;
     margin-bottom: 0.75rem;
+  }
+  .header-menu {
+    width: 100%;
+  }
+  .header {
+    font-size: clamp(32px, 1rem, 48px);
   }
 }
