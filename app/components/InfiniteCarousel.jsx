@@ -38,6 +38,7 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   };
 
   const handleTouchMove = (e) => {
+    e.preventDefault(); // Prevent default touch behavior, including pull-to-refresh
     const currentY = e.touches[0].clientY; // Get the current touch position
     const deltaY = startY - currentY; // Calculate the distance moved
     setStartY(currentY); // Update startY for continuous scrolling
@@ -51,7 +52,7 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   return (
     <div
       className="carousel"
-      style={{overflow: 'hidden', height: `100vh`}}
+      style={{overflow: 'hidden', height: `100vh`, touchAction: 'none'}}
       onWheel={handleScroll} // For desktop
       onTouchStart={handleTouchStart} // For mobile touch start
       onTouchMove={handleTouchMove} // For mobile touch move

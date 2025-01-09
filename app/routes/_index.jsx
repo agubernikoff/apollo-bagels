@@ -81,8 +81,6 @@ export default function Homepage() {
 
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
-
-  console.log(!isMobile);
   return (
     <div className="home">
       {!isMobile ? (
