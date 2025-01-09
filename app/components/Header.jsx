@@ -1,5 +1,5 @@
-import {Suspense} from 'react';
-import {Await, NavLink, useAsyncValue} from '@remix-run/react';
+import {Suspense, useState, useEffect} from 'react';
+import {Await, NavLink, useAsyncValue, useLocation} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
 
@@ -11,16 +11,13 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
 
   return (
     <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
-      </NavLink>
       <HeaderMenu
         menu={menu}
         viewport="desktop"
         primaryDomainUrl={header.shop.primaryDomain.url}
         publicStoreDomain={publicStoreDomain}
+        cart={cart}
       />
-      <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
   );
 }
@@ -38,23 +35,13 @@ export function HeaderMenu({
   primaryDomainUrl,
   viewport,
   publicStoreDomain,
+  cart,
 }) {
-  const className = `header-menu-${viewport}`;
+  const className = `header-menu`;
   const {close} = useAside();
 
   return (
     <nav className={className} role="navigation">
-      {viewport === 'mobile' && (
-        <NavLink
-          end
-          onClick={close}
-          prefetch="intent"
-          style={activeLinkStyle}
-          to="/"
-        >
-          Home
-        </NavLink>
-      )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
@@ -66,20 +53,39 @@ export function HeaderMenu({
             ? new URL(item.url).pathname
             : item.url;
         return (
-          <NavLink
-            className="header-menu-item"
-            end
+          <HeaderMenuItem
             key={item.id}
-            onClick={close}
-            prefetch="intent"
-            style={activeLinkStyle}
-            to={url}
-          >
-            {item.title}
-          </NavLink>
+            title={item.title}
+            cart={cart}
+            close={close}
+            url={url}
+          />
         );
       })}
     </nav>
+  );
+}
+
+function HeaderMenuItem({title, cart, close, url}) {
+  const [showDot, setShowDot] = useState(false);
+  const {pathname} = useLocation();
+  useEffect(() => {
+    if (pathname === url) setShowDot(true);
+  }, [pathname, url]);
+  return (
+    <NavLink
+      className="header-menu-item"
+      end
+      onClick={close}
+      prefetch="intent"
+      // style={activeLinkStyle}
+      to={url}
+      onMouseEnter={() => setShowDot(true)}
+      onMouseLeave={() => setShowDot(false)}
+    >
+      {showDot && <div className="dot">●</div>}
+      {title !== 'Cart' ? title : <CartToggle cart={cart} />}
+    </NavLink>
   );
 }
 
@@ -132,8 +138,7 @@ function CartBadge({count}) {
   const {publish, shop, cart, prevCart} = useAnalytics();
 
   return (
-    <a
-      href="/cart"
+    <span
       onClick={(e) => {
         e.preventDefault();
         open('cart');
@@ -145,8 +150,8 @@ function CartBadge({count}) {
         });
       }}
     >
-      Cart {count === null ? <span>&nbsp;</span> : count}
-    </a>
+      Cart {count === null ? <span>&nbsp;</span> : `(${count})`}
+    </span>
   );
 }
 

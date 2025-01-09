@@ -178,14 +178,13 @@ button.reset:hover:not(:has(> *)) {
 * --------------------------------------------------
 */
 .header {
-  align-items: center;
-  display: flex;
-  height: var(--header-height);
-  padding: 0 1rem;
   position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1;
-  font-family: 'HAL';
+  font-family: 'HAL-BOLD';
+  font-size: 48px;
 }
 
 .header-menu-mobile-toggle {
@@ -210,8 +209,36 @@ button.reset:hover:not(:has(> *)) {
   }
 }
 
+.header-menu {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 55vw;
+  padding-left: 1rem;
+  padding-top: 1rem;
+}
+
 .header-menu-item {
   cursor: pointer;
+  color: white;
+  background: var(--green);
+  border-radius: 14px;
+  padding: 0.25rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.header-menu-item:nth-of-type(2),
+.header-menu-item:nth-of-type(7) {
+  background: var(--red);
+}
+.header-menu-item:nth-of-type(3),
+.header-menu-item:nth-of-type(5) {
+  background: var(--blue);
+}
+.header-menu-item:nth-of-type(4),
+.header-menu-item:nth-of-type(6) {
+  background: var(--yellow);
 }
 
 .header-ctas {
