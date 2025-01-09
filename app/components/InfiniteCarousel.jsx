@@ -36,7 +36,7 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
       // Gradually reduce velocity
       setVelocity((prevVelocity) => {
         const newVelocity = prevVelocity * deceleration;
-        return Math.abs(newVelocity) < 0.01 ? 0 : newVelocity; // Stop when velocity is negligible
+        return Math.abs(newVelocity) < speed ? 0 : newVelocity; // Stop when velocity is negligible
       });
     }
   });
