@@ -4,6 +4,7 @@ import {motion, useAnimationFrame} from 'framer-motion';
 const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   const trackRef = useRef(null);
   const [offset, setOffset] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const [itemHeight, setItemHeight] = useState(1); // Height of each carousel item set to 100vh
   const [startY, setStartY] = useState(0); // Track touch start position
   const totalHeight = images.length * itemHeight; // Total height of the carousel
@@ -14,13 +15,14 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   }, []);
 
   useAnimationFrame(() => {
-    setOffset((prevOffset) => {
-      const newOffset =
-        scrollDirection === 'down'
-          ? (prevOffset + speed) % totalHeight
-          : (prevOffset - speed + totalHeight) % totalHeight;
-      return newOffset;
-    });
+    if (!isPaused)
+      setOffset((prevOffset) => {
+        const newOffset =
+          scrollDirection === 'down'
+            ? (prevOffset + speed) % totalHeight
+            : (prevOffset - speed + totalHeight) % totalHeight;
+        return newOffset;
+      });
   });
 
   const visibleImages = [...images, ...images]; // Duplicate images for infinite scrolling
@@ -35,6 +37,7 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
 
   const handleTouchStart = (e) => {
     setStartY(e.touches[0].clientY); // Capture the initial touch position
+    setIsPaused(true);
   };
 
   const handleTouchMove = (e) => {
@@ -56,6 +59,7 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
       onWheel={handleScroll} // For desktop
       onTouchStart={handleTouchStart} // For mobile touch start
       onTouchMove={handleTouchMove} // For mobile touch move
+      onTouchEnd={() => setIsPaused(false)}
     >
       <motion.div
         ref={trackRef}
