@@ -213,32 +213,36 @@ button.reset:hover:not(:has(> *)) {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  width: 796px;
+  width: 816px;
   padding-left: 1rem;
   padding-top: 1rem;
+  color: r;
 }
 
+.header-menu-item-container {
+  background: var(--green);
+  border-radius: 14px;
+}
+.header-menu-item-container:nth-of-type(2),
+.header-menu-item-container:nth-of-type(7) {
+  background: var(--red);
+}
+.header-menu-item-container:nth-of-type(3),
+.header-menu-item-container:nth-of-type(5) {
+  background: var(--blue);
+}
+.header-menu-item-container:nth-of-type(4),
+.header-menu-item-container:nth-of-type(6) {
+  background: var(--yellow);
+}
 .header-menu-item {
   cursor: pointer;
   color: white;
-  background: var(--green);
-  border-radius: 14px;
   padding: 0.25rem 0.75rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-.header-menu-item:nth-of-type(2),
-.header-menu-item:nth-of-type(7) {
-  background: var(--red);
-}
-.header-menu-item:nth-of-type(3),
-.header-menu-item:nth-of-type(5) {
-  background: var(--blue);
-}
-.header-menu-item:nth-of-type(4),
-.header-menu-item:nth-of-type(6) {
-  background: var(--yellow);
+  box-sizing: border-box;
 }
 
 .header-ctas {

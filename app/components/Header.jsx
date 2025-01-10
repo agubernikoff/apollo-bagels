@@ -2,15 +2,36 @@ import {Suspense, useState, useEffect} from 'react';
 import {Await, NavLink, useAsyncValue, useLocation} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
-
+import {motion} from 'framer-motion';
 /**
  * @param {HeaderProps}
  */
 export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
   const {shop, menu} = header;
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 0); // Check if the user has scrolled down
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <header className="header">
+    <header
+      className="header"
+      style={{
+        background: scrolled
+          ? 'linear-gradient(to bottom, var(--color-creme),transparent)'
+          : 'transparent',
+      }}
+    >
       <HeaderMenu
         menu={menu}
         viewport="desktop"
@@ -69,23 +90,62 @@ export function HeaderMenu({
 function HeaderMenuItem({title, cart, close, url}) {
   const [showDot, setShowDot] = useState(false);
   const {pathname} = useLocation();
+
   useEffect(() => {
-    if (pathname === url) setShowDot(true);
+    setShowDot(pathname === url);
   }, [pathname, url]);
   return (
-    <NavLink
-      className="header-menu-item"
-      end
-      onClick={close}
-      prefetch="intent"
-      // style={activeLinkStyle}
-      to={url}
+    <motion.div
+      layout
+      className="header-menu-item-container"
       onMouseEnter={() => setShowDot(true)}
-      onMouseLeave={() => setShowDot(false)}
+      onMouseLeave={() => {
+        if (pathname !== url) setShowDot(false);
+      }}
+      transition={{layout: {duration: 0.5}, ease: 'easeInOut'}}
+      initial={{
+        boxShadow: 'none',
+        outline: 'none',
+      }}
+      animate={
+        pathname === url
+          ? {
+              boxShadow: '0px 4px 4px 0px #00000040',
+              outline: '1px solid #000000',
+            }
+          : {
+              boxShadow: 'none',
+              outline: 'none',
+            }
+      }
     >
-      {showDot && <div className="dot">●</div>}
-      {title !== 'Cart' ? title : <CartToggle cart={cart} />}
-    </NavLink>
+      <NavLink
+        className="header-menu-item"
+        end
+        onClick={close}
+        prefetch="intent"
+        to={url}
+      >
+        <motion.div
+          className="dot"
+          initial={{opacity: 0}}
+          animate={{opacity: showDot ? 1 : 0}}
+          transition={{duration: 0.5, ease: 'easeInOut'}}
+          style={{position: 'absolute'}}
+        >
+          ●
+        </motion.div>
+
+        <motion.span
+          layout
+          transition={{duration: 0.5, ease: 'easeInOut'}}
+          initial={{marginLeft: 0}}
+          animate={{marginLeft: showDot ? '2.25rem' : 0}}
+        >
+          {title === 'Cart' ? <CartToggle cart={cart} /> : title}
+        </motion.span>
+      </NavLink>
+    </motion.div>
   );
 }
 
