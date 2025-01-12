@@ -674,7 +674,6 @@ footer.footer {
   object-fit: cover; /* Ensures the image covers the screen without distortion */
   top: 0;
   left: 0;
-  z-index: -1; /* Ensures the image stays behind other content */
 }
 
 .info-announcement-container {
