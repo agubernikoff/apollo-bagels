@@ -748,7 +748,7 @@ footer.footer {
   }
   .info-announcement-container {
     padding: 1rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0;
   }
   .clock {
     display: none;
