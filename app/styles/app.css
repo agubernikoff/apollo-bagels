@@ -656,6 +656,43 @@ footer.footer {
 .product-option-label-swatch img {
   width: 100%;
 }
+/*
+* --------------------------------------------------
+* info
+* --------------------------------------------------
+*/
+
+.info {
+  position: fixed;
+  inset: 0;
+}
+
+.info-background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.info-announcement-container {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 1rem;
+  background: var(--blue);
+  color: var(--creme);
+  border-radius: 14px;
+  width: 325px;
+  max-width: 40vw;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.info-announcement-container p {
+  font-size: 12px;
+  font-family: 'HAL';
+}
+.info-announcement-container h3 {
+  font-size: 18px;
+  font-family: 'HAL-BOLD';
+}
 
 /*
 * --------------------------------------------------
