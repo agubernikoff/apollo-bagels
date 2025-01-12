@@ -747,12 +747,17 @@ footer.footer {
     padding: 1rem;
     margin-bottom: 1.25rem;
   }
+  .info-announcement-container {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
   .clock {
     display: none;
   }
   .footer-left {
     width: 0;
     padding: 0;
+    display: none;
   }
   .footer-right {
     width: 100%;
@@ -775,6 +780,10 @@ footer.footer {
 }
 @media (max-width: 723px) {
   .announcement-container {
+    width: 84%;
+    max-width: none;
+  }
+  .info-announcement-container {
     width: 84%;
     max-width: none;
   }
