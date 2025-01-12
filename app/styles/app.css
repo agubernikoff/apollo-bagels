@@ -216,7 +216,6 @@ button.reset:hover:not(:has(> *)) {
   width: 816px;
   padding-left: 1rem;
   padding-top: 1rem;
-  color: r;
 }
 
 .header-menu-item-container {
@@ -703,8 +702,6 @@ footer.footer {
     display: none;
   }
   .announcement-container {
-    width: 84%;
-    max-width: none;
     padding: 1rem;
     margin-bottom: 1.25rem;
   }
@@ -725,10 +722,18 @@ footer.footer {
     gap: 0;
     margin-bottom: 0.75rem;
   }
+}
+@media (max-width: 816px) {
   .header-menu {
-    width: 100%;
+    width: calc(100% - 2rem);
   }
   .header {
-    font-size: clamp(32px, 1rem, 48px);
+    font-size: clamp(17px, 5vw, 48px);
+  }
+}
+@media (max-width: 723px) {
+  .announcement-container {
+    width: 84%;
+    max-width: none;
   }
 }

@@ -61,18 +61,54 @@ export function HeaderMenu({
   const className = `header-menu`;
   const {close} = useAside();
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 513px)');
+
+    // Update state initially and on changes
+    const updateIsMobile = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener('change', updateIsMobile);
+    setIsMobile(mediaQuery.matches);
+
+    return () => mediaQuery.removeEventListener('change', updateIsMobile);
+  }, []);
+
+  function moveArrayElement(arr, fromIndex, toIndex) {
+    const newArr = [...arr]; // Create a shallow copy of the array
+    const [element] = newArr.splice(fromIndex, 1); // Remove the element
+    newArr.splice(toIndex, 0, element); // Insert the element at the new position
+    return newArr; // Return the new array
+  }
+
+  const info = menu.items.find((i) => i.title === 'Info');
+  const indexOfInfo = menu.items.indexOf(info);
+
+  const [dynamicMenu, setDynamicMenu] = useState(
+    (menu || FALLBACK_HEADER_MENU).items,
+  );
+
+  useEffect(() => {
+    const originalMenu = (menu || FALLBACK_HEADER_MENU).items;
+    if (isMobile) {
+      setDynamicMenu(moveArrayElement(originalMenu, indexOfInfo, 3));
+    } else {
+      setDynamicMenu(originalMenu); // Reset to the original order
+    }
+  }, [isMobile, menu, indexOfInfo]);
+
   return (
     <nav className={className} role="navigation">
-      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+      {dynamicMenu.map((item) => {
         if (!item.url) return null;
 
-        // if the url is internal, we strip the domain
+        // If the URL is internal, strip the domain
         const url =
           item.url.includes('myshopify.com') ||
           item.url.includes(publicStoreDomain) ||
           item.url.includes(primaryDomainUrl)
             ? new URL(item.url).pathname
             : item.url;
+
         return (
           <HeaderMenuItem
             key={item.id}
@@ -94,6 +130,19 @@ function HeaderMenuItem({title, cart, close, url}) {
   useEffect(() => {
     setShowDot(pathname === url);
   }, [pathname, url]);
+
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 816px)');
+
+    // Update state initially and on changes
+    const updateIsMobile = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener('change', updateIsMobile);
+    setIsMobile(mediaQuery.matches);
+
+    return () => mediaQuery.removeEventListener('change', updateIsMobile);
+  }, []);
+
   return (
     <motion.div
       layout
@@ -140,7 +189,9 @@ function HeaderMenuItem({title, cart, close, url}) {
           layout
           transition={{duration: 0.5, ease: 'easeInOut'}}
           initial={{marginLeft: 0}}
-          animate={{marginLeft: showDot ? '2.25rem' : 0}}
+          animate={{
+            marginLeft: showDot ? (!isMobile ? '2.25rem' : '4vw') : 0,
+          }}
         >
           {title === 'Cart' ? <CartToggle cart={cart} /> : title}
         </motion.span>
