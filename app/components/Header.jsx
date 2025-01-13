@@ -151,7 +151,7 @@ function HeaderMenuItem({title, cart, close, url}) {
       onMouseLeave={() => {
         if (pathname !== url) setShowDot(false);
       }}
-      transition={{layout: {duration: 0.5}, ease: 'easeInOut'}}
+      transition={{layout: {duration: 0.3}, ease: 'easeInOut'}}
       initial={{
         boxShadow: 'none',
         outline: 'none',
@@ -179,7 +179,7 @@ function HeaderMenuItem({title, cart, close, url}) {
           className="dot"
           initial={{opacity: 0}}
           animate={{opacity: showDot ? 1 : 0}}
-          transition={{duration: 0.5, ease: 'easeInOut'}}
+          transition={{duration: 0.3, ease: 'easeInOut'}}
           style={{position: 'absolute'}}
         >
           ●
@@ -187,7 +187,7 @@ function HeaderMenuItem({title, cart, close, url}) {
 
         <motion.span
           layout
-          transition={{duration: 0.5, ease: 'easeInOut'}}
+          transition={{duration: 0.3, ease: 'easeInOut'}}
           initial={{marginLeft: 0}}
           animate={{
             marginLeft: showDot ? (!isMobile ? '2.25rem' : '4vw') : 0,
