@@ -1,9 +1,10 @@
 :root {
   --aside-width: 400px;
+  --header-height: 200px;
   --cart-aside-summary-height-with-discount: 300px;
   --cart-aside-summary-height: 250px;
   --grid-item-width: 355px;
-  --header-height: 64px;
+  /* --header-height: 64px; */
   --color-dark: #000;
   --color-light: #fff;
   --color-creme: #f1f0e4;
@@ -31,6 +32,10 @@ img {
 
 body {
   font-family: 'HAL' !important;
+}
+
+main {
+  margin-top: var(--header-height) !important;
 }
 /*
 * --------------------------------------------------
@@ -696,6 +701,19 @@ footer.footer {
 .info-announcement-container h3 {
   font-size: 18px;
   font-family: 'HAL-BOLD';
+}
+
+/*
+* --------------------------------------------------
+* order/cater
+* --------------------------------------------------
+*/
+
+.order-cater-text-container > p,
+.oc-link {
+  font-family: 'HAL';
+  font-size: 12px;
+  color: var(--blue);
 }
 
 /*
