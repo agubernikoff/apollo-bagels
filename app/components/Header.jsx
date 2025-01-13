@@ -159,8 +159,8 @@ function HeaderMenuItem({title, cart, close, url}) {
       animate={
         pathname === url
           ? {
-              boxShadow: '0px 4px 4px 0px #00000040',
-              outline: '1px solid #000000',
+              boxShadow: 'none',
+              outline: 'none',
             }
           : {
               boxShadow: 'none',
