@@ -51,9 +51,10 @@ function loadDeferredData({context}) {
 export default function Order() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
+
   return (
     <div>
-      <OrdersCaterers />
+      <OrdersCaterers data={data.sanityData.locations} />
     </div>
   );
 }

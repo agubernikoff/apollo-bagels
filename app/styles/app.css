@@ -316,7 +316,7 @@ footer.footer {
 
 .footer-left p {
   margin: 0;
-  color: var(--creme);
+  color: var(--blue);
   font-size: 11px;
   font-family: 'HAL';
 }
@@ -721,6 +721,31 @@ footer.footer {
   font-family: 'HAL';
   font-size: 12px;
   color: var(--blue);
+}
+
+.location-item {
+  font-family: 'HAL-BOLD';
+  margin-top: 1rem;
+  display: flex;
+}
+.location-item p:first-of-type {
+  padding: 0.25rem 1rem;
+  font-size: 130px;
+  background-color: var(--blue);
+  border-radius: 14px;
+  color: var(--creme) !important;
+  width: fit-content;
+}
+.location-item p:nth-of-type(2) {
+  padding: 0.5rem 1rem;
+  font-size: 12px;
+  background-color: var(--blue);
+  border-radius: 14px;
+  color: var(--creme) !important;
+  width: fit-content;
+  height: fit-content;
+  margin-left: 0.75rem;
+  font-family: 'HAL' !important;
 }
 
 /*

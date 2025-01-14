@@ -52,10 +52,10 @@ function loadDeferredData({context}) {
 export default function Catering() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
-  console.log(data);
+
   return (
     <div>
-      <OrdersCaterers />
+      <OrdersCaterers data={data.sanityData.locations} />
     </div>
   );
 }
