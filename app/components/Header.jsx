@@ -90,7 +90,10 @@ export function HeaderMenu({
   useEffect(() => {
     const originalMenu = (menu || FALLBACK_HEADER_MENU).items;
     if (isMobile) {
-      setDynamicMenu(moveArrayElement(originalMenu, indexOfInfo, 3));
+      const newOrder = moveArrayElement(originalMenu, indexOfInfo, 3);
+      const shop = newOrder.find((i) => i.title === 'Shop');
+      const indexOfShop = newOrder.indexOf(shop);
+      setDynamicMenu(moveArrayElement(newOrder, indexOfShop, 4));
     } else {
       setDynamicMenu(originalMenu); // Reset to the original order
     }
@@ -190,7 +193,7 @@ function HeaderMenuItem({title, cart, close, url}) {
           transition={{duration: 0.3, ease: 'easeInOut'}}
           initial={{marginLeft: 0}}
           animate={{
-            marginLeft: showDot ? (!isMobile ? '2.25rem' : '4vw') : 0,
+            marginLeft: showDot ? (!isMobile ? '2.25rem' : '6vw') : 0,
           }}
         >
           {title === 'Cart' ? <CartToggle cart={cart} /> : title}

@@ -790,10 +790,10 @@ footer.footer {
 }
 @media (max-width: 816px) {
   .header-menu {
-    width: calc(100% - 2rem);
+    width: calc(100% - 1rem);
   }
   .header {
-    font-size: clamp(17px, 5vw, 48px);
+    font-size: clamp(29.5px, 5vw, 48px);
   }
 }
 @media (max-width: 723px) {
@@ -804,5 +804,24 @@ footer.footer {
   .info-announcement-container {
     width: 84%;
     max-width: none;
+  }
+}
+@media (max-width: 513px) {
+  .header-menu-item-container:nth-of-type(4) {
+    background: var(--red);
+  }
+  .header-menu-item-container:nth-of-type(7) {
+    background: var(--yellow);
+  }
+  .header-menu-item {
+    padding: 0.1rem 0.55rem;
+  }
+}
+@media (max-width: 500px) {
+  .header-menu {
+    gap: 4px;
+  }
+  .header-menu-item-container {
+    border-radius: 6px;
   }
 }
