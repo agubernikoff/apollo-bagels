@@ -16,6 +16,9 @@
   --scarlet: #d44424;
 }
 
+strong {
+  font-family: 'HAL-BOLD';
+}
 img {
   border-radius: 4px;
 }
@@ -692,16 +695,20 @@ footer.footer {
   width: 325px;
   max-width: 40vw;
   padding: 1rem;
-  pointer-events: none;
 }
 
 .info-announcement-container p {
   font-size: 12px;
   font-family: 'HAL';
+  white-space: pre-line;
 }
 .info-announcement-container h3 {
   font-size: 18px;
   font-family: 'HAL-BOLD';
+}
+.info-announcement-container a,
+.info-announcement-container a:visited {
+  color: inherit;
 }
 
 /*

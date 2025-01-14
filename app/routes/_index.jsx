@@ -1,11 +1,9 @@
 import {defer} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link} from '@remix-run/react';
-import {Suspense} from 'react';
+import {Suspense, useEffect, useState} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import InfiniteCarousel from '~/components/InfiniteCarousel';
 import {sanityClient} from '~/sanity/SanityClient';
-import {useState} from 'react';
-import {useEffect} from 'react';
 
 /**
  * @type {MetaFunction}
