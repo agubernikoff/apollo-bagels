@@ -222,7 +222,7 @@ button.reset:hover:not(:has(> *)) {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  width: 816px;
+  width: 831px;
   padding-left: 1rem;
   padding-top: 1rem;
 }
@@ -794,7 +794,7 @@ footer.footer {
     margin-bottom: 0.75rem;
   }
 }
-@media (max-width: 816px) {
+@media (max-width: 831px) {
   .header-menu {
     width: calc(100% - 1rem);
   }
