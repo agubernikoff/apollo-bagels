@@ -55,7 +55,7 @@ export default function Catering() {
 
   return (
     <div>
-      <OrdersCaterers data={data.sanityData.locations} />
+      <OrdersCaterers data={data?.sanityData?.locations} />
     </div>
   );
 }

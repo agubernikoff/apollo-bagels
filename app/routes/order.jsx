@@ -54,7 +54,7 @@ export default function Order() {
 
   return (
     <div>
-      <OrdersCaterers data={data.sanityData.locations} />
+      <OrdersCaterers data={data?.sanityData?.locations} />
     </div>
   );
 }

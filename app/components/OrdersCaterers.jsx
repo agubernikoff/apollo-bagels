@@ -66,13 +66,10 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
 
   return (
     <motion.div
-      key={location._id}
       className="location-item"
       initial={{x: 0}}
       animate={{x: hovered ? '1vw' : 0}}
       transition={{ease: 'easeInOut'}}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
     >
       <motion.p
         initial={{
@@ -86,6 +83,8 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
             ? 'var(--blue)'
             : 'var(--yellow)',
         }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
         <a
           href={link}
@@ -111,6 +110,8 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
             ? 'var(--blue)'
             : 'var(--yellow)',
         }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
         <a
           href={link}
