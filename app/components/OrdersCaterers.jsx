@@ -85,6 +85,8 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+        style={{cursor: 'pointer'}}
       >
         <a
           href={link}
@@ -112,6 +114,8 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
         }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+        style={{cursor: 'pointer'}}
       >
         <a
           href={link}
