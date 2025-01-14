@@ -33,6 +33,7 @@ export function PageLayout({
           cart={cart}
           isLoggedIn={isLoggedIn}
           publicStoreDomain={publicStoreDomain}
+          hours={hours}
         />
       )}
       <Hours hours={hours} />

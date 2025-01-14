@@ -17,13 +17,18 @@ function formatTimeTo12Hour(timeString) {
   return `${formattedHour}${period}`;
 }
 
-function Hours({hours}) {
+function Hours({hours, mobile}) {
   const {pathname} = useLocation();
   function style() {
     return {
-      color: pathname !== '/' && pathname !== '/info' ? 'var(--blue)' : null,
+      color:
+        pathname !== '/' && pathname !== '/info' && !mobile
+          ? 'var(--blue)'
+          : null,
       borderColor:
-        pathname !== '/' && pathname !== '/info' ? 'var(--blue)' : null,
+        pathname !== '/' && pathname !== '/info' && !mobile
+          ? 'var(--blue)'
+          : null,
     };
   }
 

@@ -2,36 +2,17 @@ import {Suspense, useState, useEffect} from 'react';
 import {Await, NavLink, useAsyncValue, useLocation} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
-import {motion} from 'framer-motion';
+import {motion, useScroll} from 'framer-motion';
+import Frame_89 from '../assets/Frame_89.png';
+import Hours from './Hours';
 /**
  * @param {HeaderProps}
  */
-export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
+export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
   const {shop, menu} = header;
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 0); // Check if the user has scrolled down
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    // Cleanup listener on component unmount
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   return (
-    <header
-      className="header"
-      style={{
-        background: scrolled
-          ? 'linear-gradient(to bottom, var(--color-creme),transparent)'
-          : 'transparent',
-      }}
-    >
+    <header className="header">
       <HeaderMenu
         menu={menu}
         viewport="desktop"
@@ -39,6 +20,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
         publicStoreDomain={publicStoreDomain}
         cart={cart}
       />
+      {/* <MobileFooter hours={hours} /> */}
     </header>
   );
 }
@@ -99,8 +81,31 @@ export function HeaderMenu({
     }
   }, [isMobile, menu, indexOfInfo]);
 
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 0); // Check if the user has scrolled down
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <nav className={className} role="navigation">
+    <nav
+      className={className}
+      role="navigation"
+      style={{
+        background: scrolled
+          ? 'linear-gradient(to bottom, var(--color-creme),transparent)'
+          : 'transparent',
+      }}
+    >
       {dynamicMenu.map((item) => {
         if (!item.url) return null;
 
@@ -355,3 +360,96 @@ function activeLinkStyle({isActive, isPending}) {
 /** @typedef {import('@shopify/hydrogen').CartViewPayload} CartViewPayload */
 /** @typedef {import('storefrontapi.generated').HeaderQuery} HeaderQuery */
 /** @typedef {import('storefrontapi.generated').CartApiQueryFragment} CartApiQueryFragment */
+
+function MobileFooter({hours}) {
+  const {scrollYProgress} = useScroll();
+  const [isFooterActive, setIsFooterActive] = useState(false);
+  const [footerY, setFooterY] = useState(130); // Start at 100% off-screen
+
+  useEffect(() => {
+    if (!isFooterActive)
+      document.querySelector('.header').style.pointerEvents = 'none';
+    else document.querySelector('.header').style.pointerEvents = 'auto';
+
+    const handleScroll = (e) => {
+      if (isFooterActive) {
+        e.preventDefault();
+        setFooterY((prev) => {
+          const newFooterY = Math.max(0, prev - e.deltaY * 0.2); // Prevent negative values
+          if (newFooterY > 130) {
+            if (document.body.offsetHeight !== window.innerHeight)
+              setIsFooterActive(false); // Deactivate footer if it exceeds 130
+            return 130; // Reset to 130
+          }
+          return newFooterY;
+        });
+      }
+    };
+
+    const handleTouchMove = (e) => {
+      if (isFooterActive) {
+        const touch = e.touches[0];
+        setFooterY((prev) => {
+          const newFooterY = Math.max(0, prev - touch.clientY * 0.05); // Prevent negative values
+          if (newFooterY > 130) {
+            if (document.body.offsetHeight !== window.innerHeight)
+              setIsFooterActive(false); // Deactivate footer if it exceeds 130
+            return 130; // Reset to 130
+          }
+          return newFooterY;
+        });
+      }
+    };
+
+    if (isFooterActive) {
+      window.addEventListener('wheel', handleScroll, {passive: false});
+      window.addEventListener('touchmove', handleTouchMove, {passive: false});
+    } else {
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchmove', handleTouchMove);
+    }
+
+    return () => {
+      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, [isFooterActive]);
+
+  useEffect(() => {
+    if (scrollYProgress.current === 1) setIsFooterActive(true); // Activate manual scrolling;
+    const unsubscribe = scrollYProgress.onChange((value) => {
+      if (value === 1) {
+        setIsFooterActive(true); // Activate manual scrolling
+      }
+    });
+
+    return () => unsubscribe();
+  }, [scrollYProgress]);
+
+  return (
+    <motion.div
+      className="mobile-footer"
+      style={{
+        transform: `translateY(${footerY}%)`,
+      }}
+      transition={{type: 'tween', duration: 0.5}}
+    >
+      <img src={Frame_89} alt="Apollo Bagels in script" />
+      <Hours hours={hours} mobile={true} />
+      <div className="mobile-footer-bottom">
+        <div className="mobile-footer-links">
+          <a
+            href="https://www.instagram.com/apollobagels/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            ig. @apollobagels
+          </a>
+          <a href="mailto:hello@apollobagels.com">e. hello@apollobagels.com</a>
+        </div>
+        <a href="#">SUBSCRIBE</a>
+        <p>© Apollo Bagels 2024, All Rights Reserved.</p>
+      </div>
+    </motion.div>
+  );
+}
