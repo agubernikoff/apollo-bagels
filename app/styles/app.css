@@ -761,12 +761,12 @@ footer.footer {
 .mobile-location {
   font-size: 3rem;
   border-radius: 14px;
-  padding: 0.25rem 0.4rem;
+  padding: 0.5rem 0.5rem;
 }
 .mobile-address {
   font-size: 0.75rem !important;
   padding-left: 0.25rem;
-  margin-top: -0.5rem;
+  margin-top: -0.25rem;
   font-family: 'HAL';
   line-height: 0.8rem;
 }
