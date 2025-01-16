@@ -29,7 +29,8 @@ function OrdersCaterers({data}) {
         {pathname === '/catering' && (
           <p>
             We offer catering from all locations on ezCater. Please select your
-            desired location below.<br></br>Please email{' '}
+            desired location below.{isMobile ? <br></br> : null}
+            <br></br>Please email{' '}
             <a className="oc-link" href="mailto:catering@apollobagels.com">
               catering@apollobagels.com
             </a>{' '}
