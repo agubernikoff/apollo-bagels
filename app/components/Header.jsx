@@ -45,7 +45,7 @@ export function HeaderMenu({
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 513px)');
+    const mediaQuery = window.matchMedia('(max-width: 499px)');
 
     // Update state initially and on changes
     const updateIsMobile = (e) => setIsMobile(e.matches);
@@ -198,7 +198,7 @@ function HeaderMenuItem({title, cart, close, url}) {
           transition={{duration: 0.3, ease: 'easeInOut'}}
           initial={{marginLeft: 0}}
           animate={{
-            marginLeft: showDot ? (!isMobile ? '2.25rem' : '6vw') : 0,
+            marginLeft: showDot ? '.75em' : 0,
           }}
         >
           {title === 'Cart' ? <CartToggle cart={cart} /> : title}
