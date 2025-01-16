@@ -37,7 +37,10 @@ function OrdersCaterers({data}) {
           </p>
         )}
       </div>
-      <div className="order-cater-locations">
+      <div
+        className="order-cater-locations"
+        style={isMobile ? {marginTop: '1rem'} : null}
+      >
         {data
           .slice()
           .reverse()
