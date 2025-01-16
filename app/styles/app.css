@@ -26,7 +26,7 @@ img {
 
 @font-face {
   font-family: 'HAL';
-  src: url('../assets/fonts/HALFourGrotesk-Medium.woff') format('woff');
+  src: url('../assets/fonts/HALFourGrotesk-Regular.otf');
 }
 
 @font-face {
