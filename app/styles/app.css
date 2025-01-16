@@ -888,7 +888,7 @@ footer.footer {
 }
 @media (max-width: 504px) {
   .header-menu {
-    width: calc(100vw - 1.15rem);
+    width: calc(100vw - 1.3rem);
   }
 }
 @media (max-width: 723px) {
