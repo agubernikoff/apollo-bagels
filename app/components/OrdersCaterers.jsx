@@ -3,6 +3,17 @@ import {useLocation} from 'react-router-dom';
 import {motion} from 'framer-motion';
 
 function OrdersCaterers({data}) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 57.5em)');
+
+    // Update state initially and on changes
+    const updateIsMobile = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener('change', updateIsMobile);
+    setIsMobile(mediaQuery.matches);
+
+    return () => mediaQuery.removeEventListener('change', updateIsMobile);
+  }, []);
   const {pathname} = useLocation();
   return (
     <div className="order-cater-container">
@@ -54,7 +65,7 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 499px)');
+    const mediaQuery = window.matchMedia('(max-width: 57.5em)');
 
     // Update state initially and on changes
     const updateIsMobile = (e) => setIsMobile(e.matches);
