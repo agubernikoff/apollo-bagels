@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {motion} from 'framer-motion';
 
@@ -51,12 +51,26 @@ function OrdersCaterers({data}) {
 
 function Location({title, address, orderLink, cateringLink, pathname}) {
   const [hovered, setHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 499px)');
+
+    // Update state initially and on changes
+    const updateIsMobile = (e) => setIsMobile(e.matches);
+    mediaQuery.addEventListener('change', updateIsMobile);
+    setIsMobile(mediaQuery.matches);
+
+    return () => mediaQuery.removeEventListener('change', updateIsMobile);
+  }, []);
+
   const formattedAddress = (
     <>
       {address.street},{<br />}
       {address.city}, {address.state} {address.postalCode}
     </>
   );
+
   const link =
     pathname === '/order'
       ? orderLink
@@ -66,68 +80,111 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
 
   return (
     <motion.div
-      className="location-item"
+      className={`${isMobile ? 'location-item-mobile' : 'location-item'}`}
       initial={{x: 0}}
       animate={{x: hovered ? '1vw' : 0}}
       transition={{ease: 'easeInOut'}}
     >
-      <motion.p
-        initial={{
-          backgroundColor:
-            pathname === '/order' ? 'var(--blue)' : 'var(--yellow)',
-        }}
-        animate={{
-          backgroundColor: hovered
-            ? 'var(--green)'
-            : pathname === '/order'
-            ? 'var(--blue)'
-            : 'var(--yellow)',
-        }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
-        style={{cursor: 'pointer'}}
-      >
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="location-link"
-          style={{
-            color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
+      {/* Mobile: Title and Address in the same div */}
+      {isMobile ? (
+        <motion.div
+          className="mobile-location"
+          initial={{
+            backgroundColor:
+              pathname === '/order' ? 'var(--blue)' : 'var(--yellow)',
           }}
-        >
-          {title}
-        </a>
-      </motion.p>
-      <motion.p
-        initial={{
-          backgroundColor:
-            pathname === '/order' ? 'var(--blue)' : 'var(--yellow)',
-        }}
-        animate={{
-          backgroundColor: hovered
-            ? 'var(--green)'
-            : pathname === '/order'
-            ? 'var(--blue)'
-            : 'var(--yellow)',
-        }}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
-        style={{cursor: 'pointer'}}
-      >
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
+          animate={{
+            backgroundColor: hovered
+              ? 'var(--green)'
+              : pathname === '/order'
+              ? 'var(--blue)'
+              : 'var(--yellow)',
           }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+          style={{cursor: 'pointer'}}
         >
-          {formattedAddress}
-        </a>
-      </motion.p>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="location-link"
+            style={{
+              color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
+            }}
+          >
+            {title}
+          </a>
+          <p
+            className="mobile-address"
+            style={{
+              color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
+            }}
+          >
+            {formattedAddress}
+          </p>
+        </motion.div>
+      ) : (
+        // Desktop: Title and Address in separate divs
+        <>
+          <motion.p
+            initial={{
+              backgroundColor:
+                pathname === '/order' ? 'var(--blue)' : 'var(--yellow)',
+            }}
+            animate={{
+              backgroundColor: hovered
+                ? 'var(--green)'
+                : pathname === '/order'
+                ? 'var(--blue)'
+                : 'var(--yellow)',
+            }}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+            style={{cursor: 'pointer'}}
+          >
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="location-link"
+              style={{
+                color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
+              }}
+            >
+              {title}
+            </a>
+          </motion.p>
+          <motion.p
+            className="desktop-address"
+            initial={{
+              backgroundColor:
+                pathname === '/order' ? 'var(--blue)' : 'var(--yellow)',
+            }}
+            animate={{
+              backgroundColor: hovered
+                ? 'var(--green)'
+                : pathname === '/order'
+                ? 'var(--blue)'
+                : 'var(--yellow)',
+            }}
+            style={{cursor: 'pointer'}}
+          >
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
+              }}
+            >
+              {formattedAddress}
+            </a>
+          </motion.p>
+        </>
+      )}
     </motion.div>
   );
 }
