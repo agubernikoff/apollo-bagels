@@ -20,8 +20,7 @@ function OrdersCaterers({data}) {
       <div className="order-cater-text-container">
         {pathname === '/order' && (
           <p>
-            Place your pickup order via Toast at any of our locations until 2
-            PM.
+            Place your pickup order via Toast at any of our locations until 2PM.
             <br></br>
             Select your preferred location below.
           </p>
