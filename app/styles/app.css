@@ -736,7 +736,7 @@ footer.footer {
 }
 .location-item p:first-of-type {
   padding: 0.25rem 1rem;
-  font-size: 130px;
+  font-size: clamp(1px, 10vw, 130px);
   background-color: var(--blue);
   border-radius: 14px;
   color: var(--creme) !important;
@@ -744,7 +744,7 @@ footer.footer {
 }
 .location-item p:nth-of-type(2) {
   padding: 0.5rem 1rem;
-  font-size: 12px;
+  font-size: clamp(8.85px, 1.77vw, 12px);
   background-color: var(--blue);
   border-radius: 14px;
   color: var(--creme) !important;
