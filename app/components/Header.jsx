@@ -1,4 +1,4 @@
-import {Suspense, useState, useEffect} from 'react';
+import {Suspense, useState, useEffect, useRef} from 'react';
 import {Await, NavLink, useAsyncValue, useLocation} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
@@ -96,6 +96,36 @@ export function HeaderMenu({
     };
   }, []);
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const updateHeaderHeight = () => {
+      if (ref.current) {
+        document.documentElement.style.setProperty(
+          '--header-height',
+          `calc(${ref.current.offsetHeight}px + 1rem)`,
+        );
+        document.documentElement.style.setProperty(
+          '--mobile-header-height',
+          `calc(${ref.current.offsetHeight}px + 1rem)`,
+        );
+      }
+    };
+
+    // Initialize and listen to size changes
+    const resizeObserver = new ResizeObserver(updateHeaderHeight);
+    if (ref.current) {
+      resizeObserver.observe(ref.current);
+    }
+
+    // Cleanup observer on unmount
+    return () => {
+      if (ref.current) {
+        resizeObserver.unobserve(ref.current);
+      }
+    };
+  }, []);
+
   return (
     <nav
       className={className}
@@ -105,6 +135,7 @@ export function HeaderMenu({
           ? 'linear-gradient(to bottom, var(--color-creme),transparent)'
           : 'transparent',
       }}
+      ref={ref}
     >
       {dynamicMenu.map((item) => {
         if (!item.url) return null;
