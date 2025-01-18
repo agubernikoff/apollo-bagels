@@ -805,6 +805,7 @@ footer.footer {
 .location-grid-item-title-container > h5 {
   font-size: 48px;
   margin: 0;
+  font-family: 'HAL-BOLD';
 }
 .location-grid-item-title-container > p {
   font-size: 12px;
@@ -819,6 +820,7 @@ footer.footer {
   width: 33%;
   text-wrap: nowrap;
   font-size: 12px;
+  line-height: 1.4;
 }
 .location-grid-item-bottom-container > a:first-of-type {
   border-right: 1px solid var(--color-creme);

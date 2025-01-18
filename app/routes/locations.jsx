@@ -1,8 +1,9 @@
 import {defer} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
-import React from 'react';
+import React, {useState} from 'react';
 import {sanityClient} from '~/sanity/SanityClient';
 import MediaViewer from '~/components/MediaViewer';
+import {motion} from 'framer-motion';
 
 /**
  * @type {MetaFunction}
@@ -61,6 +62,7 @@ export default function Locations() {
 }
 
 function Location({location}) {
+  const [hovered, setHovered] = useState(null);
   const formattedAddress = (
     <>
       {location.address.street},{<br />}
@@ -78,9 +80,36 @@ function Location({location}) {
         <p>{formattedAddress}</p>
       </div>
       <div className="location-grid-item-bottom-container">
-        <a href={location.orderlink}>ORDER</a>
-        <a href={location.caterLink}>CATERING</a>
-        <p>{`p. ${location.phoneNumber}`}</p>
+        <motion.a
+          href={location.orderlink}
+          onMouseEnter={() => setHovered('order')}
+          onMouseLeave={() => setHovered(null)}
+          initial={{background: 'var(--blue)'}}
+          animate={{
+            background: hovered === 'order' ? 'var(--green)' : 'var(--blue)',
+          }}
+        >
+          ORDER
+        </motion.a>
+        <motion.a
+          href={location.caterLink}
+          onMouseEnter={() => setHovered('cater')}
+          onMouseLeave={() => setHovered(null)}
+          initial={{background: 'var(--blue)'}}
+          animate={{
+            background: hovered === 'cater' ? 'var(--green)' : 'var(--blue)',
+          }}
+        >
+          CATERING
+        </motion.a>
+        <motion.p
+          onMouseEnter={() => setHovered('phone')}
+          onMouseLeave={() => setHovered(null)}
+          initial={{background: 'var(--blue)'}}
+          animate={{
+            background: hovered === 'phone' ? 'var(--green)' : 'var(--blue)',
+          }}
+        >{`p. ${location.phoneNumber}`}</motion.p>
       </div>
     </div>
   );
