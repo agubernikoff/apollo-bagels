@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 
 const MediaViewer = ({file}) => {
-  console.log(file);
   const [error, setError] = useState(false);
 
   if (!file) {

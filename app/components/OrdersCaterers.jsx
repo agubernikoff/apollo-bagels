@@ -14,7 +14,7 @@ function OrdersCaterers({data}) {
 
     return () => mediaQuery.removeEventListener('change', updateIsMobile);
   }, []);
-  console.log(isMobile);
+
   const {pathname} = useLocation();
   return (
     <div className="order-cater-container">
