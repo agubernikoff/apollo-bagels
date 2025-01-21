@@ -134,6 +134,7 @@ export function HeaderMenu({
           paddingLeft: '-1rem',
           paddingTop: '-1rem',
           position: 'absolute',
+          zIndex: '-1',
           height: 'var(--mobile-header-height)',
           background: scrolled
             ? 'linear-gradient(to bottom, var(--color-creme),transparent)'
