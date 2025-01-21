@@ -26,6 +26,7 @@ export default async function handleRequest(
       "'self'",
       'https://cdn.sanity.io/images/gnnsqgu6/production/',
       'https://cdn.sanity.io/files/gnnsqgu6/production/',
+      'https://cdn.shopify.com/',
     ],
   });
 
