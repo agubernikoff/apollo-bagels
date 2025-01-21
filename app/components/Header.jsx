@@ -131,6 +131,8 @@ export function HeaderMenu({
       <div
         style={{
           width: '100vw',
+          paddingLeft: '-1rem',
+          paddingTop: '-1rem',
           position: 'absolute',
           height: 'var(--mobile-header-height)',
           background: scrolled
