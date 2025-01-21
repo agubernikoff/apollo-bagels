@@ -4,6 +4,14 @@ import {useLocation} from '@remix-run/react';
 export function Footer() {
   const [time, setTime] = useState('');
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    window
+      .matchMedia('(max-width: 57.5em)') // 920px ÷ 16 = 57.5em
+      .addEventListener('change', (e) => setIsMobile(e.matches));
+    if (window.matchMedia('(max-width: 57.5em)').matches) setIsMobile(true);
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
@@ -21,7 +29,12 @@ export function Footer() {
     };
   }
   return (
-    <footer className="footer">
+    <footer
+      className="footer"
+      style={{
+        display: isMobile && pathname !== '/' ? 'none' : null,
+      }}
+    >
       <div className="footer-left" style={style()}>
         {pathname !== '/' && <p>© Apollo Bagels 2024, All Rights Reserved.</p>}
       </div>
