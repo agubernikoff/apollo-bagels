@@ -11,6 +11,7 @@ import {
 import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
+import {useEffect} from 'react';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -102,44 +103,79 @@ export default function Product() {
 
   const {title, descriptionHtml} = product;
 
+  useEffect(() => {
+    const mainWrapper = document.querySelector('.product-page'); // Assuming the main wrapper is `product-page`
+
+    // Remove margins by using position absolute
+    if (mainWrapper) {
+      mainWrapper.style.position = 'absolute';
+      mainWrapper.style.top = '0';
+      mainWrapper.style.left = '0';
+      mainWrapper.style.right = '0';
+      mainWrapper.style.bottom = '0';
+      mainWrapper.style.margin = '0'; // Remove margins
+    }
+
+    return () => {
+      if (mainWrapper) {
+        // Reset the styles
+        mainWrapper.style.position = '';
+        mainWrapper.style.top = '';
+        mainWrapper.style.left = '';
+        mainWrapper.style.right = '';
+        mainWrapper.style.bottom = '';
+        mainWrapper.style.margin = '';
+      }
+    };
+  }, []);
+
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
+    <div className="product-page">
       <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <ProductForm
-          productOptions={productOptions}
-          selectedVariant={selectedVariant}
-        />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <br />
+        <div className="product-box">
+          <div className="product-header">
+            <p>{title}</p>
+            <ProductPrice
+              price={selectedVariant?.price}
+              compareAtPrice={selectedVariant?.compareAtPrice}
+            />
+          </div>
+          <div className="product-sizes">
+            <p>SIZE:</p>
+            <div className="size-buttons">
+              {productOptions?.map((option) => (
+                <button key={option.id}>{option.value}</button>
+              ))}
+            </div>
+          </div>
+
+          <div className="product-description">
+            <p>Johns height is 6'9</p>
+          </div>
+
+          <div className="product-details">
+            <p style={{fontFamily: 'HAL-BOLD', marginBottom: '-.5rem'}}>
+              DETAILS:
+            </p>
+            <br />
+            <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+          </div>
+
+          <div className="product-confirm">
+            <button>ADD TO CART</button>
+          </div>
+        </div>
       </div>
-      <Analytics.ProductView
-        data={{
-          products: [
-            {
-              id: product.id,
-              title: product.title,
-              price: selectedVariant?.price.amount || '0',
-              vendor: product.vendor,
-              variantId: selectedVariant?.id || '',
-              variantTitle: selectedVariant?.title || '',
-              quantity: 1,
-            },
-          ],
-        }}
-      />
+
+      <div className="product-images">
+        {product?.images?.nodes && product.images.nodes.length > 0 ? (
+          product.images.nodes.map((image) => (
+            <ProductImage key={image.id} image={image} />
+          ))
+        ) : (
+          <div className="product-image-placeholder">No images available</div>
+        )}
+      </div>
     </div>
   );
 }
@@ -185,6 +221,16 @@ const PRODUCT_FRAGMENT = `#graphql
   fragment Product on Product {
     id
     title
+    images(first: 12) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
+
     vendor
     handle
     descriptionHtml
