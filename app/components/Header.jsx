@@ -11,8 +11,34 @@ import Hours from './Hours';
 export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
   const {shop, menu} = header;
 
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 0); // Check if the user has scrolled down
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    // Cleanup listener on component unmount
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <header className="header">
+      <div
+        style={{
+          background: scrolled
+            ? 'linear-gradient(to bottom, var(--color-creme),transparent)'
+            : 'transparent',
+          width: '100vw',
+          height: 'var(--header-height)',
+          position: 'absolute',
+          zIndex: -1,
+        }}
+      />
       <HeaderMenu
         menu={menu}
         viewport="desktop"
@@ -81,21 +107,6 @@ export function HeaderMenu({
     }
   }, [isMobile, menu, indexOfInfo]);
 
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 0); // Check if the user has scrolled down
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    // Cleanup listener on component unmount
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
   const ref = useRef(null);
 
   useEffect(() => {
@@ -127,16 +138,7 @@ export function HeaderMenu({
   }, []);
 
   return (
-    <nav
-      className={className}
-      role="navigation"
-      style={{
-        background: scrolled
-          ? 'linear-gradient(to bottom, var(--color-creme),transparent)'
-          : 'transparent',
-      }}
-      ref={ref}
-    >
+    <nav className={className} role="navigation" ref={ref}>
       {dynamicMenu.map((item) => {
         if (!item.url) return null;
 
