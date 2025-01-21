@@ -790,6 +790,7 @@ footer.footer {
   background-color: var(--blue); /* Ensures the background is white */
   color: var(--color-creme);
   overflow: hidden; /* Clips overflowing content */
+  aspect-ratio: 6/5;
 }
 .location-grid-item-bottom-container,
 .location-grid-item-title-container {
