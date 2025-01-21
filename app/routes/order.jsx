@@ -3,6 +3,7 @@ import {useLoaderData} from '@remix-run/react';
 import React from 'react';
 import OrdersCaterers from '~/components/OrdersCaterers';
 import {sanityClient} from '~/sanity/SanityClient';
+import reorderArray from '~/helpers/reorderArray';
 
 /**
  * @type {MetaFunction}
@@ -52,9 +53,20 @@ export default function Order() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
 
+  const condition = (loc) => loc.comingSoon;
+  const condition2 = (loc) => Object.keys(loc.address).length <= 2;
+  const condition3 = (loc) => !loc.orderLink;
+
+  // console.log(reorderArray(data.sanityData.locations, [condition]));
   return (
     <div>
-      <OrdersCaterers data={data?.sanityData?.locations} />
+      <OrdersCaterers
+        data={reorderArray(data?.sanityData?.locations, [
+          condition,
+          condition2,
+          condition3,
+        ])}
+      />
     </div>
   );
 }

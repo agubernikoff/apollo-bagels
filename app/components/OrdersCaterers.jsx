@@ -42,29 +42,35 @@ function OrdersCaterers({data}) {
         className="order-cater-locations"
         style={isMobile ? {marginTop: '1rem'} : null}
       >
-        {data
-          .slice()
-          .reverse()
-          .map((location) => {
-            const {title, address, orderLink, cateringLink} = location;
+        {data.map((location) => {
+          const {title, address, orderLink, cateringLink, comingSoon} =
+            location;
 
-            return (
-              <Location
-                title={title}
-                address={address}
-                orderLink={orderLink}
-                cateringLink={cateringLink}
-                pathname={pathname}
-                key={location._id}
-              />
-            );
-          })}
+          return (
+            <Location
+              title={title}
+              address={address}
+              orderLink={orderLink}
+              cateringLink={cateringLink}
+              pathname={pathname}
+              comingSoon={comingSoon}
+              key={location._id}
+            />
+          );
+        })}
       </div>
     </div>
   );
 }
 
-function Location({title, address, orderLink, cateringLink, pathname}) {
+function Location({
+  title,
+  address,
+  orderLink,
+  cateringLink,
+  pathname,
+  comingSoon,
+}) {
   const [hovered, setHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -99,6 +105,11 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
       initial={{x: 0}}
       animate={{x: hovered ? '1vw' : 0}}
       transition={{ease: 'easeInOut'}}
+      style={
+        comingSoon || link === undefined || Object.keys(address).length <= 2
+          ? {opacity: 0.33}
+          : null
+      }
     >
       {/* Mobile: Title and Address in the same div */}
       {isMobile ? (
@@ -137,7 +148,11 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
               color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
             }}
           >
-            {formattedAddress}
+            {!comingSoon &&
+            link !== undefined &&
+            Object.keys(address).length > 2
+              ? formattedAddress
+              : 'COMING SOON'}
           </p>
         </motion.div>
       ) : (
@@ -195,7 +210,11 @@ function Location({title, address, orderLink, cateringLink, pathname}) {
                 color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
               }}
             >
-              {formattedAddress}
+              {!comingSoon &&
+              link !== undefined &&
+              Object.keys(address).length > 2
+                ? formattedAddress
+                : 'COMING SOON'}
             </a>
           </motion.p>
         </>
