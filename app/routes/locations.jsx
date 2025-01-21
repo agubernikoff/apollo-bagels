@@ -84,44 +84,72 @@ function Location({location}) {
     </>
   );
   return (
-    <div className="location-grid-item">
-      <MediaViewer file={location.videoBackground?.asset} />
-      <div className="location-grid-item-title-container">
-        <h5>{location.title}</h5>
-        <p>{formattedAddress}</p>
-      </div>
-      <div className="location-grid-item-bottom-container">
-        <motion.a
-          href={location.orderlink}
-          onMouseEnter={() => setHovered('order')}
-          onMouseLeave={() => setHovered(null)}
-          initial={{background: 'var(--blue)'}}
-          animate={{
-            background: hovered === 'order' ? 'var(--green)' : 'var(--blue)',
+    <div
+      className="location-grid-item"
+      style={
+        location.comingSoon ||
+        location.phoneNumber === undefined ||
+        Object.keys(location.address).length <= 2
+          ? {opacity: 0.33}
+          : null
+      }
+    >
+      {!location.comingSoon &&
+      location.phoneNumber !== undefined &&
+      Object.keys(location.address).length > 2 ? (
+        <>
+          <MediaViewer file={location.videoBackground?.asset} />
+          <div className="location-grid-item-title-container">
+            <h5>{location.title}</h5>
+            <p>{formattedAddress}</p>
+          </div>
+          <div className="location-grid-item-bottom-container">
+            <motion.a
+              href={location.orderlink}
+              onMouseEnter={() => setHovered('order')}
+              onMouseLeave={() => setHovered(null)}
+              initial={{background: 'var(--blue)'}}
+              animate={{
+                background:
+                  hovered === 'order' ? 'var(--green)' : 'var(--blue)',
+              }}
+            >
+              ORDER
+            </motion.a>
+            <motion.a
+              href={location.caterLink}
+              onMouseEnter={() => setHovered('cater')}
+              onMouseLeave={() => setHovered(null)}
+              initial={{background: 'var(--blue)'}}
+              animate={{
+                background:
+                  hovered === 'cater' ? 'var(--green)' : 'var(--blue)',
+              }}
+            >
+              CATERING
+            </motion.a>
+            <motion.p
+              onMouseEnter={() => setHovered('phone')}
+              onMouseLeave={() => setHovered(null)}
+              initial={{background: 'var(--blue)'}}
+              animate={{
+                background:
+                  hovered === 'phone' ? 'var(--green)' : 'var(--blue)',
+              }}
+            >{`p. ${location.phoneNumber}`}</motion.p>
+          </div>
+        </>
+      ) : (
+        <div
+          style={{
+            margin: 'auto',
+            textAlign: 'center',
           }}
         >
-          ORDER
-        </motion.a>
-        <motion.a
-          href={location.caterLink}
-          onMouseEnter={() => setHovered('cater')}
-          onMouseLeave={() => setHovered(null)}
-          initial={{background: 'var(--blue)'}}
-          animate={{
-            background: hovered === 'cater' ? 'var(--green)' : 'var(--blue)',
-          }}
-        >
-          CATERING
-        </motion.a>
-        <motion.p
-          onMouseEnter={() => setHovered('phone')}
-          onMouseLeave={() => setHovered(null)}
-          initial={{background: 'var(--blue)'}}
-          animate={{
-            background: hovered === 'phone' ? 'var(--green)' : 'var(--blue)',
-          }}
-        >{`p. ${location.phoneNumber}`}</motion.p>
-      </div>
+          <h5>{location.title}</h5>
+          <p>COMING SOON</p>
+        </div>
+      )}
     </div>
   );
 }

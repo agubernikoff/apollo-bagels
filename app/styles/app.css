@@ -803,7 +803,7 @@ footer.footer {
 .location-grid-item-title-container {
   padding-inline: 1rem;
 }
-.location-grid-item-title-container > h5 {
+.location-grid-item h5 {
   font-size: 48px;
   margin: 0;
   font-family: 'HAL-BOLD';
@@ -837,14 +837,14 @@ footer.footer {
   position: relative;
   width: 100%;
   max-width: 600px; /* Adjust based on your layout needs */
-  height: auto;
+  height: 100%;
   overflow: hidden;
 }
 
 .media-element {
   border-radius: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover; /* Ensures content fits nicely */
 }
 
