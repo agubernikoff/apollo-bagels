@@ -127,16 +127,17 @@ export function HeaderMenu({
   }, []);
 
   return (
-    <nav
-      className={className}
-      role="navigation"
-      style={{
-        background: scrolled
-          ? 'linear-gradient(to bottom, var(--color-creme),transparent)'
-          : 'transparent',
-      }}
-      ref={ref}
-    >
+    <nav className={className} role="navigation" ref={ref}>
+      <div
+        style={{
+          width: '100vw',
+          position: 'absolute',
+          height: 'var(--mobile-header-height)',
+          background: scrolled
+            ? 'linear-gradient(to bottom, var(--color-creme),transparent)'
+            : 'transparent',
+        }}
+      ></div>
       {dynamicMenu.map((item) => {
         if (!item.url) return null;
 
