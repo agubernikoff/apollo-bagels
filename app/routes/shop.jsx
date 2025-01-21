@@ -1,6 +1,8 @@
 import {defer} from '@shopify/remix-oxygen';
 import {useLoaderData, Link} from '@remix-run/react';
 import {getPaginationVariables, Image, Money} from '@shopify/hydrogen';
+import {useState} from 'react';
+import {AnimatePresence, motion} from 'framer-motion';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -50,18 +52,34 @@ export default function ShopPage() {
  * @param {{product: ProductItemFragment}}
  */
 function ProductItem({product}) {
+  const [image, setImage] = useState(product.images.nodes[0]);
+
   return (
     <Link className="product-item" to={`/products/${product.handle}`}>
-      <div className="image-container">
-        {product.featuredImage && (
-          <Image
-            alt={product.featuredImage.altText || product.title}
-            aspectRatio="1/1"
-            data={product.featuredImage}
-            sizes="(min-width: 45em) 400px, 100vw"
-          />
-        )}
-      </div>
+      <AnimatePresence mode="popLayout">
+        <motion.div
+          className="image-container"
+          onMouseEnter={() => {
+            if (product.images.nodes.length > 1)
+              setImage(product.images.nodes[1]);
+          }}
+          onMouseLeave={() => setImage(product.images.nodes[0])}
+          key={image.url}
+          initial={false}
+          animate={{opacity: 1}}
+          exit={{opacity: 0}}
+          transition={{duration: 0.5}}
+        >
+          {image && (
+            <Image
+              alt={product.featuredImage.altText || product.title}
+              aspectRatio="1/1"
+              data={image}
+              sizes="(min-width: 45em) 400px, 100vw"
+            />
+          )}
+        </motion.div>
+      </AnimatePresence>
       <div className="product-info">
         <p>{product.title}</p>
         <small>
@@ -88,6 +106,15 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
       url
       width
       height
+    }
+    images(first: 2) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
     }
     priceRange {
       minVariantPrice {
