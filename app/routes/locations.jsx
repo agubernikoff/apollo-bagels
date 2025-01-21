@@ -83,6 +83,7 @@ function Location({location}) {
       MON-SUN: 7A-5P
     </>
   );
+  console.log(location);
   return (
     <div
       className="location-grid-item"
@@ -105,7 +106,7 @@ function Location({location}) {
           </div>
           <div className="location-grid-item-bottom-container">
             <motion.a
-              href={location.orderlink}
+              href={location.orderLink}
               onMouseEnter={() => setHovered('order')}
               onMouseLeave={() => setHovered(null)}
               initial={{background: 'var(--blue)'}}
@@ -114,10 +115,12 @@ function Location({location}) {
                   hovered === 'order' ? 'var(--green)' : 'var(--blue)',
               }}
             >
-              ORDER
+              {hovered === 'order' && !location.orderLink
+                ? 'COMING SOON'
+                : 'ORDER'}
             </motion.a>
             <motion.a
-              href={location.caterLink}
+              href={location.cateringLink}
               onMouseEnter={() => setHovered('cater')}
               onMouseLeave={() => setHovered(null)}
               initial={{background: 'var(--blue)'}}
@@ -126,7 +129,9 @@ function Location({location}) {
                   hovered === 'cater' ? 'var(--green)' : 'var(--blue)',
               }}
             >
-              CATERING
+              {hovered === 'cater' && !location.cateringLink
+                ? 'COMING SOON'
+                : 'CATERING'}
             </motion.a>
             <motion.p
               onMouseEnter={() => setHovered('phone')}

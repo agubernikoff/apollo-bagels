@@ -98,7 +98,7 @@ function Location({
       : pathname === '/catering'
       ? cateringLink
       : '#';
-
+  console.log(Boolean(link));
   return (
     <motion.div
       className={`${isMobile ? 'location-item-mobile' : 'location-item'}`}
@@ -128,7 +128,9 @@ function Location({
           }}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+          onClick={() => {
+            if (link) window.open(link, '_blank', 'noopener,noreferrer');
+          }}
           style={{cursor: 'pointer'}}
         >
           <a
@@ -172,7 +174,9 @@ function Location({
             }}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+            onClick={() => {
+              if (link) window.open(link, '_blank', 'noopener,noreferrer');
+            }}
             style={{cursor: 'pointer'}}
           >
             <a
