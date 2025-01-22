@@ -648,7 +648,10 @@ footer.footer {
 
 @media (max-width: 500px) {
   .products-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: (2, 1fr);
+  }
+  .image-container {
+    height: 280px;
   }
 }
 
