@@ -1,5 +1,5 @@
 import {CartForm} from '@shopify/hydrogen';
-
+import {motion} from 'framer-motion';
 /**
  * @param {{
  *   analytics?: unknown;
@@ -25,14 +25,19 @@ export function AddToCartButton({
             type="hidden"
             value={JSON.stringify(analytics)}
           />
-          <button
+          <motion.button
             id="add-to-cart-btn"
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
+            initial={{background: '#00000000', color: 'var(--color-creme)'}}
+            animate={{
+              background: disabled ? '#00000000' : 'var(--color-creme)',
+              color: disabled ? 'var(--color-creme)' : 'var(--blue)',
+            }}
           >
             {children}
-          </button>
+          </motion.button>
         </div>
       )}
     </CartForm>

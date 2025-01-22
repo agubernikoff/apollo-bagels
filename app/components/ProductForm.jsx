@@ -1,6 +1,7 @@
 import {Link, useNavigate} from '@remix-run/react';
 import {AddToCartButton} from './AddToCartButton';
 import {useAside} from './Aside';
+import {motion} from 'framer-motion';
 
 /**
  * @param {{
@@ -8,9 +9,18 @@ import {useAside} from './Aside';
  *   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
  * }}
  */
-export function ProductForm({productOptions, selectedVariant, children}) {
+export function ProductForm({
+  productOptions,
+  selectedVariant,
+  children,
+  setInitial,
+}) {
   const navigate = useNavigate();
   const {open} = useAside();
+  const atLeastOneSelected = productOptions[0].optionValues.find(
+    (o) => o.selected,
+  );
+
   return (
     <div className="product-form">
       {productOptions.map((option) => {
@@ -70,7 +80,7 @@ export function ProductForm({productOptions, selectedVariant, children}) {
                   // the variant so that SEO bots do not index these as
                   // duplicated links
                   return (
-                    <button
+                    <motion.button
                       type="button"
                       className={`product-options-item${
                         exists && !selected ? ' link' : ''
@@ -78,24 +88,31 @@ export function ProductForm({productOptions, selectedVariant, children}) {
                       key={option.name + name}
                       style={{
                         border: '1px solid var(--color-creme)',
-                        background: selected
-                          ? 'var(--color-creme)'
-                          : 'transparent',
-                        color: selected ? 'var(--blue)' : 'var(--color-creme)',
                         opacity: available ? 1 : 0.3,
                       }}
                       disabled={!exists}
                       onClick={() => {
                         if (!selected) {
+                          setInitial(false);
                           navigate(`?${variantUriQuery}`, {
                             replace: true,
                             preventScrollReset: true,
                           });
-                        }
+                        } else setInitial(true);
+                      }}
+                      initial={{
+                        backgroundColor: '#00000000',
+                        color: 'var(--color-creme)',
+                      }}
+                      animate={{
+                        backgroundColor: selected
+                          ? 'var(--color-creme)'
+                          : '#00000000',
+                        color: selected ? 'var(--blue)' : 'var(--color-creme)',
                       }}
                     >
                       <ProductOptionSwatch swatch={swatch} name={name} />
-                    </button>
+                    </motion.button>
                   );
                 }
               })}
@@ -122,7 +139,11 @@ export function ProductForm({productOptions, selectedVariant, children}) {
             : []
         }
       >
-        {selectedVariant?.availableForSale ? 'ADD TO CART' : 'SOLD OUT'}
+        {atLeastOneSelected
+          ? selectedVariant?.availableForSale
+            ? 'ADD TO CART'
+            : 'SOLD OUT'
+          : 'SELECT A SIZE'}
       </AddToCartButton>
     </div>
   );

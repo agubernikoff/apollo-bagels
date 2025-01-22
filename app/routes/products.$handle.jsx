@@ -11,7 +11,7 @@ import {
 import {ProductPrice} from '~/components/ProductPrice';
 import {ProductImage} from '~/components/ProductImage';
 import {ProductForm} from '~/components/ProductForm';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -81,6 +81,8 @@ function loadDeferredData({context, params}) {
 }
 
 export default function Product() {
+  const [initial, setInitial] = useState(true);
+
   /** @type {LoaderReturnData} */
   const {product} = useLoaderData();
   // Optimistically selects a variant with given available variant information
@@ -88,7 +90,6 @@ export default function Product() {
     product.selectedOrFirstAvailableVariant,
     getAdjacentAndFirstAvailableVariants(product),
   );
-
   // Sets the search param to the selected variant without navigation
   // only when no search params are set in the url
   useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
@@ -98,7 +99,6 @@ export default function Product() {
     ...product,
     selectedOrFirstAvailableVariant: selectedVariant,
   });
-  console.log(product);
 
   const {title, descriptionHtml} = product;
 
@@ -140,8 +140,20 @@ export default function Product() {
             />
           </div>
           <ProductForm
-            productOptions={productOptions}
-            selectedVariant={selectedVariant}
+            productOptions={
+              initial
+                ? [...productOptions].map((option) => {
+                    return {
+                      ...option,
+                      optionValues: option.optionValues.map((oV) => {
+                        return {...oV, selected: false};
+                      }),
+                    };
+                  })
+                : productOptions
+            }
+            selectedVariant={initial ? null : selectedVariant}
+            setInitial={setInitial}
           >
             <div className="product-description">
               <p>Johns height is 6'9</p>

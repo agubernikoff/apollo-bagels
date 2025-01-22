@@ -50,7 +50,7 @@ main {
 * --------------------------------------------------
 */
 .link:hover {
-  text-decoration: underline;
+  /* text-decoration: underline; */
   cursor: pointer;
 }
 
@@ -761,6 +761,9 @@ footer.footer {
   cursor: pointer;
   font-family: 'HAL-BOLD', sans-serif;
   font-size: 12px;
+}
+#add-to-cart-btn:disabled {
+  cursor: auto;
 }
 .product-confirm button.selected {
   background-color: var(--color-creme);
