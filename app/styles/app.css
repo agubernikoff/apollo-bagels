@@ -1194,6 +1194,16 @@ footer.footer {
   .header-menu-item {
     padding: 1.5352px 6.72px;
   }
+  .locations-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .location-grid-item-title-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .location-grid-item h5 {
+    font-size: 43px;
+  }
 }
 @media (max-width: 365px) {
   .header-menu {
