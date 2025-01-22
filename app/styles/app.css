@@ -1207,6 +1207,12 @@ footer.footer {
   .location-grid-item h5 {
     font-size: 43px;
   }
+  .shop-page {
+    margin-top: 1rem;
+  }
+  .products-grid {
+    row-gap: 1.5rem;
+  }
 }
 @media (max-width: 365px) {
   .header-menu {
