@@ -19,20 +19,21 @@ export function AddToCartButton({
   return (
     <CartForm route="/cart" inputs={{lines}} action={CartForm.ACTIONS.LinesAdd}>
       {(fetcher) => (
-        <>
+        <div className="product-confirm">
           <input
             name="analytics"
             type="hidden"
             value={JSON.stringify(analytics)}
           />
           <button
+            id="add-to-cart-btn"
             type="submit"
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
           >
             {children}
           </button>
-        </>
+        </div>
       )}
     </CartForm>
   );

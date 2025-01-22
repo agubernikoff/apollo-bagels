@@ -8,7 +8,7 @@ import {useAside} from './Aside';
  *   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
  * }}
  */
-export function ProductForm({productOptions, selectedVariant}) {
+export function ProductForm({productOptions, selectedVariant, children}) {
   const navigate = useNavigate();
   const {open} = useAside();
   return (
@@ -18,9 +18,14 @@ export function ProductForm({productOptions, selectedVariant}) {
         if (option.optionValues.length === 1) return null;
 
         return (
-          <div className="product-options" key={option.name}>
-            <h5>{option.name}</h5>
-            <div className="product-options-grid">
+          <div
+            className={`product-options product-${option.name.toLowerCase()}s`}
+            key={option.name}
+          >
+            <p>{option.name.toUpperCase()}:</p>
+            <div
+              className={`product-options-grid ${option.name.toLowerCase()}-buttons`}
+            >
               {option.optionValues.map((value) => {
                 const {
                   name,
@@ -47,9 +52,11 @@ export function ProductForm({productOptions, selectedVariant}) {
                       replace
                       to={`/products/${handle}?${variantUriQuery}`}
                       style={{
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
+                        border: '1px solid var(--color-creme)',
+                        background: selected
+                          ? 'var(--color-creme)'
+                          : 'transparent',
+                        color: selected ? 'var(--blue)' : 'var(--color-creme)',
                         opacity: available ? 1 : 0.3,
                       }}
                     >
@@ -70,9 +77,11 @@ export function ProductForm({productOptions, selectedVariant}) {
                       }`}
                       key={option.name + name}
                       style={{
-                        border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
+                        border: '1px solid var(--color-creme)',
+                        background: selected
+                          ? 'var(--color-creme)'
+                          : 'transparent',
+                        color: selected ? 'var(--blue)' : 'var(--color-creme)',
                         opacity: available ? 1 : 0.3,
                       }}
                       disabled={!exists}
@@ -95,6 +104,7 @@ export function ProductForm({productOptions, selectedVariant}) {
           </div>
         );
       })}
+      {children}
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
         onClick={() => {
@@ -112,7 +122,7 @@ export function ProductForm({productOptions, selectedVariant}) {
             : []
         }
       >
-        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        {selectedVariant?.availableForSale ? 'ADD TO CART' : 'SOLD OUT'}
       </AddToCartButton>
     </div>
   );

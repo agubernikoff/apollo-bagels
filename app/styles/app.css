@@ -249,7 +249,7 @@ button.reset:hover:not(:has(> *)) {
 }
 .header-menu-item {
   cursor: pointer;
-  color: white;
+  color: var(--color-creme);
   padding: 0.25rem 0.85rem;
   display: flex;
   align-items: center;
@@ -404,7 +404,7 @@ footer.footer {
 }
 
 .cart-summary-aside {
-  background: white;
+  background: var(--color-creme);
   border-top: 1px solid var(--color-dark);
   bottom: 0;
   padding-top: 0.75rem;
@@ -679,7 +679,7 @@ footer.footer {
 
 .product-box {
   background-color: var(--blue);
-  color: white;
+  color: var(--color-creme);
   width: 50%;
   display: flex;
   flex-direction: column;
@@ -714,6 +714,10 @@ footer.footer {
   font-size: 24px !important;
   margin-bottom: 1rem;
 }
+.product-form,
+.product-form > form {
+  width: 100%;
+}
 .product-header p {
   font-family: 'HAL-BOLD';
   font-size: 24px !important;
@@ -731,34 +735,35 @@ footer.footer {
   margin-top: 0.5rem;
   padding: 15px;
   background-color: transparent;
-  color: white;
-  border: 1px solid white;
+  color: var(--color-creme);
+  border: 1px solid var(--color-creme);
   border-radius: 5px;
   cursor: pointer;
   font-family: 'HAL', sans-serif;
   font-size: 12px;
 }
 .size-buttons button.selected {
-  background-color: white;
+  background-color: var(--color-creme);
   color: var(--blue);
 }
 .product-confirm {
   width: 100%;
   margin-top: 1rem;
 }
-.product-confirm button {
+.product-confirm button,
+#add-to-cart-btn {
   padding: 1.25rem;
   width: 100%;
   background-color: transparent;
-  color: white;
-  border: 1px solid white;
+  color: var(--color-creme);
+  border: 1px solid var(--color-creme);
   border-radius: 5px;
   cursor: pointer;
   font-family: 'HAL-BOLD', sans-serif;
   font-size: 12px;
 }
 .product-confirm button.selected {
-  background-color: white;
+  background-color: var(--color-creme);
   color: var(--blue);
 }
 

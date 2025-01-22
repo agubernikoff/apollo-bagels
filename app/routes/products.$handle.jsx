@@ -51,7 +51,6 @@ async function loadCriticalData({context, params, request}) {
   if (!handle) {
     throw new Error('Expected product handle to be defined');
   }
-
   const [{product}] = await Promise.all([
     storefront.query(PRODUCT_QUERY, {
       variables: {handle, selectedOptions: getSelectedProductOptions(request)},
@@ -84,7 +83,6 @@ function loadDeferredData({context, params}) {
 export default function Product() {
   /** @type {LoaderReturnData} */
   const {product} = useLoaderData();
-
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
@@ -100,6 +98,7 @@ export default function Product() {
     ...product,
     selectedOrFirstAvailableVariant: selectedVariant,
   });
+  console.log(product);
 
   const {title, descriptionHtml} = product;
 
@@ -140,30 +139,22 @@ export default function Product() {
               compareAtPrice={selectedVariant?.compareAtPrice}
             />
           </div>
-          <div className="product-sizes">
-            <p>SIZE:</p>
-            <div className="size-buttons">
-              {productOptions?.map((option) => (
-                <button key={option.id}>{option.value}</button>
-              ))}
+          <ProductForm
+            productOptions={productOptions}
+            selectedVariant={selectedVariant}
+          >
+            <div className="product-description">
+              <p>Johns height is 6'9</p>
             </div>
-          </div>
 
-          <div className="product-description">
-            <p>Johns height is 6'9</p>
-          </div>
-
-          <div className="product-details">
-            <p style={{fontFamily: 'HAL-BOLD', marginBottom: '-.5rem'}}>
-              DETAILS:
-            </p>
-            <br />
-            <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-          </div>
-
-          <div className="product-confirm">
-            <button>ADD TO CART</button>
-          </div>
+            <div className="product-details">
+              <p style={{fontFamily: 'HAL-BOLD', marginBottom: '-.5rem'}}>
+                DETAILS:
+              </p>
+              <br />
+              <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+            </div>
+          </ProductForm>
         </div>
       </div>
 
@@ -176,6 +167,21 @@ export default function Product() {
           <div className="product-image-placeholder">No images available</div>
         )}
       </div>
+      <Analytics.ProductView
+        data={{
+          products: [
+            {
+              id: product.id,
+              title: product.title,
+              price: selectedVariant?.price.amount || '0',
+              vendor: product.vendor,
+              variantId: selectedVariant?.id || '',
+              variantTitle: selectedVariant?.title || '',
+              quantity: 1,
+            },
+          ],
+        }}
+      />
     </div>
   );
 }
