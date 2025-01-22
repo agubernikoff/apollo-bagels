@@ -15,6 +15,8 @@
   --green: #7bba76;
   --red: #da291c;
   --scarlet: #d44424;
+  --loc-grid-item-title-container-align-items: center;
+  --loc-grid-item-title-container-flex-direction: row;
 }
 
 strong {
@@ -906,6 +908,16 @@ footer.footer {
   gap: 1rem;
   margin: 0 auto; /* Centers the grid on the page */
 }
+@media (max-width: 965px) {
+  .locations-grid {
+    grid-template-columns: repeat(2, minmax(300px, 1fr));
+  }
+}
+@media (max-width: 645px) {
+  .locations-grid {
+    grid-template-columns: repeat(1, minmax(300px, 1fr));
+  }
+}
 
 .location-grid-item {
   display: flex;
@@ -917,19 +929,24 @@ footer.footer {
   overflow: hidden; /* Clips overflowing content */
   aspect-ratio: 6/5;
 }
-.location-grid-item-bottom-container,
-.location-grid-item-title-container {
+.location-grid-item-bottom-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+.location-grid-item-title-container {
+  display: flex;
+  flex-direction: var(--loc-grid-item-title-container-flex-direction);
+  justify-content: space-between;
+  align-items: var(--loc-grid-item-title-container-align-items);
 }
 
 .location-grid-item-title-container {
   padding-inline: 1rem;
 }
 .location-grid-item h5 {
-  font-size: 48px;
+  font-size: clamp(36px, 2.95vw, 48px);
   margin: 0;
   font-family: 'HAL-BOLD';
 }
@@ -962,7 +979,7 @@ footer.footer {
   align-items: center;
   position: relative;
   width: 100%;
-  max-width: 600px; /* Adjust based on your layout needs */
+  max-width: 620px; /* Adjust based on your layout needs */
   height: 100%;
   overflow: hidden;
 }

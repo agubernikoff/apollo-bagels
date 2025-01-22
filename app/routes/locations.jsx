@@ -1,6 +1,6 @@
 import {defer} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {sanityClient} from '~/sanity/SanityClient';
 import MediaViewer from '~/components/MediaViewer';
 import {motion} from 'framer-motion';
@@ -74,6 +74,80 @@ export default function Locations() {
 
 function Location({location}) {
   const [hovered, setHovered] = useState(null);
+  const [isSizeExceeded, setIsSizeExceeded] = useState(false);
+  const [isLargest, setIsLargest] = useState(false);
+  const h5Ref = useRef(null);
+  const parentRef = useRef(null);
+
+  useEffect(() => {
+    //find all h5s
+    const allH5Elements = Array.from(
+      document.querySelectorAll('.location-grid-item h5'),
+    );
+
+    // Find the largest h5 width excluding 'COMING SOON'
+    const largestH5Width = Math.max(
+      ...allH5Elements.map((h5) => {
+        if (h5.nextElementSibling.innerHTML !== 'COMING SOON')
+          return h5.offsetWidth;
+        else return 0;
+      }),
+    );
+
+    if (h5Ref?.current && h5Ref.current.offsetWidth === largestH5Width)
+      setIsLargest(true);
+
+    const checkSize = () => {
+      if (h5Ref.current && parentRef.current && isLargest) {
+        const h5Width = h5Ref.current.offsetWidth;
+        const parentWidth = parentRef.current.offsetWidth;
+        const percentage = (h5Width / parentWidth) * 100;
+
+        // Update state only if the current h5 is the largest and exceeds the threshold
+        if (isLargest) {
+          setIsSizeExceeded(percentage > 61.99);
+        }
+      }
+    };
+
+    // Initialize ResizeObserver
+    const resizeObserver = new ResizeObserver(checkSize);
+
+    // Observe the <h5> element
+    if (parentRef.current) {
+      resizeObserver.observe(parentRef.current);
+    }
+
+    // Cleanup on unmount
+    return () => {
+      if (parentRef.current) {
+        resizeObserver.unobserve(parentRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isLargest)
+      if (isSizeExceeded) {
+        document.documentElement.style.setProperty(
+          '--loc-grid-item-title-container-flex-direction',
+          `column`,
+        );
+        document.documentElement.style.setProperty(
+          '--loc-grid-item-title-container-align-items',
+          `flex-start`,
+        );
+      } else {
+        document.documentElement.style.setProperty(
+          '--loc-grid-item-title-container-flex-direction',
+          `row`,
+        );
+        document.documentElement.style.setProperty(
+          '--loc-grid-item-title-container-align-items',
+          `center`,
+        );
+      }
+  }, [isSizeExceeded, isLargest]);
   const formattedAddress = (
     <>
       {location.address.street},{<br />}
@@ -83,7 +157,7 @@ function Location({location}) {
       MON-SUN: 7A-5P
     </>
   );
-  console.log(location);
+
   return (
     <div
       className="location-grid-item"
@@ -100,8 +174,8 @@ function Location({location}) {
       Object.keys(location.address).length > 2 ? (
         <>
           <MediaViewer file={location.videoBackground?.asset} />
-          <div className="location-grid-item-title-container">
-            <h5>{location.title}</h5>
+          <div ref={parentRef} className="location-grid-item-title-container">
+            <h5 ref={h5Ref}>{location.title}</h5>
             <p>{formattedAddress}</p>
           </div>
           <div className="location-grid-item-bottom-container">
