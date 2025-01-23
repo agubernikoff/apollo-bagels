@@ -17,6 +17,8 @@
   --scarlet: #d44424;
   --loc-grid-item-title-container-align-items: center;
   --loc-grid-item-title-container-flex-direction: row;
+  --add-to-cart-marginLeft: 7.23rem;
+  --add-to-cart-marginLeft-added: 10.6rem;
 }
 
 strong {

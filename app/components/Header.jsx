@@ -2,7 +2,7 @@ import {Suspense, useState, useEffect, useRef} from 'react';
 import {Await, NavLink, useAsyncValue, useLocation} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
-import {motion, useScroll} from 'framer-motion';
+import {motion, useScroll, AnimatePresence} from 'framer-motion';
 import Frame_89 from '../assets/Frame_89.png';
 import Hours from './Hours';
 /**
@@ -288,9 +288,22 @@ function SearchToggle() {
 function CartBadge({count}) {
   const {open} = useAside();
   const {publish, shop, cart, prevCart} = useAnalytics();
+  const [changed, setIsChanged] = useState(false);
+  const countRef = useRef(count);
+  console.log(prevCart?.totalQuantity, cart?.totalQuantity);
+
+  useEffect(() => {
+    if (cart?.totalQuantity > prevCart?.totalQuantity) {
+      setIsChanged(true);
+    }
+  }, [cart?.totalQuantity, prevCart?.totalQuantity]);
+
+  useEffect(() => {
+    setTimeout(() => setIsChanged(false), 1000); // Reset after 1 second
+  }, [changed]);
 
   return (
-    <span
+    <motion.span
       onClick={(e) => {
         e.preventDefault();
         open('cart');
@@ -301,9 +314,52 @@ function CartBadge({count}) {
           url: window.location.href || '',
         });
       }}
+      layout="size"
+      style={{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        gap: '1rem',
+      }}
     >
-      Cart {count === null ? <span>&nbsp;</span> : `(${count})`}
-    </span>
+      <AnimatePresence mode="popLayout">
+        <motion.span
+          key="cart"
+          initial={{opacity: 0}}
+          animate={{
+            opacity: changed ? 1 : 0,
+          }}
+          exit={{opacity: 0}}
+          transition={{duration: 0.5}}
+          style={{position: 'absolute'}}
+        >
+          {'Added! '}
+        </motion.span>
+        <motion.span
+          key="added"
+          initial={{opacity: 1}}
+          animate={{
+            opacity: !changed ? 1 : 0,
+          }}
+          exit={{opacity: 0}}
+          transition={{duration: 0.5}}
+          style={{position: 'absolute'}}
+        >
+          {'Cart '}
+        </motion.span>
+      </AnimatePresence>
+      <motion.span
+        layout
+        initial={{marginLeft: 'var(--add-to-cart-marginLeft)'}}
+        animate={{
+          marginLeft: changed
+            ? 'var(--add-to-cart-marginLeft-added)'
+            : 'var(--add-to-cart-marginLeft)',
+        }}
+        transition={{duration: 0.5}}
+      >
+        {count === null ? <span>&nbsp;</span> : `(${count})`}
+      </motion.span>
+    </motion.span>
   );
 }
 
@@ -323,7 +379,7 @@ function CartToggle({cart}) {
 function CartBanner() {
   const originalCart = useAsyncValue();
   const cart = useOptimisticCart(originalCart);
-  return <CartBadge count={cart?.totalQuantity ?? 0} />;
+  return <CartBadge count={originalCart?.totalQuantity ?? 0} />;
 }
 
 const FALLBACK_HEADER_MENU = {
