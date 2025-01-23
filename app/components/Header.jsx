@@ -136,7 +136,18 @@ export function HeaderMenu({
       }
     };
   }, []);
+  const analytics = useAnalytics();
+  const [changed, setIsChanged] = useState(false);
 
+  useEffect(() => {
+    if (analytics?.cart?.totalQuantity > analytics?.prevCart?.totalQuantity) {
+      setIsChanged(true);
+    }
+  }, [analytics?.cart?.totalQuantity, analytics?.prevCart?.totalQuantity]);
+
+  useEffect(() => {
+    setTimeout(() => setIsChanged(false), 1000); // Reset after 1 second
+  }, [changed]);
   return (
     <nav className={className} role="navigation" ref={ref}>
       {dynamicMenu.map((item) => {
@@ -160,6 +171,23 @@ export function HeaderMenu({
           />
         );
       })}
+      <AnimatePresence>
+        {changed && (
+          <motion.div
+            initial={{opacity: 0}}
+            animate={{opacity: 0.65}}
+            exit={{opacity: 0}}
+            style={{
+              position: 'absolute',
+              background: 'var(--color-creme)',
+              inset: 0,
+              height: '100vh',
+              zIndex: 11,
+            }}
+            transition={{duration: 0.5}}
+          ></motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
@@ -208,6 +236,7 @@ function HeaderMenuItem({title, cart, close, url}) {
               outline: 'none',
             }
       }
+      style={{zIndex: title === 'Cart' ? 20 : 1}}
     >
       <NavLink
         className="header-menu-item"
@@ -289,8 +318,6 @@ function CartBadge({count}) {
   const {open} = useAside();
   const {publish, shop, cart, prevCart} = useAnalytics();
   const [changed, setIsChanged] = useState(false);
-  const countRef = useRef(count);
-  console.log(prevCart?.totalQuantity, cart?.totalQuantity);
 
   useEffect(() => {
     if (cart?.totalQuantity > prevCart?.totalQuantity) {
