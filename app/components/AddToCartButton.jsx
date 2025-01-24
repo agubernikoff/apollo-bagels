@@ -23,11 +23,15 @@ export function AddToCartButton({
     <CartForm route="/cart" inputs={{lines}} action={CartForm.ACTIONS.LinesAdd}>
       {(fetcher) => {
         if (fetcher.data?.warnings?.length > 0 && fetcher.state === 'loading') {
-          setError(fetcher.data.warnings[0].message.toUpperCase());
+          setError(
+            fetcher.data.warnings[0].message.includes('You can only add')
+              ? 'MAXIMUM QUANTITY REACHED'
+              : fetcher.data.warnings[0].message.toUpperCase(),
+          );
           setTimeout(() => {
             setError(null);
             setCanDisplay(false);
-          }, 2500);
+          }, 2000);
         }
         if (fetcher.state === 'submitting') {
           setCanDisplay(true);
@@ -52,8 +56,12 @@ export function AddToCartButton({
               animate={{
                 background: disabled ? '#00000000' : 'var(--color-creme)',
                 color: disabled ? 'var(--color-creme)' : 'var(--blue)',
-                x: error && canDisplay ? [5, -5, 5, -5, 5, -5, 0] : 0,
+                x:
+                  error && canDisplay
+                    ? [1.25, -1.25, 1, -1, 0.75, -0.75, 0.5, -0.5, 0]
+                    : 0,
               }}
+              transition={{x: {duration: 1}}}
             >
               <AnimatePresence mode="popLayout">
                 {error && canDisplay ? (
