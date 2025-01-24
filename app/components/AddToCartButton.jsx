@@ -22,7 +22,6 @@ export function AddToCartButton({
   return (
     <CartForm route="/cart" inputs={{lines}} action={CartForm.ACTIONS.LinesAdd}>
       {(fetcher) => {
-        console.log(fetcher, error, canDisplay);
         if (fetcher.data?.warnings?.length > 0 && fetcher.state === 'loading') {
           setError(fetcher.data.warnings[0].message.toUpperCase());
           setTimeout(() => {
