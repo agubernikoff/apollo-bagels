@@ -17,8 +17,8 @@
   --scarlet: #d44424;
   --loc-grid-item-title-container-align-items: center;
   --loc-grid-item-title-container-flex-direction: row;
-  --add-to-cart-marginLeft: 7.23rem;
-  --add-to-cart-marginLeft-added: 10.6rem;
+  --add-to-cart-marginLeft: clamp(72.3px, 14vw, 115px);
+  --add-to-cart-marginLeft-added: clamp(105px, 20vw, 169.6px);
 }
 
 strong {
@@ -1249,6 +1249,10 @@ footer.footer {
 @media (max-width: 342px) {
   .header {
     font-size: 27px;
+  }
+  :root {
+    --add-to-cart-marginLeft: 65px;
+    --add-to-cart-marginLeft-added: 95px;
   }
 }
 @media (max-width: 800px) {
