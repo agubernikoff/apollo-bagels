@@ -332,8 +332,8 @@ function CartBadge({count}) {
   return (
     <motion.span
       onClick={(e) => {
-        e.preventDefault();
-        open('cart');
+        // e.preventDefault();
+        // open('cart');
         publish('cart_viewed', {
           cart,
           prevCart,
