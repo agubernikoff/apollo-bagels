@@ -128,6 +128,32 @@ export default function Product() {
     };
   }, []);
 
+  const [imageIndex, setImageIndex] = useState(0);
+
+  function handleScroll(scrollWidth, scrollLeft) {
+    const widthOfAnImage = scrollWidth / product?.images?.nodes.length;
+    const dividend = scrollLeft / widthOfAnImage;
+    const rounded = parseFloat((scrollLeft / widthOfAnImage).toFixed(0));
+
+    if (Math.abs(dividend - rounded) < 0.001) setImageIndex(rounded);
+  }
+
+  const mappedIndicators =
+    product?.images?.nodes.length > 1
+      ? product?.images?.nodes.map((e, i) => (
+          <div
+            key={e.id}
+            className="circle"
+            style={{
+              background: 'var(--color-creme)',
+              opacity: i === imageIndex ? 1 : 0.5,
+              height: '10px',
+              width: '10px',
+            }}
+          ></div>
+        ))
+      : null;
+
   return (
     <div className="product-page">
       <div className="product-main">
@@ -169,8 +195,25 @@ export default function Product() {
           </ProductForm>
         </div>
       </div>
-
-      <div className="product-images">
+      <div
+        className="mapped-indicators"
+        style={{
+          flexDirection: 'row',
+          width: 'fit-content',
+          gap: '.2rem',
+          transform: 'translateY(-400%)',
+          zIndex: 2,
+          margin: 'auto',
+        }}
+      >
+        {mappedIndicators}
+      </div>
+      <div
+        className="product-images"
+        onScroll={(e) =>
+          handleScroll(e.target.scrollWidth, e.target.scrollLeft)
+        }
+      >
         {product?.images?.nodes && product.images.nodes.length > 0 ? (
           product.images.nodes.map((image) => (
             <ProductImage key={image.id} image={image} />
