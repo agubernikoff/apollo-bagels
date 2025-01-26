@@ -407,6 +407,7 @@ footer.footer {
   border-radius: 14px;
   padding: 1rem;
   color: var(--color-creme);
+  box-sizing: border-box;
 }
 .cart-details * {
   font-size: 12px;
@@ -469,6 +470,7 @@ footer.footer {
   flex-direction: column;
   gap: 1rem;
   color: var(--blue);
+  box-sizing: border-box;
 }
 
 .cart-summary-aside {
@@ -1285,6 +1287,16 @@ footer.footer {
     width: auto;
     max-width: none;
     right: 1rem;
+  }
+}
+@media (max-width: 650px) {
+  .cart-details {
+    flex-direction: column;
+    max-width: calc(100vw - 2rem);
+    margin: 0;
+  }
+  .cart-summary-page {
+    max-width: calc(100vw - 2rem);
   }
 }
 @media (max-width: 504px) {
