@@ -467,7 +467,8 @@ footer.footer {
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 1rem;
+  color: var(--blue);
 }
 
 .cart-summary-aside {
@@ -488,10 +489,26 @@ footer.footer {
   display: flex;
   margin-top: 0.25rem;
 }
-
+.cart-summary-page dl {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+}
 .cart-subtotal {
   align-items: center;
   display: flex;
+}
+.cart-total * {
+  font-family: 'HAL-BOLD';
+}
+.cart-summary-page a {
+  background: var(--blue);
+  color: var(--color-creme);
+  display: block;
+  width: 100%;
+  padding: 1rem 0;
+  border-radius: 14px;
+  text-align: center;
 }
 /*
 * --------------------------------------------------
