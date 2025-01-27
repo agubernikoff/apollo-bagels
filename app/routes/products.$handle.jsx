@@ -102,11 +102,22 @@ export default function Product() {
 
   const {title, descriptionHtml} = product;
 
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
-    const mainWrapper = document.querySelector('.product-page'); // Assuming the main wrapper is `product-page`
+    window
+      .matchMedia('(max-width: 999px)') // 920px ÷ 16 = 57.5em
+      .addEventListener('change', (e) => setIsMobile(e.matches));
+    if (window.matchMedia('(max-width: 999px)').matches) setIsMobile(true);
+  }, []);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+    });
+    const mainWrapper = document.querySelector('.product-page'); // Assuming the main wrapper is `product-page`
     // Remove margins by using position absolute
-    if (mainWrapper) {
+    if (mainWrapper && !isMobile) {
       mainWrapper.style.position = 'absolute';
       mainWrapper.style.top = '0';
       mainWrapper.style.left = '0';
@@ -126,7 +137,7 @@ export default function Product() {
         mainWrapper.style.margin = '';
       }
     };
-  }, []);
+  }, [isMobile]);
 
   const [imageIndex, setImageIndex] = useState(0);
 
