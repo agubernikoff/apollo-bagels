@@ -1331,7 +1331,7 @@ footer.footer {
   }
   .product-images {
     width: 100%;
-    height: 69vh;
+    /* height: 69vh; */
     position: relative;
     flex-direction: row;
     overflow: scroll;
