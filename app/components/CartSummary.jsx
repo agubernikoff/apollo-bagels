@@ -51,7 +51,7 @@ function CartCheckoutActions({checkoutUrl}) {
   return (
     <div>
       <a href={checkoutUrl} target="_self">
-        <p>CONTINUE TO CHECKOUT</p>
+        <p style={{fontFamily: 'HAL-BOLD'}}>CONTINUE TO CHECKOUT</p>
       </a>
     </div>
   );

@@ -26,9 +26,11 @@ export function CartMain({layout, cart: originalCart}) {
       <CartEmpty hidden={linesCount} layout={layout} />
       <div className="cart-details">
         <div aria-labelledby="cart-lines" className="cart-lines">
-          <p>{`CART (${cart?.totalQuantity || 0})`}</p>
-          <p>ITEM</p>
-          <p style={{textAlign: 'right'}}>TOTAL</p>
+          <p style={{fontFamily: 'HAL-BOLD'}}>{`CART (${
+            cart?.totalQuantity || 0
+          })`}</p>
+          <p style={{fontFamily: 'HAL-BOLD'}}>ITEM</p>
+          <p style={{textAlign: 'right', fontFamily: 'HAL-BOLD'}}>TOTAL</p>
           <ul className="cart-lines-ul">
             {(cart?.lines?.nodes ?? []).map((line) => (
               <CartLineItem key={line.id} line={line} layout={layout} />

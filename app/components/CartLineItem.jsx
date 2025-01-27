@@ -43,15 +43,15 @@ export function CartLineItem({layout, line}) {
             }}
             style={{color: 'var(--color-creme)'}}
           >
-            <p>
-              <strong>{product.title}</strong>
+            <p style={{fontFamily: 'HAL-BOLD', marginBottom: '.25rem'}}>
+              {product.title}
             </p>
           </Link>
           <ul>
             {selectedOptions.map((option) => (
               <li key={option.name}>
                 <small>
-                  {option.name}: {option.value}
+                  {option.name.toUpperCase()}: {option.value}
                 </small>
               </li>
             ))}
@@ -130,7 +130,11 @@ function CartLineRemoveButton({lineIds, disabled}) {
       <button
         disabled={disabled}
         type="submit"
-        style={{padding: 0}}
+        style={{
+          padding: 0,
+          fontFamily: 'HAL-BOLD',
+          textDecoration: 'underline',
+        }}
         className="remove-btn"
       >
         Remove
