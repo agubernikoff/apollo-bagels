@@ -55,7 +55,11 @@ function ProductItem({product}) {
   const [image, setImage] = useState(product.images.nodes[0]);
 
   return (
-    <Link className="product-item" to={`/products/${product.handle}`}>
+    <Link
+      className="product-item"
+      to={`/products/${product.handle}`}
+      preventScrollReset={true}
+    >
       <AnimatePresence mode="popLayout">
         <motion.div
           className="image-container"
