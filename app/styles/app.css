@@ -525,6 +525,29 @@ footer.footer {
   border-radius: 14px;
   text-align: center;
 }
+.cart-empty {
+  width: 100%;
+  margin-top: 15%;
+  text-align: center;
+  font-size: 24px;
+  color: var(--blue);
+}
+.custom-link,
+.cart-empty p {
+  font-size: 24px;
+  font-family: 'HAL';
+  line-height: 1.5rem;
+  color: var(--blue) !important;
+}
+.custom-link {
+  text-decoration: underline;
+  color: inherit;
+}
+
+.custom-link:visited {
+  color: inherit;
+}
+
 /*
 * --------------------------------------------------
 * components/Search

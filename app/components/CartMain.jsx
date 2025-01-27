@@ -24,21 +24,23 @@ export function CartMain({layout, cart: originalCart}) {
   return (
     <div className={className}>
       <CartEmpty hidden={linesCount} layout={layout} />
-      <div className="cart-details">
-        <div aria-labelledby="cart-lines" className="cart-lines">
-          <p style={{fontFamily: 'HAL-BOLD'}}>{`CART (${
-            cart?.totalQuantity || 0
-          })`}</p>
-          <p style={{fontFamily: 'HAL-BOLD'}}>ITEM</p>
-          <p style={{textAlign: 'right', fontFamily: 'HAL-BOLD'}}>TOTAL</p>
-          <ul className="cart-lines-ul">
-            {(cart?.lines?.nodes ?? []).map((line) => (
-              <CartLineItem key={line.id} line={line} layout={layout} />
-            ))}
-          </ul>
+      {cartHasItems ? (
+        <div className="cart-details">
+          <div aria-labelledby="cart-lines" className="cart-lines">
+            <p style={{fontFamily: 'HAL-BOLD'}}>{`CART (${
+              cart?.totalQuantity || 0
+            })`}</p>
+            <p style={{fontFamily: 'HAL-BOLD'}}>ITEM</p>
+            <p style={{textAlign: 'right', fontFamily: 'HAL-BOLD'}}>TOTAL</p>
+            <ul className="cart-lines-ul">
+              {(cart?.lines?.nodes ?? []).map((line) => (
+                <CartLineItem key={line.id} line={line} layout={layout} />
+              ))}
+            </ul>
+          </div>
+          {cartHasItems && <CartSummary cart={cart} layout={layout} />}
         </div>
-        {cartHasItems && <CartSummary cart={cart} layout={layout} />}
-      </div>
+      ) : null}
     </div>
   );
 }
@@ -52,15 +54,15 @@ export function CartMain({layout, cart: originalCart}) {
 function CartEmpty({hidden = false}) {
   const {close} = useAside();
   return (
-    <div hidden={hidden}>
-      <br />
-      <p>
-        Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
-        started!
-      </p>
-      <br />
-      <Link to="/collections" onClick={close} prefetch="viewport">
-        Continue shopping →
+    <div class="cart-empty" hidden={hidden}>
+      <p>Your shopping cart is empty.</p>
+      <Link
+        to="/shop"
+        onClick={close}
+        prefetch="viewport"
+        className="custom-link"
+      >
+        Back to shop.
       </Link>
     </div>
   );
