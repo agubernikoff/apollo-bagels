@@ -32,7 +32,7 @@ export function ProductForm({
             className={`product-options product-${option.name.toLowerCase()}s`}
             key={option.name}
           >
-            <p>{option.name.toUpperCase()}:</p>
+            <p style={{fontFamily: 'HAL-BOLD'}}>{option.name.toUpperCase()}:</p>
             <div
               className={`product-options-grid ${option.name.toLowerCase()}-buttons`}
             >

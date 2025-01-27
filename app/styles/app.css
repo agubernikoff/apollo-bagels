@@ -826,6 +826,9 @@ footer.footer {
 .product-description p {
   font-size: 12px;
 }
+.product-details {
+  margin-top: 1.5rem;
+}
 .product-details div {
   font-size: 12px;
 }
@@ -850,7 +853,7 @@ footer.footer {
 .product-sizes {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
 }
 .size-buttons {
   display: flex;
@@ -858,7 +861,8 @@ footer.footer {
 }
 .size-buttons button {
   margin-top: 0.5rem;
-  padding: 15px;
+  height: 2.5rem;
+  width: 2.5rem;
   background-color: transparent;
   color: var(--color-creme);
   border: 1px solid var(--color-creme);
