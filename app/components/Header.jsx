@@ -53,7 +53,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
         publicStoreDomain={publicStoreDomain}
         cart={cart}
       />
-      {pathname !== '/' ? <MobileFooter hours={hours} /> : null}
+      {/* {pathname !== '/' ? <MobileFooter hours={hours} /> : null} */}
     </header>
   );
 }
