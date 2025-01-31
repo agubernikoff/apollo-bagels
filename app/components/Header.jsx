@@ -504,32 +504,60 @@ function MobileFooter({hours}) {
       }
     };
 
+    let startY = 0; // Initial touch position
+    let lastY = 0; // Last touch position during movement
+
+    const handleTouchStart = (e) => {
+      if (isFooterActive) {
+        startY = e.touches[0].clientY;
+        lastY = startY;
+      }
+    };
+
     const handleTouchMove = (e) => {
       if (isFooterActive) {
         const touch = e.touches[0];
+        const deltaY = touch.clientY - lastY; // Movement difference
+        lastY = touch.clientY; // Update last position
+
         setFooterY((prev) => {
-          const newFooterY = Math.max(0, prev - touch.clientY * 0.05); // Prevent negative values
-          if (newFooterY > 100) {
-            if (document.body.offsetHeight !== window.innerHeight)
-              setIsFooterActive(false); // Deactivate footer if it exceeds 100
-            return 100; // Reset to 100
+          let newFooterY = prev - deltaY * -0.2; // Adjust based on movement
+          newFooterY = Math.max(0, Math.min(100, newFooterY)); // Keep within bounds
+
+          if (newFooterY >= 100) {
+            if (document.body.offsetHeight !== window.innerHeight) {
+              setIsFooterActive(false); // Deactivate if it moves out of bounds
+            }
+            return 100;
           }
+
           return newFooterY;
         });
       }
     };
 
+    const handleTouchEnd = () => {
+      startY = 0;
+      lastY = 0;
+    };
+
     if (isFooterActive) {
       window.addEventListener('wheel', handleScroll, {passive: false});
+      window.addEventListener('touchstart', handleTouchStart, {passive: false});
       window.addEventListener('touchmove', handleTouchMove, {passive: false});
+      window.addEventListener('touchend', handleTouchEnd, {passive: false});
     } else {
       window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
     }
 
     return () => {
       window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isFooterActive]);
 

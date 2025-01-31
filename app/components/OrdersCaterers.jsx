@@ -98,7 +98,7 @@ function Location({
       : pathname === '/catering'
       ? cateringLink
       : '#';
-  console.log(Boolean(link));
+
   return (
     <motion.div
       className={`${isMobile ? 'location-item-mobile' : 'location-item'}`}
