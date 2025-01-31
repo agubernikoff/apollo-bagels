@@ -535,7 +535,7 @@ function MobileFooter({hours}) {
 
   useEffect(() => {
     if (scrollYProgress.current === 1) setIsFooterActive(true); // Activate manual scrolling;
-    const unsubscribe = scrollYProgress.onChange((value) => {
+    const unsubscribe = scrollYProgress.on('change', (value) => {
       if (value === 1) {
         setIsFooterActive(true); // Activate manual scrolling
       }
