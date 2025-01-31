@@ -1435,6 +1435,16 @@ footer.footer {
   .products-grid {
     row-gap: 1.5rem;
   }
+  .mobile-footer {
+    gap: 1.5rem;
+    padding-block: 1rem;
+  }
+  .mobile-footer-bottom {
+    gap: 1rem;
+  }
+  .mobile-footer-links {
+    gap: 0;
+  }
 }
 @media (max-width: 349px) {
   .header {
