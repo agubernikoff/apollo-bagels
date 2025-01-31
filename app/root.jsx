@@ -131,7 +131,11 @@ async function loadCriticalData({context}) {
     .fetch("*[_type == 'storeHours'][0]")
     .then((response) => response);
 
-  return {header, hours};
+  const infoPage = await sanityClient
+    .fetch("*[_type == 'info'][0]{...,backgroundImage{...,asset->{url}}}")
+    .then((response) => response);
+
+  return {header, hours, infoPage};
 }
 
 /**
@@ -142,6 +146,7 @@ async function loadCriticalData({context}) {
  */
 function loadDeferredData({context}) {
   const {storefront, customerAccount, cart} = context;
+
   return {
     cart: cart.get(),
     isLoggedIn: customerAccount.isLoggedIn(),
