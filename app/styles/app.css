@@ -1401,6 +1401,10 @@ footer.footer {
   }
 }
 @media (max-width: 499px) {
+  html,
+  body {
+    overscroll-behavior-y: contain;
+  }
   .header-menu-item-container:nth-of-type(4) {
     background: var(--red);
   }
