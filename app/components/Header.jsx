@@ -156,7 +156,13 @@ export function HeaderMenu({
     setTimeout(() => setIsChanged(false), 1000); // Reset after 1 second
   }, [changed]);
   return (
-    <nav className={className} role="navigation" ref={ref}>
+    <motion.nav
+      layoutRoot
+      layout
+      className={className}
+      role="navigation"
+      ref={ref}
+    >
       {dynamicMenu.map((item) => {
         if (!item.url) return null;
 
@@ -195,7 +201,7 @@ export function HeaderMenu({
           ></motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </motion.nav>
   );
 }
 
@@ -228,51 +234,38 @@ function HeaderMenuItem({title, cart, close, url}) {
         if (pathname !== url) setShowDot(false);
       }}
       transition={{layout: {duration: 0.3}, ease: 'easeInOut'}}
-      initial={{
-        boxShadow: 'none',
-        outline: 'none',
-      }}
-      animate={
-        pathname === url
-          ? {
-              boxShadow: 'none',
-              outline: 'none',
-            }
-          : {
-              boxShadow: 'none',
-              outline: 'none',
-            }
-      }
       style={{zIndex: title === 'Cart' ? 20 : 1}}
     >
-      <NavLink
-        className="header-menu-item"
-        end
-        onClick={close}
-        prefetch="intent"
-        to={url}
-      >
-        <motion.div
-          className="dot"
-          initial={{opacity: 0}}
-          animate={{opacity: showDot ? 1 : 0}}
-          transition={{duration: 0.3, ease: 'easeInOut'}}
-          style={{position: 'absolute'}}
+      <motion.div layout layoutRoot>
+        <NavLink
+          className="header-menu-item"
+          end
+          onClick={close}
+          prefetch="intent"
+          to={url}
         >
-          ●
-        </motion.div>
+          <motion.div
+            className="dot"
+            initial={{opacity: 0}}
+            animate={{opacity: showDot ? 1 : 0}}
+            transition={{duration: 0.3, ease: 'easeInOut'}}
+            style={{position: 'absolute'}}
+          >
+            ●
+          </motion.div>
 
-        <motion.span
-          layout
-          transition={{duration: 0.3, ease: 'easeInOut'}}
-          initial={{marginLeft: 0}}
-          animate={{
-            marginLeft: showDot ? '.75em' : 0,
-          }}
-        >
-          {title === 'Cart' ? <CartToggle cart={cart} /> : title}
-        </motion.span>
-      </NavLink>
+          <motion.span
+            layout
+            transition={{duration: 0.3, ease: 'easeInOut'}}
+            initial={{marginLeft: 0}}
+            animate={{
+              marginLeft: showDot ? '.75em' : 0,
+            }}
+          >
+            {title === 'Cart' ? <CartToggle cart={cart} /> : title}
+          </motion.span>
+        </NavLink>
+      </motion.div>
     </motion.div>
   );
 }
@@ -381,18 +374,20 @@ function CartBadge({count}) {
           {'Cart '}
         </motion.span>
       </AnimatePresence>
-      <motion.span
-        layout
-        initial={{marginLeft: 'var(--add-to-cart-marginLeft)'}}
-        animate={{
-          marginLeft: changed
-            ? 'var(--add-to-cart-marginLeft-added)'
-            : 'var(--add-to-cart-marginLeft)',
-        }}
-        transition={{duration: 0.5}}
-      >
-        {count === null ? <span>&nbsp;</span> : `(${count})`}
-      </motion.span>
+      <motion.div layoutRoot>
+        <motion.span
+          layout
+          initial={{marginLeft: 'var(--add-to-cart-marginLeft)'}}
+          animate={{
+            marginLeft: changed
+              ? 'var(--add-to-cart-marginLeft-added)'
+              : 'var(--add-to-cart-marginLeft)',
+          }}
+          transition={{duration: 0.5}}
+        >
+          {count === null ? <span>&nbsp;</span> : `(${count})`}
+        </motion.span>
+      </motion.div>
     </motion.span>
   );
 }
