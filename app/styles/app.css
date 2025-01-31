@@ -1406,6 +1406,9 @@ footer.footer {
   main {
     overscroll-behavior-y: none;
   }
+  .header {
+    pointer-events: none !important;
+  }
   .header-menu-item-container:nth-of-type(4) {
     background: var(--red);
   }
