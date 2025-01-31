@@ -1,5 +1,5 @@
 import {defer} from '@shopify/remix-oxygen';
-import {useRouteLoaderData} from '@remix-run/react';
+import {useLoaderData} from '@remix-run/react';
 import {sanityClient} from '~/sanity/SanityClient';
 import {PortableText} from '@portabletext/react';
 import SanityEmailLink from '../sanity/SanityEmailLink';
@@ -51,15 +51,23 @@ function loadDeferredData({context}) {
 }
 
 export default function Info() {
-  const {infoPage} = useRouteLoaderData('root');
+  /** @type {LoaderReturnData} */
+  const data = useLoaderData();
   return (
-    <div className="info">
+    <div
+      className="info"
+      style={{
+        backgroundImage: `url(${data.sanityData.backgroundImage.asset.url}?blur=50&q=10)`,
+        backgroundPosition: 'center',
+        backgroundSize: 'cover',
+      }}
+    >
       <img
         className="info-background"
-        src={infoPage.backgroundImage.asset.url}
+        src={data.sanityData.backgroundImage.asset.url}
         alt="delicious bagels"
       />
-      <Announcement data={infoPage.text} />
+      <Announcement data={data.sanityData.text} />
     </div>
   );
 }
