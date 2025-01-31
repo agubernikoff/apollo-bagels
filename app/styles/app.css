@@ -609,7 +609,7 @@ footer.footer {
 .home {
   position: fixed;
   inset: 0;
-  background: pink;
+  background: var(--blue);
   display: flex;
 }
 .home-left,
