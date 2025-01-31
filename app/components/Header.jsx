@@ -490,9 +490,9 @@ function MobileFooter({hours}) {
   const [footerY, setFooterY] = useState(100); // Start at 100% off-screen
 
   useEffect(() => {
-    if (!isFooterActive)
-      document.querySelector('.header').style.pointerEvents = 'none';
-    else document.querySelector('.header').style.pointerEvents = 'auto';
+    if (isFooterActive)
+      document.querySelector('.header').style.pointerEvents = 'auto';
+    else document.querySelector('.header').style.pointerEvents = 'none';
 
     const handleScroll = (e) => {
       if (isFooterActive) {
