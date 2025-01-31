@@ -1288,6 +1288,9 @@ footer.footer {
     margin: auto;
     margin-top: 2rem;
   }
+  .mobile-footer img {
+    max-width: 50vw;
+  }
   .mobile-footer-bottom {
     display: flex;
     flex-direction: column;
