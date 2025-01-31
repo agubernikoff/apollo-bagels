@@ -516,6 +516,7 @@ function MobileFooter({hours}) {
 
     const handleTouchStart = (e) => {
       if (isFooterActive) {
+        e.preventDefault();
         startY = e.touches[0].clientY;
         lastY = startY;
         velocity = 0;
@@ -525,6 +526,7 @@ function MobileFooter({hours}) {
 
     const handleTouchMove = (e) => {
       if (isFooterActive) {
+        e.preventDefault();
         const touchY = e.touches[0].clientY;
         const deltaY = touchY - lastY;
         lastY = touchY;
@@ -551,12 +553,14 @@ function MobileFooter({hours}) {
           if (Math.abs(velocity) > 0.1) {
             momentumID = requestAnimationFrame(applyMomentum);
           }
+          if (newFooterY > 99) setIsFooterActive(false);
           return newFooterY;
         });
       }
     };
 
-    const handleTouchEnd = () => {
+    const handleTouchEnd = (e) => {
+      e.preventDefault();
       applyMomentum();
     };
 
