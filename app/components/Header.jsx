@@ -26,6 +26,8 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
     };
   }, []);
 
+  const {pathname} = useLocation();
+
   return (
     <header className="header">
       <div
@@ -46,7 +48,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
         publicStoreDomain={publicStoreDomain}
         cart={cart}
       />
-      {/* <MobileFooter hours={hours} /> */}
+      {pathname !== '/' ? <MobileFooter hours={hours} /> : null}
     </header>
   );
 }
@@ -480,7 +482,7 @@ function activeLinkStyle({isActive, isPending}) {
 function MobileFooter({hours}) {
   const {scrollYProgress} = useScroll();
   const [isFooterActive, setIsFooterActive] = useState(false);
-  const [footerY, setFooterY] = useState(130); // Start at 100% off-screen
+  const [footerY, setFooterY] = useState(100); // Start at 100% off-screen
 
   useEffect(() => {
     if (!isFooterActive)
@@ -492,10 +494,10 @@ function MobileFooter({hours}) {
         e.preventDefault();
         setFooterY((prev) => {
           const newFooterY = Math.max(0, prev - e.deltaY * 0.2); // Prevent negative values
-          if (newFooterY > 130) {
+          if (newFooterY > 100) {
             if (document.body.offsetHeight !== window.innerHeight)
-              setIsFooterActive(false); // Deactivate footer if it exceeds 130
-            return 130; // Reset to 130
+              setIsFooterActive(false); // Deactivate footer if it exceeds 100
+            return 100; // Reset to 100
           }
           return newFooterY;
         });
@@ -507,10 +509,10 @@ function MobileFooter({hours}) {
         const touch = e.touches[0];
         setFooterY((prev) => {
           const newFooterY = Math.max(0, prev - touch.clientY * 0.05); // Prevent negative values
-          if (newFooterY > 130) {
+          if (newFooterY > 100) {
             if (document.body.offsetHeight !== window.innerHeight)
-              setIsFooterActive(false); // Deactivate footer if it exceeds 130
-            return 130; // Reset to 130
+              setIsFooterActive(false); // Deactivate footer if it exceeds 100
+            return 100; // Reset to 100
           }
           return newFooterY;
         });
@@ -542,11 +544,19 @@ function MobileFooter({hours}) {
     return () => unsubscribe();
   }, [scrollYProgress]);
 
+  const {pathname} = useLocation();
+  // Reset footer when the route changes
+  useEffect(() => {
+    document.querySelector('.header').style.pointerEvents = 'none';
+    setIsFooterActive(true);
+    setFooterY(130);
+  }, [pathname]);
+
   return (
     <motion.div
       className="mobile-footer"
       style={{
-        transform: `translateY(${footerY}%)`,
+        transform: `translateY(${footerY}vh)`,
       }}
       transition={{type: 'tween', duration: 0.5}}
     >
