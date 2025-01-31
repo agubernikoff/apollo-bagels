@@ -2,7 +2,12 @@ import {Suspense, useState, useEffect, useRef} from 'react';
 import {Await, NavLink, useAsyncValue, useLocation} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
-import {motion, useScroll, AnimatePresence} from 'framer-motion';
+import {
+  motion,
+  useScroll,
+  AnimatePresence,
+  useMotionValueEvent,
+} from 'framer-motion';
 import Frame_89 from '../assets/Frame_89.png';
 import Hours from './Hours';
 /**
@@ -576,16 +581,16 @@ function MobileFooter({hours}) {
     };
   }, [isFooterActive]);
 
-  useEffect(() => {
-    if (scrollYProgress.current === 1) setIsFooterActive(true); // Activate manual scrolling;
-    const unsubscribe = scrollYProgress.on('change', (value) => {
-      if (value === 1) {
-        setIsFooterActive(true); // Activate manual scrolling
-      }
-    });
+  // useEffect(() => {
+  //   if (scrollYProgress.current === 1) setIsFooterActive(true); // Activate manual scrolling;
+  //   const unsubscribe = scrollYProgress.on('change', (value) => {
+  //     if (value === 1) {
+  //       setIsFooterActive(true); // Activate manual scrolling
+  //     }
+  //   });
 
-    return () => unsubscribe();
-  }, [scrollYProgress]);
+  //   return () => unsubscribe();
+  // }, [scrollYProgress]);
 
   const {pathname} = useLocation();
   // Reset footer when the route changes
@@ -594,6 +599,12 @@ function MobileFooter({hours}) {
     setIsFooterActive(true);
     setFooterY(130);
   }, [pathname]);
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (scrollYProgress.current >= 1)
+      setIsFooterActive(true); // Activate manual scrolling;
+    else setIsFooterActive(false);
+  });
 
   return (
     <motion.div
