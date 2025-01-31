@@ -599,7 +599,7 @@ function MobileFooter({hours}) {
     <motion.div
       className="mobile-footer"
       style={{
-        transform: `translateY(${footerY}vh)`,
+        transform: `translateY(${footerY}dvh)`,
       }}
       transition={{type: 'tween', duration: 0.5}}
     >
