@@ -504,41 +504,55 @@ function MobileFooter({hours}) {
       }
     };
 
-    let startY = 0; // Initial touch position
-    let lastY = 0; // Last touch position during movement
+    let startY = 0;
+    let lastY = 0;
+    let velocity = 0;
+    let momentumID = null;
 
     const handleTouchStart = (e) => {
       if (isFooterActive) {
         startY = e.touches[0].clientY;
         lastY = startY;
+        velocity = 0;
+        if (momentumID) cancelAnimationFrame(momentumID); // Stop any existing momentum
       }
     };
 
     const handleTouchMove = (e) => {
       if (isFooterActive) {
-        const touch = e.touches[0];
-        const deltaY = touch.clientY - lastY; // Movement difference
-        lastY = touch.clientY; // Update last position
+        const touchY = e.touches[0].clientY;
+        const deltaY = touchY - lastY;
+        lastY = touchY;
+
+        // Compute velocity as a moving average (smooths sudden movements)
+        velocity = 0.8 * velocity + 0.2 * deltaY;
 
         setFooterY((prev) => {
-          let newFooterY = prev - deltaY * -0.2; // Adjust based on movement
+          let newFooterY = prev - deltaY * -0.2; // Apply scaled movement
+          return Math.max(0, Math.min(100, newFooterY)); // Keep within bounds
+        });
+      }
+    };
+
+    const applyMomentum = () => {
+      if (Math.abs(velocity) > 0.1) {
+        setFooterY((prev) => {
+          let newFooterY = prev - velocity * -0.5; // Apply inertia
           newFooterY = Math.max(0, Math.min(100, newFooterY)); // Keep within bounds
 
-          if (newFooterY >= 100) {
-            if (document.body.offsetHeight !== window.innerHeight) {
-              setIsFooterActive(false); // Deactivate if it moves out of bounds
-            }
-            return 100;
-          }
+          // Slow down velocity over time (friction effect)
+          velocity *= 0.9;
 
+          if (Math.abs(velocity) > 0.1) {
+            momentumID = requestAnimationFrame(applyMomentum);
+          }
           return newFooterY;
         });
       }
     };
 
     const handleTouchEnd = () => {
-      startY = 0;
-      lastY = 0;
+      applyMomentum();
     };
 
     if (isFooterActive) {
@@ -558,6 +572,7 @@ function MobileFooter({hours}) {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
+      if (momentumID) cancelAnimationFrame(momentumID);
     };
   }, [isFooterActive]);
 
