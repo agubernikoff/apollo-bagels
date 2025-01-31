@@ -1402,7 +1402,8 @@ footer.footer {
 }
 @media (max-width: 499px) {
   html,
-  body {
+  body,
+  main {
     overscroll-behavior-y: contain;
   }
   .header-menu-item-container:nth-of-type(4) {
