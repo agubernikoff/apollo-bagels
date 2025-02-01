@@ -21,6 +21,7 @@ export function PageLayout({
   isLoggedIn,
   publicStoreDomain,
   hours,
+  subscribeImage,
 }) {
   return (
     <Aside.Provider>
@@ -34,11 +35,12 @@ export function PageLayout({
           isLoggedIn={isLoggedIn}
           publicStoreDomain={publicStoreDomain}
           hours={hours}
+          subscribeImage={subscribeImage}
         />
       )}
       <Hours hours={hours} />
       <main>{children}</main>
-      <Footer />
+      <Footer subscribeImage={subscribeImage} />
     </Aside.Provider>
   );
 }

@@ -131,7 +131,11 @@ async function loadCriticalData({context}) {
     .fetch("*[_type == 'storeHours'][0]")
     .then((response) => response);
 
-  return {header, hours};
+  const subscribeImage = await sanityClient
+    .fetch("*[_type == 'settings'][0]{footer{subscribeImage{...asset->{url}}}}")
+    .then((response) => response.footer.subscribeImage.url);
+
+  return {header, hours, subscribeImage};
 }
 
 /**
