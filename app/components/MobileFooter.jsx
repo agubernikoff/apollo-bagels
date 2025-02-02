@@ -7,20 +7,34 @@ import Hours from './Hours';
 export default function MobileFooter({hours}) {
   const {scrollYProgress} = useScroll();
   const [isFooterActive, setIsFooterActive] = useState(false);
-  const [footerY, setFooterY] = useState(85); // Start at 100% off-screen
+  const [footerY, setFooterY] = useState(0); // Start at 100% off-screen
+  const mainElement =
+    document.querySelectorAll('main')[
+      document.querySelectorAll('main').length - 1
+    ];
 
+  function pxToDvh(px) {
+    return (px / window.innerHeight) * 100;
+  }
   useEffect(() => {
     const handleScroll = (e) => {
       if (isFooterActive) {
         e.preventDefault();
+        const computedStyles = getComputedStyle(mainElement);
+        const headerHeight = parseInt(
+          computedStyles.getPropertyValue('margin-top'),
+          10,
+        );
         setFooterY((prev) => {
-          const newFooterY = Math.max(0, prev - e.deltaY * 0.2); // Prevent negative values
-          if (newFooterY > 85) {
+          let newFooterY = Math.max(0, prev + e.deltaY * 0.2);
+          if (newFooterY === 0) {
             if (document.body.offsetHeight !== window.innerHeight)
-              setIsFooterActive(false); // Deactivate footer if it exceeds 100
+              setIsFooterActive(false);
             setIsSubscribeOpen(false);
-            return 85; // Reset to 100
+            return 0;
           }
+          if (newFooterY >= 100 - pxToDvh(headerHeight))
+            newFooterY = 100 - pxToDvh(headerHeight);
           return newFooterY;
         });
       }
@@ -51,18 +65,31 @@ export default function MobileFooter({hours}) {
         // Compute velocity as a moving average (smooths sudden movements)
         velocity = 0.8 * velocity + 0.2 * deltaY;
 
+        const computedStyles = getComputedStyle(mainElement);
+        const headerHeight = parseInt(
+          computedStyles.getPropertyValue('margin-top'),
+          10,
+        );
         setFooterY((prev) => {
-          let newFooterY = prev - deltaY * -0.2; // Apply scaled movement
-          return Math.max(0, Math.min(85, newFooterY)); // Keep within bounds
+          let newFooterY = prev - deltaY * 0.2; // Apply scaled movement
+          return Math.max(0, Math.min(100 - pxToDvh(headerHeight), newFooterY)); // Keep within bounds
         });
       }
     };
 
     const applyMomentum = () => {
       if (Math.abs(velocity) > 0.1) {
+        const computedStyles = getComputedStyle(mainElement);
+        const headerHeight = parseInt(
+          computedStyles.getPropertyValue('margin-top'),
+          10,
+        );
         setFooterY((prev) => {
-          let newFooterY = prev - velocity * -0.5; // Apply inertia
-          newFooterY = Math.max(0, Math.min(85, newFooterY)); // Keep within bounds
+          let newFooterY = prev - velocity * 0.5; // Apply inertia
+          newFooterY = Math.max(
+            0,
+            Math.min(100 - pxToDvh(headerHeight), newFooterY),
+          ); // Keep within bounds
 
           // Slow down velocity over time (friction effect)
           velocity *= 0.9;
@@ -70,7 +97,7 @@ export default function MobileFooter({hours}) {
           if (Math.abs(velocity) > 0.1) {
             momentumID = requestAnimationFrame(applyMomentum);
           }
-          if (newFooterY >= 85) setIsFooterActive(false);
+          if (newFooterY === 0) setIsFooterActive(false);
           return newFooterY;
         });
       }
@@ -108,7 +135,7 @@ export default function MobileFooter({hours}) {
     if (document.body.scrollHeight !== window.innerHeight)
       setIsFooterActive(false);
     else setIsFooterActive(true);
-    setFooterY(85);
+    setFooterY(0);
     setIsSubscribeOpen(false);
   }, [pathname]);
 
@@ -126,7 +153,7 @@ export default function MobileFooter({hours}) {
     <motion.div
       className="mobile-footer"
       style={{
-        transform: `translateY(${footerY}lvh)`,
+        transform: `translateY(-${footerY}lvh)`,
       }}
       transition={{type: 'tween', duration: 0.5}}
       initial={{background: 'var(--red)'}}

@@ -1394,7 +1394,7 @@ footer.footer {
     pointer-events: auto;
     z-index: 10;
     position: fixed;
-    top: var(--header-height);
+    top: 100dvh;
   }
   .mobile-footer img {
     max-width: 50vw;
