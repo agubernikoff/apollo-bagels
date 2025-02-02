@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {useLocation} from '@remix-run/react';
+import {motion, AnimatePresence} from 'framer-motion';
 
 export function Footer({subscribeImage}) {
   const [time, setTime] = useState('');
@@ -66,30 +67,48 @@ export function Footer({subscribeImage}) {
           </div>
         </div>
       </footer>
-      <div
-        className={`overlay ${
-          isSubscribeOpen ? 'expanded' : ''
-        } footer-overlay`}
-        onClick={() => setIsSubscribeOpen(false)}
-      >
-        <div className="subscribe-container">
-          <div className="subscribe-img-container">
-            <img src={subscribeImage} alt="delicious looking food" />
-          </div>
-          <div className="subscribe-footer-form-container">
-            <SubscribeForm close={() => setIsSubscribeOpen(false)} />
-          </div>
-        </div>
-      </div>
+      <AnimatePresence>
+        {isSubscribeOpen && (
+          <motion.div
+            className="overlay expanded footer-overlay"
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+          >
+            <div
+              style={{position: 'absolute', inset: 0}}
+              onClick={() => setIsSubscribeOpen(false)}
+            />
+            <div className="subscribe-container">
+              <div className="subscribe-img-container">
+                <img src={subscribeImage} alt="delicious looking food" />
+              </div>
+              <div className="subscribe-footer-form-container">
+                <SubscribeForm close={() => setIsSubscribeOpen(false)} />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
 
 export function SubscribeForm({close}) {
   const [email, setEmail] = useState('');
+  function isValidEmail(x) {
+    const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+    return emailRegex.test(x);
+  }
   return (
     <>
-      <button onClick={close}>Close</button>
+      <button
+        onClick={() => {
+          close();
+        }}
+      >
+        Close
+      </button>
       <div className="subscribe-form-container">
         <div>
           <h2>Subscribe to Apollo Mail</h2>
@@ -105,7 +124,27 @@ export function SubscribeForm({close}) {
             placeholder="Email Address"
             type="email"
           ></input>
-          <button>SUBSCRIBE</button>
+          <button
+            style={
+              isValidEmail(email)
+                ? {background: 'var(--color-creme)', color: 'var(--blue)'}
+                : {background: 'transparent', color: 'var(--color-creme)'}
+            }
+            disabled={!isValidEmail(email)}
+            onClick={close}
+          >
+            <AnimatePresence mode="popLayout">
+              <motion.span
+                key={isValidEmail(email)}
+                initial={{opacity: !email ? 1 : 0}}
+                animate={{opacity: 1}}
+                exit={{opacity: 0}}
+                style={{width: '100%', display: 'block'}}
+              >
+                {isValidEmail(email) ? 'SUBSCRIBE' : 'ENTER A VALID EMAIL'}
+              </motion.span>
+            </AnimatePresence>
+          </button>
         </div>
       </div>
     </>

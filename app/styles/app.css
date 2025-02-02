@@ -472,9 +472,10 @@ footer.footer {
 .subscribe-form > input:focus::placeholder {
   color: transparent;
 }
+.subscribe-form > button:disabled {
+  cursor: auto;
+}
 .subscribe-form > button {
-  background: var(--color-creme);
-  color: var(--blue);
   cursor: pointer;
 }
 
