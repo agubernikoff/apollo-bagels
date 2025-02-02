@@ -485,9 +485,13 @@ function MobileFooter({hours}) {
   const [footerY, setFooterY] = useState(100); // Start at 100% off-screen
 
   useEffect(() => {
-    if (isFooterActive)
+    if (isFooterActive) {
       document.querySelector('.header').style.pointerEvents = 'auto';
-    else document.querySelector('.header').style.pointerEvents = 'none';
+      document.querySelector('.header').style.touchEvents = 'auto';
+    } else {
+      document.querySelector('.header').style.pointerEvents = 'none';
+      document.querySelector('.header').style.touchEvents = 'auto';
+    }
 
     const handleScroll = (e) => {
       if (isFooterActive) {
@@ -585,6 +589,7 @@ function MobileFooter({hours}) {
   // Reset footer when the route changes
   useEffect(() => {
     document.querySelector('.header').style.pointerEvents = 'none';
+    document.querySelector('.header').style.touchEvents = 'none';
     if (document.body.scrollHeight !== window.innerHeight)
       setIsFooterActive(false);
     else setIsFooterActive(true);
