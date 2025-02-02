@@ -482,7 +482,7 @@ function activeLinkStyle({isActive, isPending}) {
 function MobileFooter({hours}) {
   const {scrollYProgress} = useScroll();
   const [isFooterActive, setIsFooterActive] = useState(false);
-  const [footerY, setFooterY] = useState(100); // Start at 100% off-screen
+  const [footerY, setFooterY] = useState(85); // Start at 100% off-screen
 
   useEffect(() => {
     if (isFooterActive) {
@@ -498,11 +498,11 @@ function MobileFooter({hours}) {
         e.preventDefault();
         setFooterY((prev) => {
           const newFooterY = Math.max(0, prev - e.deltaY * 0.2); // Prevent negative values
-          if (newFooterY > 100) {
+          if (newFooterY > 85) {
             if (document.body.offsetHeight !== window.innerHeight)
               setIsFooterActive(false); // Deactivate footer if it exceeds 100
             setIsSubscribeOpen(false);
-            return 100; // Reset to 100
+            return 85; // Reset to 100
           }
           return newFooterY;
         });
@@ -536,7 +536,7 @@ function MobileFooter({hours}) {
 
         setFooterY((prev) => {
           let newFooterY = prev - deltaY * -0.2; // Apply scaled movement
-          return Math.max(0, Math.min(100, newFooterY)); // Keep within bounds
+          return Math.max(0, Math.min(85, newFooterY)); // Keep within bounds
         });
       }
     };
@@ -545,7 +545,7 @@ function MobileFooter({hours}) {
       if (Math.abs(velocity) > 0.1) {
         setFooterY((prev) => {
           let newFooterY = prev - velocity * -0.5; // Apply inertia
-          newFooterY = Math.max(0, Math.min(100, newFooterY)); // Keep within bounds
+          newFooterY = Math.max(0, Math.min(85, newFooterY)); // Keep within bounds
 
           // Slow down velocity over time (friction effect)
           velocity *= 0.9;
@@ -553,7 +553,7 @@ function MobileFooter({hours}) {
           if (Math.abs(velocity) > 0.1) {
             momentumID = requestAnimationFrame(applyMomentum);
           }
-          if (newFooterY > 99) setIsFooterActive(false);
+          if (newFooterY >= 85) setIsFooterActive(false);
           return newFooterY;
         });
       }
@@ -593,7 +593,7 @@ function MobileFooter({hours}) {
     if (document.body.scrollHeight !== window.innerHeight)
       setIsFooterActive(false);
     else setIsFooterActive(true);
-    setFooterY(100);
+    setFooterY(85);
     setIsSubscribeOpen(false);
   }, [pathname]);
 
