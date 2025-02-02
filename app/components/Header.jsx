@@ -53,7 +53,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
         publicStoreDomain={publicStoreDomain}
         cart={cart}
       />
-      {/* {pathname !== '/' ? <MobileFooter hours={hours} /> : null} */}
+      {pathname !== '/' ? <MobileFooter hours={hours} /> : null}
     </header>
   );
 }
@@ -497,6 +497,7 @@ function MobileFooter({hours}) {
           if (newFooterY > 100) {
             if (document.body.offsetHeight !== window.innerHeight)
               setIsFooterActive(false); // Deactivate footer if it exceeds 100
+            setIsSubscribeOpen(false);
             return 100; // Reset to 100
           }
           return newFooterY;
@@ -580,38 +581,36 @@ function MobileFooter({hours}) {
     };
   }, [isFooterActive]);
 
-  // useEffect(() => {
-  //   if (scrollYProgress.current === 1) setIsFooterActive(true); // Activate manual scrolling;
-  //   const unsubscribe = scrollYProgress.on('change', (value) => {
-  //     if (value === 1) {
-  //       setIsFooterActive(true); // Activate manual scrolling
-  //     }
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [scrollYProgress]);
-
   const {pathname} = useLocation();
   // Reset footer when the route changes
   useEffect(() => {
     document.querySelector('.header').style.pointerEvents = 'none';
-    setIsFooterActive(true);
-    setFooterY(130);
+    if (document.body.scrollHeight !== window.innerHeight)
+      setIsFooterActive(false);
+    else setIsFooterActive(true);
+    setFooterY(100);
+    setIsSubscribeOpen(false);
   }, [pathname]);
 
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (scrollYProgress.current >= 1)
-      setIsFooterActive(true); // Activate manual scrolling;
-    else setIsFooterActive(false);
+    if (latest >= 1) setIsFooterActive(true); // Activate manual scrolling;
+    else {
+      setIsFooterActive(false);
+      setIsSubscribeOpen(false);
+    }
   });
+
+  const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
 
   return (
     <motion.div
       className="mobile-footer"
       style={{
-        transform: `translateY(${footerY}dvh)`,
+        transform: `translateY(${footerY}lvh)`,
       }}
       transition={{type: 'tween', duration: 0.5}}
+      initial={{background: 'var(--red)'}}
+      animate={{background: isSubscribeOpen ? 'var(--blue)' : 'var(--red)'}}
     >
       <img src={Frame_89} alt="Apollo Bagels in script" />
       <Hours hours={hours} mobile={true} />
@@ -626,7 +625,7 @@ function MobileFooter({hours}) {
           </a>
           <a href="mailto:hello@apollobagels.com">e. hello@apollobagels.com</a>
         </div>
-        <a href="#">SUBSCRIBE</a>
+        <button onClick={() => setIsSubscribeOpen(true)}>SUBSCRIBE</button>
         <p>© Apollo Bagels 2024, All Rights Reserved.</p>
       </div>
     </motion.div>

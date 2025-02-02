@@ -1384,7 +1384,7 @@ footer.footer {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: var(--red);
+    /* background: var(--red); */
     font-family: 'HAL';
     gap: 3rem;
     padding-block: 2rem;
@@ -1392,6 +1392,7 @@ footer.footer {
     width: calc(100% - 2rem);
     margin: auto;
     margin-top: 2rem;
+    pointer-events: auto;
   }
   .mobile-footer img {
     max-width: 50vw;
@@ -1408,9 +1409,14 @@ footer.footer {
     gap: 0.25rem;
   }
   .mobile-footer-bottom a,
-  .mobile-footer-links a {
+  .mobile-footer-links a,
+  .mobile-footer-bottom button {
     color: var(--color-creme);
     font-size: 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
   }
   .mobile-footer-bottom p {
     color: var(--color-creme);

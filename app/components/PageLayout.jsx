@@ -35,7 +35,6 @@ export function PageLayout({
           isLoggedIn={isLoggedIn}
           publicStoreDomain={publicStoreDomain}
           hours={hours}
-          subscribeImage={subscribeImage}
         />
       )}
       <Hours hours={hours} />
