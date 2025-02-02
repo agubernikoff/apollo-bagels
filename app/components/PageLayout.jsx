@@ -1,4 +1,4 @@
-import {Await, Link} from '@remix-run/react';
+import {Await, Link, useLocation} from '@remix-run/react';
 import {Suspense, useId} from 'react';
 import {Aside} from '~/components/Aside';
 import {Footer} from '~/components/Footer';
@@ -10,6 +10,7 @@ import {
 } from '~/components/SearchFormPredictive';
 import {SearchResultsPredictive} from '~/components/SearchResultsPredictive';
 import Hours from './Hours';
+import MobileFooter from './MobileFooter';
 
 /**
  * @param {PageLayoutProps}
@@ -23,6 +24,7 @@ export function PageLayout({
   hours,
   subscribeImage,
 }) {
+  const {pathname} = useLocation();
   return (
     <Aside.Provider>
       <CartAside cart={cart} />
@@ -40,6 +42,7 @@ export function PageLayout({
       <Hours hours={hours} />
       <main>{children}</main>
       <Footer subscribeImage={subscribeImage} />
+      {pathname !== '/' ? <MobileFooter hours={hours} /> : null}
     </Aside.Provider>
   );
 }
