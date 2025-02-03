@@ -47,7 +47,7 @@ export default function MobileFooter({hours}) {
 
     const handleTouchStart = (e) => {
       if (isFooterActive) {
-        e.preventDefault();
+        // e.preventDefault();
         startY = e.touches[0].clientY;
         lastY = startY;
         velocity = 0;
