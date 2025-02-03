@@ -115,26 +115,17 @@ export default function Product() {
       top: 0,
       left: 0,
     });
-    const mainWrapper = document.querySelector('.product-page'); // Assuming the main wrapper is `product-page`
+    const productPageWrapper = document.querySelector('.product-page'); // Assuming the main wrapper is `product-page`
     // Remove margins by using position absolute
-    if (mainWrapper && !isMobile) {
-      mainWrapper.style.position = 'absolute';
-      mainWrapper.style.top = '0';
-      mainWrapper.style.left = '0';
-      mainWrapper.style.right = '0';
-      mainWrapper.style.bottom = '0';
-      mainWrapper.style.margin = '0'; // Remove margins
+    if (productPageWrapper && !isMobile) {
+      productPageWrapper.style.margin =
+        'calc(var(--header-height) * -1) -1rem -3rem'; // Remove margins
     }
 
     return () => {
-      if (mainWrapper) {
+      if (productPageWrapper) {
         // Reset the styles
-        mainWrapper.style.position = '';
-        mainWrapper.style.top = '';
-        mainWrapper.style.left = '';
-        mainWrapper.style.right = '';
-        mainWrapper.style.bottom = '';
-        mainWrapper.style.margin = '';
+        productPageWrapper.style.margin = '';
       }
     };
   }, [isMobile]);
