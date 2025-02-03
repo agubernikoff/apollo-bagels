@@ -8,9 +8,9 @@ export function Footer({subscribeImage}) {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     window
-      .matchMedia('(max-width: 57.5em)') // 920px ÷ 16 = 57.5em
+      .matchMedia('(max-width: 501px)')
       .addEventListener('change', (e) => setIsMobile(e.matches));
-    if (window.matchMedia('(max-width: 57.5em)').matches) setIsMobile(true);
+    if (window.matchMedia('(max-width: 501px)').matches) setIsMobile(true);
   }, []);
 
   useEffect(() => {
