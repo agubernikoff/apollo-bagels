@@ -161,7 +161,7 @@ export default function MobileFooter({hours}) {
       className="mobile-footer"
       style={{
         transform: `translateY(-${footerY}dvh)`,
-        display: isFooterActive ? 'flex' : 'none',
+        visibility: isFooterActive ? 'visible' : 'hidden',
       }}
       transition={{type: 'tween', duration: 0.5}}
       initial={{background: 'var(--red)'}}
