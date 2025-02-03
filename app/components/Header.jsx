@@ -202,7 +202,10 @@ function HeaderMenuItem({title, cart, close, url}) {
   const {pathname} = useLocation();
 
   useEffect(() => {
-    setShowDot(pathname === url);
+    setShowDot(
+      pathname === url || (url === '/shop' && pathname.includes('product')),
+    );
+    console.log(url);
   }, [pathname, url]);
 
   const [isMobile, setIsMobile] = useState(false);
