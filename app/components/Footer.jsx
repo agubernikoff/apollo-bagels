@@ -106,6 +106,7 @@ export function SubscribeForm({close}) {
         onClick={() => {
           close();
         }}
+        className="close-subscribe-btn"
       >
         Close
       </button>

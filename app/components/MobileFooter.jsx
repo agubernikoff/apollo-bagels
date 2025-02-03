@@ -1,8 +1,14 @@
 import {useLocation} from '@remix-run/react';
 import React, {useState, useEffect} from 'react';
-import {motion, useMotionValueEvent, useScroll} from 'framer-motion';
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from 'framer-motion';
 import Frame_89 from '../assets/Frame_89.png';
 import Hours from './Hours';
+import {SubscribeForm} from './Footer';
 
 export default function MobileFooter({hours}) {
   const {scrollYProgress} = useScroll();
@@ -167,28 +173,52 @@ export default function MobileFooter({hours}) {
       initial={{background: 'var(--red)'}}
       animate={{background: isSubscribeOpen ? 'var(--blue)' : 'var(--red)'}}
     >
-      <img src={Frame_89} alt="Apollo Bagels in script" />
-      <Hours hours={hours} mobile={true} />
-      <div className="mobile-footer-bottom">
-        <div className="mobile-footer-links">
-          <a
-            href="https://www.instagram.com/apollobagels/"
-            target="_blank"
-            rel="noopener noreferrer"
+      <AnimatePresence mode="wait">
+        {isSubscribeOpen ? (
+          <motion.div
+            key="open"
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+            className="mobile-footer-info"
           >
-            ig. @apollobagels
-          </a>
-          <a href="mailto:hello@apollobagels.com">e. hello@apollobagels.com</a>
-        </div>
-        <button
-          onClick={() => {
-            setIsSubscribeOpen(true);
-          }}
-        >
-          SUBSCRIBE
-        </button>
-        <p>© Apollo Bagels 2024, All Rights Reserved.</p>
-      </div>
+            <SubscribeForm close={() => setIsSubscribeOpen(false)} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="close"
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+            className="mobile-footer-info"
+          >
+            <img src={Frame_89} alt="Apollo Bagels in script" />
+            <Hours hours={hours} mobile={true} />
+            <div className="mobile-footer-bottom">
+              <div className="mobile-footer-links">
+                <a
+                  href="https://www.instagram.com/apollobagels/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  ig. @apollobagels
+                </a>
+                <a href="mailto:hello@apollobagels.com">
+                  e. hello@apollobagels.com
+                </a>
+              </div>
+              <button
+                onClick={() => {
+                  setIsSubscribeOpen(true);
+                }}
+              >
+                SUBSCRIBE
+              </button>
+              <p>© Apollo Bagels 2024, All Rights Reserved.</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
