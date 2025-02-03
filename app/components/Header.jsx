@@ -312,7 +312,7 @@ function CartBadge({count}) {
   const [changed, setIsChanged] = useState(false);
 
   useEffect(() => {
-    if (cart?.totalQuantity > prevCart?.totalQuantity) {
+    if (cart?.totalQuantity > (prevCart?.totalQuantity || 0)) {
       setIsChanged(true);
     }
   }, [cart?.totalQuantity, prevCart?.totalQuantity]);
