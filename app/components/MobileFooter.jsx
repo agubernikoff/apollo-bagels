@@ -160,7 +160,7 @@ export default function MobileFooter({hours}) {
     <motion.div
       className="mobile-footer"
       style={{
-        transform: `translateY(-${footerY}lvh)`,
+        transform: `translateY(-${footerY}dvh)`,
       }}
       transition={{type: 'tween', duration: 0.5}}
       initial={{background: 'var(--red)'}}
