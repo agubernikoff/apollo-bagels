@@ -8,10 +8,6 @@ export default function MobileFooter({hours}) {
   const {scrollYProgress} = useScroll();
   const [isFooterActive, setIsFooterActive] = useState(false);
   const [footerY, setFooterY] = useState(0); // Start at 100% off-screen
-  const mainElement =
-    document.querySelectorAll('main')[
-      document.querySelectorAll('main').length - 1
-    ];
 
   function pxToDvh(px) {
     return (px / window.innerHeight) * 100;
@@ -20,6 +16,10 @@ export default function MobileFooter({hours}) {
     const handleScroll = (e) => {
       if (isFooterActive) {
         e.preventDefault();
+        const mainElement =
+          document?.querySelectorAll('main')[
+            document?.querySelectorAll('main').length - 1
+          ];
         const computedStyles = getComputedStyle(mainElement);
         const headerHeight = parseInt(
           computedStyles.getPropertyValue('margin-top'),
@@ -64,7 +64,10 @@ export default function MobileFooter({hours}) {
 
         // Compute velocity as a moving average (smooths sudden movements)
         velocity = 0.8 * velocity + 0.2 * deltaY;
-
+        const mainElement =
+          document?.querySelectorAll('main')[
+            document?.querySelectorAll('main').length - 1
+          ];
         const computedStyles = getComputedStyle(mainElement);
         const headerHeight = parseInt(
           computedStyles.getPropertyValue('margin-top'),
@@ -79,6 +82,10 @@ export default function MobileFooter({hours}) {
 
     const applyMomentum = () => {
       if (Math.abs(velocity) > 0.1) {
+        const mainElement =
+          document?.querySelectorAll('main')[
+            document?.querySelectorAll('main').length - 1
+          ];
         const computedStyles = getComputedStyle(mainElement);
         const headerHeight = parseInt(
           computedStyles.getPropertyValue('margin-top'),
