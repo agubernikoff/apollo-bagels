@@ -1598,8 +1598,8 @@ footer.footer {
     width: 100%;
   }
   .subscribe-form-container h2 {
-    font-size: clamp(38px, 12.67vw, 48px);
-    line-height: clamp(38px, 12.67vw, 48px);
+    font-size: clamp(38px, 12.6vw, 48px);
+    line-height: clamp(38px, 12.6vw, 48px);
   }
 }
 @media (max-width: 349px) {
