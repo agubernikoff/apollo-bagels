@@ -1380,7 +1380,7 @@ footer.footer {
     margin-bottom: 0.75rem;
   }
   .mobile-footer {
-    display: flex;
+    /* display: flex; */
     flex-direction: column;
     justify-content: center;
     align-items: center;
