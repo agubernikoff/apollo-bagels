@@ -891,6 +891,7 @@ footer.footer {
 */
 .product-page {
   display: flex;
+  flex-direction: row-reverse;
   height: 100vh;
   /* overflow: hidden; */
 }
@@ -1437,7 +1438,7 @@ footer.footer {
 } */
 @media (max-width: 999px) {
   .product-page {
-    flex-direction: column-reverse;
+    flex-direction: column;
     position: static !important ;
     gap: -0.5rem;
     align-items: center;

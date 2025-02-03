@@ -167,6 +167,32 @@ export default function Product() {
 
   return (
     <div className="product-page">
+      <div
+        className="product-images"
+        onScroll={(e) =>
+          handleScroll(e.target.scrollWidth, e.target.scrollLeft)
+        }
+      >
+        {product?.images?.nodes && product.images.nodes.length > 0 ? (
+          product.images.nodes.map((image) => (
+            <ProductImage key={image.id} image={image} />
+          ))
+        ) : (
+          <div className="product-image-placeholder">No images available</div>
+        )}
+      </div>
+      <div
+        className="mapped-indicators"
+        style={{
+          flexDirection: 'row',
+          width: 'fit-content',
+          gap: '.2rem',
+          transform: 'translateY(-400%)',
+          margin: 'auto',
+        }}
+      >
+        {mappedIndicators}
+      </div>
       <div className="product-main">
         <div className="product-box">
           <div className="product-header">
@@ -206,33 +232,7 @@ export default function Product() {
           </ProductForm>
         </div>
       </div>
-      <div
-        className="mapped-indicators"
-        style={{
-          flexDirection: 'row',
-          width: 'fit-content',
-          gap: '.2rem',
-          transform: 'translateY(-400%)',
-          zIndex: 2,
-          margin: 'auto',
-        }}
-      >
-        {mappedIndicators}
-      </div>
-      <div
-        className="product-images"
-        onScroll={(e) =>
-          handleScroll(e.target.scrollWidth, e.target.scrollLeft)
-        }
-      >
-        {product?.images?.nodes && product.images.nodes.length > 0 ? (
-          product.images.nodes.map((image) => (
-            <ProductImage key={image.id} image={image} />
-          ))
-        ) : (
-          <div className="product-image-placeholder">No images available</div>
-        )}
-      </div>
+
       <Analytics.ProductView
         data={{
           products: [
