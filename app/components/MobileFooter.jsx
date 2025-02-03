@@ -111,7 +111,7 @@ export default function MobileFooter({hours}) {
     };
 
     const handleTouchEnd = (e) => {
-      e.preventDefault();
+      //   e.preventDefault();
       applyMomentum();
     };
 
@@ -180,7 +180,13 @@ export default function MobileFooter({hours}) {
           </a>
           <a href="mailto:hello@apollobagels.com">e. hello@apollobagels.com</a>
         </div>
-        <button onClick={() => setIsSubscribeOpen(true)}>SUBSCRIBE</button>
+        <button
+          onClick={() => {
+            setIsSubscribeOpen(true);
+          }}
+        >
+          SUBSCRIBE
+        </button>
         <p>© Apollo Bagels 2024, All Rights Reserved.</p>
       </div>
     </motion.div>
