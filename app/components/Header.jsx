@@ -205,7 +205,6 @@ function HeaderMenuItem({title, cart, close, url}) {
     setShowDot(
       pathname === url || (url === '/shop' && pathname.includes('product')),
     );
-    console.log(url);
   }, [pathname, url]);
 
   const [isMobile, setIsMobile] = useState(false);
@@ -313,12 +312,19 @@ function CartBadge({count}) {
   const {open} = useAside();
   const {publish, shop, cart, prevCart} = useAnalytics();
   const [changed, setIsChanged] = useState(false);
-
+  function isCartStale(updatedAt) {
+    const updatedTime = new Date(updatedAt).getTime();
+    const currentTime = Date.now();
+    return currentTime - updatedTime > 3000;
+  }
   useEffect(() => {
-    if (cart?.totalQuantity > (prevCart?.totalQuantity || 0)) {
+    if (
+      !isCartStale(cart?.updatedAt) &&
+      cart?.totalQuantity > (prevCart?.totalQuantity || 0)
+    ) {
       setIsChanged(true);
     }
-  }, [cart?.totalQuantity, prevCart?.totalQuantity]);
+  }, [cart?.totalQuantity, cart?.updatedAt, prevCart?.totalQuantity]);
 
   useEffect(() => {
     setTimeout(() => setIsChanged(false), 1000); // Reset after 1 second
