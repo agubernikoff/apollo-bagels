@@ -1,5 +1,5 @@
 import {Await, Link, useLocation} from '@remix-run/react';
-import {Suspense, useId} from 'react';
+import {Suspense, useId, useState, useEffect} from 'react';
 import {Aside} from '~/components/Aside';
 import {Footer} from '~/components/Footer';
 import {Header, HeaderMenu} from '~/components/Header';
@@ -24,6 +24,13 @@ export function PageLayout({
   hours,
   subscribeImage,
 }) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    window
+      .matchMedia('(max-width: 500px)')
+      .addEventListener('change', (e) => setIsMobile(e.matches));
+    if (window.matchMedia('(max-width: 500px)').matches) setIsMobile(true);
+  }, []);
   const {pathname} = useLocation();
   return (
     <Aside.Provider>
@@ -42,7 +49,7 @@ export function PageLayout({
       <Hours hours={hours} />
       <main>{children}</main>
       <Footer subscribeImage={subscribeImage} />
-      {pathname !== '/' ? <MobileFooter hours={hours} /> : null}
+      {pathname !== '/' && isMobile ? <MobileFooter hours={hours} /> : null}
     </Aside.Provider>
   );
 }
