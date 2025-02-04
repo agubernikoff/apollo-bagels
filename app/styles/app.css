@@ -1566,6 +1566,18 @@ footer.footer {
   body {
     overscroll-behavior-y: none;
   }
+  html {
+    width: 100vw;
+    overflow: hidden;
+  }
+  body {
+    min-height: 100lvh;
+    height: 100%;
+    position: fixed;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
 
   .header-menu-item-container:nth-of-type(4) {
     background: var(--red);
