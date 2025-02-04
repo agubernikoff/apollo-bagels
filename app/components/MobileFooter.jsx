@@ -123,6 +123,7 @@ export default function MobileFooter({hours}) {
       //   e.preventDefault();
       applyMomentum();
     };
+    if (isFooterActive) applyMomentum();
 
     // if (isFooterActive) {
     window.addEventListener('wheel', handleScroll, {passive: false});
