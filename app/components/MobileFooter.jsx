@@ -87,6 +87,7 @@ export default function MobileFooter({hours}) {
     };
 
     const applyMomentum = () => {
+      console.log(velocity, isFooterActive);
       if (Math.abs(velocity) > 0.1) {
         const mainElement =
           document?.querySelectorAll('main')[
