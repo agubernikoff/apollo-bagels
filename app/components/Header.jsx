@@ -12,15 +12,19 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    const mainElement =
+      document?.querySelectorAll('main')[
+        document?.querySelectorAll('main').length - 1
+      ];
     const handleScroll = () => {
-      setScrolled(window.scrollY > 0); // Check if the user has scrolled down
+      setScrolled(mainElement.scrollTop > 0); // Check if the user has scrolled down
     };
 
-    window.addEventListener('scroll', handleScroll);
+    mainElement.addEventListener('scroll', handleScroll);
 
     // Cleanup listener on component unmount
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      mainElement.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
