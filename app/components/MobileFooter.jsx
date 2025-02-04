@@ -21,7 +21,6 @@ export default function MobileFooter({hours}) {
   useEffect(() => {
     console.log('does this trigger right away?');
     const handleScroll = (e) => {
-      console.log(velocity, isFooterActive, scrollYProgress.current);
       if (isFooterActive) {
         e.preventDefault();
         const mainElement =
@@ -129,6 +128,14 @@ export default function MobileFooter({hours}) {
     window.addEventListener('touchstart', handleTouchStart, {passive: false});
     window.addEventListener('touchmove', handleTouchMove, {passive: false});
     window.addEventListener('touchend', handleTouchEnd, {passive: false});
+    window.addEventListener(
+      'scroll',
+      () => {
+        console.log(velocity, isFooterActive, scrollYProgress.current);
+      },
+      {passive: false},
+    );
+
     // } else {
     //   window.removeEventListener('wheel', handleScroll);
     //   window.removeEventListener('touchstart', handleTouchStart);
