@@ -19,6 +19,7 @@ export default function MobileFooter({hours}) {
     return (px / window.innerHeight) * 100;
   }
   useEffect(() => {
+    console.log('does this trigger right away?');
     const handleScroll = (e) => {
       if (isFooterActive) {
         e.preventDefault();
@@ -123,17 +124,17 @@ export default function MobileFooter({hours}) {
       applyMomentum();
     };
 
-    if (isFooterActive) {
-      window.addEventListener('wheel', handleScroll, {passive: false});
-      window.addEventListener('touchstart', handleTouchStart, {passive: false});
-      window.addEventListener('touchmove', handleTouchMove, {passive: false});
-      window.addEventListener('touchend', handleTouchEnd, {passive: false});
-    } else {
-      window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-    }
+    // if (isFooterActive) {
+    window.addEventListener('wheel', handleScroll, {passive: false});
+    window.addEventListener('touchstart', handleTouchStart, {passive: false});
+    window.addEventListener('touchmove', handleTouchMove, {passive: false});
+    window.addEventListener('touchend', handleTouchEnd, {passive: false});
+    // } else {
+    //   window.removeEventListener('wheel', handleScroll);
+    //   window.removeEventListener('touchstart', handleTouchStart);
+    //   window.removeEventListener('touchmove', handleTouchMove);
+    //   window.removeEventListener('touchend', handleTouchEnd);
+    // }
 
     return () => {
       window.removeEventListener('wheel', handleScroll);
