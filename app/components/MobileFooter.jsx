@@ -62,14 +62,14 @@ export default function MobileFooter({hours}) {
     };
 
     const handleTouchMove = (e) => {
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchY - lastY;
+      lastY = touchY;
+
+      // Compute velocity as a moving average (smooths sudden movements)
+      velocity = 0.8 * velocity + 0.2 * deltaY;
       if (isFooterActive) {
         e.preventDefault();
-        const touchY = e.touches[0].clientY;
-        const deltaY = touchY - lastY;
-        lastY = touchY;
-
-        // Compute velocity as a moving average (smooths sudden movements)
-        velocity = 0.8 * velocity + 0.2 * deltaY;
         const mainElement =
           document?.querySelectorAll('main')[
             document?.querySelectorAll('main').length - 1
@@ -97,22 +97,23 @@ export default function MobileFooter({hours}) {
           computedStyles.getPropertyValue('margin-top'),
           10,
         );
-        setFooterY((prev) => {
-          let newFooterY = prev - velocity * 0.5; // Apply inertia
-          newFooterY = Math.max(
-            0,
-            Math.min(100 - pxToDvh(headerHeight), newFooterY),
-          ); // Keep within bounds
+        if (isFooterActive)
+          setFooterY((prev) => {
+            let newFooterY = prev - velocity * 0.5; // Apply inertia
+            newFooterY = Math.max(
+              0,
+              Math.min(100 - pxToDvh(headerHeight), newFooterY),
+            ); // Keep within bounds
 
-          // Slow down velocity over time (friction effect)
-          velocity *= 0.9;
+            // Slow down velocity over time (friction effect)
+            velocity *= 0.9;
 
-          if (Math.abs(velocity) > 0.1) {
-            momentumID = requestAnimationFrame(applyMomentum);
-          }
-          if (newFooterY === 0) setIsFooterActive(false);
-          return newFooterY;
-        });
+            if (Math.abs(velocity) > 0.1) {
+              momentumID = requestAnimationFrame(applyMomentum);
+            }
+            if (newFooterY === 0) setIsFooterActive(false);
+            return newFooterY;
+          });
       }
     };
 
