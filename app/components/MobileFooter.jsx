@@ -21,6 +21,7 @@ export default function MobileFooter({hours}) {
   useEffect(() => {
     console.log('does this trigger right away?');
     const handleScroll = (e) => {
+      console.log(velocity, isFooterActive, scrollYProgress.current);
       if (isFooterActive) {
         e.preventDefault();
         const mainElement =
@@ -88,7 +89,6 @@ export default function MobileFooter({hours}) {
     };
 
     const applyMomentum = () => {
-      console.log(velocity, isFooterActive, scrollYProgress.current);
       if (Math.abs(velocity) > 0.1) {
         const mainElement =
           document?.querySelectorAll('main')[
