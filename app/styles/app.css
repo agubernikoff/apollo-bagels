@@ -1058,12 +1058,15 @@ footer.footer {
 
 .info {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100lvh;
 }
 
 .info-background {
   width: 100%;
-  height: 100%;
+  height: 100lvh;
   position: absolute;
   object-fit: cover; /* Ensures the image covers the screen without distortion */
   top: 0;
@@ -1393,7 +1396,7 @@ footer.footer {
     top: 100dvh; */
     color: var(--color-creme);
     min-height: 474px;
-    margin: 101vh auto 0;
+    margin: 101lvh auto 0;
   }
   .mobile-footer-info {
     min-height: 474px;
@@ -1544,7 +1547,10 @@ footer.footer {
   main {
     position: fixed;
     overflow: scroll;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100lvh;
     margin: 0 !important;
     padding: var(--header-height) 1rem 3rem 1rem;
   }
