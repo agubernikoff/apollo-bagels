@@ -24,7 +24,10 @@ export default function MobileFooter({hours}) {
       ];
     console.log('cannot deal with this anymore', isInView);
     if (isInView) mainElement.style.overflow = 'hidden';
-    else mainElement.style.overflow = 'scroll';
+    else {
+      mainElement.style.overflow = 'scroll';
+      mainElement.scrollBy({top: -100, behavior: 'smooth'});
+    }
   }, [isInView]);
   //   function pxToDvh(px) {
   //     return (px / window.innerHeight) * 100;
