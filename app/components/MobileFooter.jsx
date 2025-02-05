@@ -237,9 +237,6 @@ export default function MobileFooter({hours}) {
       const atBottom =
         mainElement.scrollTop + mainElement.clientHeight >=
         mainElement.scrollHeight;
-
-      if (atBottom) {
-      }
     };
 
     const applyMomentum = (e) => {
@@ -253,7 +250,6 @@ export default function MobileFooter({hours}) {
           //   window.scrollBy(0, -velocity * 0.5); // Apply inertia
           if (!isInView && e.type === 'scroll') {
             document.body.scrollTo({top: 100, behavior: 'smooth'});
-            console.log('applyMomentum', e, velocity);
           }
           if (isInView && e.type === 'scroll') e.preventDefault();
           // Slow down velocity over time to simulate friction
