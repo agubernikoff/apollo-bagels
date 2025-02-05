@@ -240,11 +240,13 @@ export default function MobileFooter({hours}) {
 
       if (atBottom) {
         // Move the document by deltaY when at the bottom of the page
-        if (!isInView)
+        if (!isInView) {
+          console.log('handletouchmove');
           window.scrollBy({
             top: -deltaY * 0.1, // Pass the user's scroll velocity
             //   behavior: 'smooth',
           });
+        }
       }
     };
 
@@ -257,7 +259,10 @@ export default function MobileFooter({hours}) {
 
         if (atBottom) {
           //   window.scrollBy(0, -velocity * 0.5); // Apply inertia
-          if (!isInView) document.body.scrollTo({top: 100, behavior: 'smooth'});
+          if (!isInView) {
+            document.body.scrollTo({top: 100, behavior: 'smooth'});
+            console.log('applyMomentum');
+          }
           if (isInView && e.type === 'scroll') e.preventDefault();
           // Slow down velocity over time to simulate friction
           velocity *= 0.9;
