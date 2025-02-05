@@ -190,35 +190,11 @@ export default function MobileFooter({hours}) {
         document?.querySelectorAll('main').length - 1
       ];
 
-    function handleScroll(event) {
-      // Check if user is at the bottom of the fixed element
-      const atBottom =
-        mainElement.scrollTop + mainElement.clientHeight >=
-        mainElement.scrollHeight;
-      if (atBottom && event.deltaY > 0) {
-        event.preventDefault(); // Stop the default behavior
-
-        // Apply remaining scroll momentum to the body
-        window.scrollBy({
-          top: event.deltaY * 0.1, // Pass the user's scroll velocity
-          //   behavior: 'smooth',
-        });
-      }
-    }
-
     let startY = 0;
     let lastY = 0;
     let velocity = 0;
     let momentumID = null;
-
-    const handleTouchStart = (e) => {
-      startY = e.touches[0].clientY;
-      lastY = startY;
-      velocity = 0;
-
-      // Cancel any existing momentum animations
-      if (momentumID) cancelAnimationFrame(momentumID);
-    };
+    let isFooterVisible = false;
 
     const handleTouchMove = (e) => {
       const touchY = e.touches[0].clientY;
@@ -261,11 +237,6 @@ export default function MobileFooter({hours}) {
       }
     };
 
-    const handleTouchEnd = (e) => {
-      // Start the momentum effect once touch ends
-      applyMomentum(e);
-    };
-
     function allowScroll(e) {
       const atBottom =
         mainElement.scrollTop + mainElement.clientHeight >=
@@ -277,27 +248,46 @@ export default function MobileFooter({hours}) {
         document.body.scrollTo({top: 105, behavior: 'smooth'});
       } else mainElement.style.overflow = 'scroll';
     }
+    const handleTouchStart = (e) => {
+      startY = e.touches[0].clientY;
+      lastY = startY;
+      velocity = 0;
+      const rect = ref.current.getBoundingClientRect();
+      isFooterVisible = rect.top < window.innerHeight && rect.bottom > 0;
+
+      // Cancel any existing momentum animations
+      if (momentumID) cancelAnimationFrame(momentumID);
+    };
     function hanldeTouchMove2(e) {
       if (ref.current) {
         const rect = ref.current.getBoundingClientRect();
         const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-        console.log(ref, isVisible, e);
+        const touchY = e.touches[0].clientY;
+        const deltaY = touchY - lastY;
+        lastY = touchY;
+        if (isFooterVisible && !isVisible) mainElement.scrollBy({top: deltaY});
       }
     }
+    const handleTouchEnd = (e) => {
+      // Start the momentum effect once touch ends
+      //   applyMomentum(e);
+
+      const rect = ref.current.getBoundingClientRect();
+      isFooterVisible = rect.top < window.innerHeight && rect.bottom > 0;
+    };
 
     // mainElement.addEventListener('wheel', handleScroll);
-    // mainElement.addEventListener('touchstart', handleTouchStart);
+    mainElement.addEventListener('touchstart', handleTouchStart);
     // mainElement.addEventListener('touchmove', handleTouchMove, {
     //   passive: false,
     // });
-    // mainElement.addEventListener('touchend', handleTouchEnd);
+    mainElement.addEventListener('touchend', handleTouchEnd);
     // mainElement.addEventListener('scroll', handleTouchEnd, {passive: false});
     mainElement.addEventListener('scroll', allowScroll);
     mainElement.addEventListener('touchmove', hanldeTouchMove2);
     return () => {
-      mainElement.removeEventListener('wheel', handleScroll);
       mainElement.removeEventListener('touchstart', handleTouchStart);
-      mainElement.removeEventListener('touchmove', handleTouchMove);
+      mainElement.removeEventListener('touchmove', hanldeTouchMove2);
       mainElement.removeEventListener('touchend', handleTouchEnd);
       mainElement.removeEventListener('scroll', handleTouchEnd);
       if (momentumID) cancelAnimationFrame(momentumID);
