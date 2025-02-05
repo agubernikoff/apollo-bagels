@@ -188,22 +188,6 @@ export default function MobileFooter({hours}) {
         document?.querySelectorAll('main').length - 1
       ];
 
-    function handleScroll(event) {
-      // Check if user is at the bottom of the fixed element
-      const atBottom =
-        mainElement.scrollTop + mainElement.clientHeight >=
-        mainElement.scrollHeight;
-      if (atBottom && event.deltaY > 0) {
-        event.preventDefault(); // Stop the default behavior
-
-        // Apply remaining scroll momentum to the body
-        window.scrollBy({
-          top: event.deltaY * 0.1, // Pass the user's scroll velocity
-          //   behavior: 'smooth',
-        });
-      }
-    }
-
     let startY = 0;
     let lastY = 0;
     let velocity = 0;
@@ -214,7 +198,6 @@ export default function MobileFooter({hours}) {
       lastY = startY;
       velocity = 0;
 
-      // Cancel any existing momentum animations
       if (momentumID) cancelAnimationFrame(momentumID);
     };
 
@@ -223,63 +206,51 @@ export default function MobileFooter({hours}) {
       const deltaY = touchY - lastY;
       lastY = touchY;
 
-      // Compute velocity as a moving average to smooth out sudden changes
-      velocity = 0.8 * velocity + 0.2 * deltaY;
+      velocity = 0.9 * velocity + 0.1 * deltaY; // Smooth out velocity changes
 
-      //   // Prevent default scrolling while interacting with the fixed element
-      //   e.preventDefault();
-
-      // Check if the user is at the bottom of the page or near the bottom
       const atBottom =
         mainElement.scrollTop + mainElement.clientHeight >=
-        mainElement.scrollHeight;
+        mainElement.scrollHeight - 1; // Small threshold to avoid early activation
+
+      if (atBottom && deltaY < 0) {
+        e.preventDefault(); // Prevent rubber-band bounce
+
+        // Apply a natural scroll effect by moving the window
+        window.scrollBy({
+          top: -deltaY * 0.8, // Reduce intensity for a more natural feel
+        });
+      }
     };
 
-    const applyMomentum = (e) => {
-      const atBottom =
-        mainElement.scrollTop + mainElement.clientHeight >=
-        mainElement.scrollHeight;
-      if (Math.abs(velocity) > 0.1) {
-        // Check if the user is at the bottom
+    const applyMomentum = () => {
+      if (Math.abs(velocity) > 0.5) {
+        window.scrollBy(0, -velocity * 0.8); // Apply momentum
 
-        if (atBottom) {
-          //   window.scrollBy(0, -velocity * 0.5); // Apply inertia
-          if (!isInView && e.type === 'scroll') {
-            document.body.scrollTo({top: 100, behavior: 'smooth'});
-          }
-          if (isInView && e.type === 'scroll') e.preventDefault();
-          // Slow down velocity over time to simulate friction
-          velocity *= 0.9;
+        velocity *= 0.85; // Gradually reduce velocity (friction effect)
 
-          // Continue applying momentum if still above a threshold
-          if (Math.abs(velocity) > 0.1) {
-            momentumID = requestAnimationFrame(applyMomentum);
-          }
+        if (Math.abs(velocity) > 0.1) {
+          momentumID = requestAnimationFrame(applyMomentum);
         }
       }
     };
 
-    const handleTouchEnd = (e) => {
-      // Start the momentum effect once touch ends
-      applyMomentum(e);
+    const handleTouchEnd = () => {
+      applyMomentum();
     };
 
-    // mainElement.addEventListener('wheel', handleScroll);
-    // mainElement.addEventListener('touchstart', handleTouchStart);
-    // mainElement.addEventListener('touchmove', handleTouchMove, {
-    //   passive: false,
-    // });
-    // mainElement.addEventListener('touchend', handleTouchEnd);
-    // mainElement.addEventListener('scroll', handleTouchEnd, {passive: false});
+    mainElement.addEventListener('touchstart', handleTouchStart);
+    mainElement.addEventListener('touchmove', handleTouchMove, {
+      passive: false,
+    });
+    mainElement.addEventListener('touchend', handleTouchEnd);
+
     return () => {
-      mainElement.removeEventListener('wheel', handleScroll);
       mainElement.removeEventListener('touchstart', handleTouchStart);
       mainElement.removeEventListener('touchmove', handleTouchMove);
       mainElement.removeEventListener('touchend', handleTouchEnd);
-      mainElement.removeEventListener('scroll', handleTouchEnd);
       if (momentumID) cancelAnimationFrame(momentumID);
     };
-  }, [isInView]);
+  }, []);
 
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
 
