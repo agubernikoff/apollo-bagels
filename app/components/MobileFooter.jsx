@@ -25,6 +25,7 @@ export default function MobileFooter({hours}) {
     function preventScroll(e) {
       e.preventDefault();
     }
+    console.log('cannot deal with this anymore', isInView);
     if (isInView)
       mainElement.addEventListener('scroll', preventScroll, {passive: true});
     else window.removeEventListener('scroll', preventScroll, {passive: true});
