@@ -26,7 +26,6 @@ export default function MobileFooter({hours}) {
     if (isInView) mainElement.style.overflow = 'hidden';
     else {
       mainElement.style.overflow = 'scroll';
-      mainElement.scrollBy({top: -100, behavior: 'smooth'});
     }
   }, [isInView]);
   //   function pxToDvh(px) {
