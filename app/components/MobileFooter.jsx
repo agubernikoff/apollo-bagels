@@ -281,6 +281,11 @@ export default function MobileFooter({hours}) {
       applyMomentum(e);
     };
 
+    mainElement.removeEventListener('wheel', handleScroll);
+    mainElement.removeEventListener('touchstart', handleTouchStart);
+    mainElement.removeEventListener('touchmove', handleTouchMove);
+    mainElement.removeEventListener('touchend', handleTouchEnd);
+    mainElement.removeEventListener('scroll', handleTouchEnd);
     mainElement.addEventListener('wheel', handleScroll);
     mainElement.addEventListener('touchstart', handleTouchStart);
     mainElement.addEventListener('touchmove', handleTouchMove, {
@@ -289,11 +294,11 @@ export default function MobileFooter({hours}) {
     mainElement.addEventListener('touchend', handleTouchEnd);
     mainElement.addEventListener('scroll', handleTouchEnd);
     return () => {
-      window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('scroll', handleTouchEnd);
+      mainElement.removeEventListener('wheel', handleScroll);
+      mainElement.removeEventListener('touchstart', handleTouchStart);
+      mainElement.removeEventListener('touchmove', handleTouchMove);
+      mainElement.removeEventListener('touchend', handleTouchEnd);
+      mainElement.removeEventListener('scroll', handleTouchEnd);
       if (momentumID) cancelAnimationFrame(momentumID);
     };
   }, [isInView]);
