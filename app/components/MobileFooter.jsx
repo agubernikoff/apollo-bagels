@@ -162,15 +162,16 @@ export default function MobileFooter({hours}) {
   //     };
   //   }, [isFooterActive]);
 
-  //   const {pathname} = useLocation();
-  //   // Reset footer when the route changes
-  //   useEffect(() => {
-  //     if (document.body.scrollHeight !== window.innerHeight)
-  //       setIsFooterActive(false);
-  //     else setIsFooterActive(true);
-  //     setFooterY(0);
-  //     setIsSubscribeOpen(false);
-  //   }, [pathname]);
+  const {pathname} = useLocation();
+  // Reset footer when the route changes
+  useEffect(() => {
+    const mainElement =
+      document?.querySelectorAll('main')[
+        document?.querySelectorAll('main').length - 1
+      ];
+    mainElement.scrollTo({top: 0});
+    document.body.scrollTo({top: 0, behavior: 'smooth'});
+  }, [pathname]);
 
   //   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
   //     if (latest >= 1) setIsFooterActive(true); // Activate manual scrolling;
