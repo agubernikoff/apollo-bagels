@@ -1217,6 +1217,7 @@ footer.footer {
   padding: 0.5rem 1rem;
   width: 33%;
   text-wrap: nowrap;
+  white-space: nowrap;
   font-size: 12px;
   line-height: 1.4;
   color: var(--color-creme);
@@ -1226,6 +1227,9 @@ footer.footer {
 }
 .location-grid-item-bottom-container > p {
   border-left: 1px solid var(--color-creme);
+}
+.location-grid-item-bottom-container > p > a {
+  color: var(--color-creme);
 }
 
 .media-viewer {
