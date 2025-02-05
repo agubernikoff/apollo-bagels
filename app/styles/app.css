@@ -1592,6 +1592,9 @@ footer.footer {
   .header-menu-item {
     padding: 1.5352px 6.72px;
   }
+  .info-announcement-container {
+    bottom: 6rem;
+  }
   .locations-grid {
     grid-template-columns: repeat(1, 1fr);
   }
