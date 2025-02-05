@@ -248,6 +248,13 @@ export default function MobileFooter({hours}) {
           mainElement.scrollTop + mainElement.clientHeight >=
           mainElement.scrollHeight;
 
+        console.log(
+          atBottom,
+          mainElement.scrollTop,
+          mainElement.clientHeight,
+          mainElement.scrollHeight,
+        );
+
         if (atBottom) {
           window.scrollBy(0, -velocity * 0.5); // Apply inertia
 
