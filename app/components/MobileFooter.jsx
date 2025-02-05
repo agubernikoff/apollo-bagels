@@ -248,15 +248,9 @@ export default function MobileFooter({hours}) {
           mainElement.scrollTop + mainElement.clientHeight >=
           mainElement.scrollHeight;
 
-        console.log(
-          atBottom,
-          mainElement.scrollTop,
-          mainElement.clientHeight,
-          mainElement.scrollHeight,
-        );
-
         if (atBottom) {
-          window.scrollBy(0, -velocity * 0.5); // Apply inertia
+          //   window.scrollBy(0, -velocity * 0.5); // Apply inertia
+          document.body.scrollTo({top: 100, behavior: 'smooth'});
 
           // Slow down velocity over time to simulate friction
           velocity *= 0.9;
