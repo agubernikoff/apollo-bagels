@@ -182,7 +182,7 @@ export function Layout({children}) {
         ) : (
           children
         )}
-        <ScrollRestoration nonce={nonce} />
+        {/* <ScrollRestoration nonce={nonce} /> */}
         <Scripts nonce={nonce} />
       </body>
     </html>
