@@ -1387,6 +1387,16 @@ footer.footer {
     margin: auto;
     margin-bottom: 0.75rem;
   }
+
+  .mobile-footer {
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For IE and Edge */
+  }
+
+  .mobile-footer::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
+
   .mobile-footer {
     /* background: var(--red); */
     display: block;
