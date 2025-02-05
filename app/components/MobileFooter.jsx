@@ -265,7 +265,15 @@ export default function MobileFooter({hours}) {
         const touchY = e.touches[0].clientY;
         const deltaY = touchY - lastY;
         lastY = touchY;
-        if (isFooterVisible && !isVisible) mainElement.scrollBy({top: deltaY});
+        console.log(
+          'global: ',
+          isFooterVisible,
+          'local: ',
+          isVisible,
+          'deltaY: ',
+          deltaY,
+        );
+        if (isFooterVisible && !isVisible) mainElement.scrollBy({top: -deltaY});
       }
     }
     const handleTouchEnd = (e) => {
