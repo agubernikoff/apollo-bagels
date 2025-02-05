@@ -269,8 +269,10 @@ export default function MobileFooter({hours}) {
         mainElement.scrollHeight;
       console.log('allowscroll: ', atBottom);
 
-      if (atBottom) mainElement.style.overflow = 'hidden';
-      else mainElement.style.overflow = 'scroll';
+      if (atBottom) {
+        mainElement.style.overflow = 'hidden';
+        document.body.scrollTo({top: 105, behavior: 'smooth'});
+      } else mainElement.style.overflow = 'scroll';
     }
 
     // mainElement.addEventListener('wheel', handleScroll);
