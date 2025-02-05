@@ -17,19 +17,15 @@ export default function MobileFooter({hours}) {
   const [footerY, setFooterY] = useState(0); // Start at 100% off-screen
   const ref = useRef(null);
   const isInView = useInView(ref);
-  //   useEffect(() => {
-  //     const mainElement =
-  //       document?.querySelectorAll('main')[
-  //         document?.querySelectorAll('main').length - 1
-  //       ];
-  //     function preventScroll(e) {
-  //       e.preventDefault();
-  //     }
-  //     console.log('cannot deal with this anymore', isInView);
-  //     if (isInView)
-  //       mainElement.addEventListener('scroll', preventScroll, {passive: true});
-  //     else window.removeEventListener('scroll', preventScroll, {passive: true});
-  //   }, [isInView]);
+  useEffect(() => {
+    const mainElement =
+      document?.querySelectorAll('main')[
+        document?.querySelectorAll('main').length - 1
+      ];
+    console.log('cannot deal with this anymore', isInView);
+    if (isInView) mainElement.style.overflow = 'hidden';
+    else mainElement.style.overflow = 'scroll';
+  }, [isInView]);
   //   function pxToDvh(px) {
   //     return (px / window.innerHeight) * 100;
   //   }
@@ -268,13 +264,13 @@ export default function MobileFooter({hours}) {
       applyMomentum(e);
     };
 
-    mainElement.addEventListener('wheel', handleScroll);
-    mainElement.addEventListener('touchstart', handleTouchStart);
-    mainElement.addEventListener('touchmove', handleTouchMove, {
-      passive: false,
-    });
-    mainElement.addEventListener('touchend', handleTouchEnd);
-    mainElement.addEventListener('scroll', handleTouchEnd, {passive: false});
+    // mainElement.addEventListener('wheel', handleScroll);
+    // mainElement.addEventListener('touchstart', handleTouchStart);
+    // mainElement.addEventListener('touchmove', handleTouchMove, {
+    //   passive: false,
+    // });
+    // mainElement.addEventListener('touchend', handleTouchEnd);
+    // mainElement.addEventListener('scroll', handleTouchEnd, {passive: false});
     return () => {
       mainElement.removeEventListener('wheel', handleScroll);
       mainElement.removeEventListener('touchstart', handleTouchStart);
