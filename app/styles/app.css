@@ -1630,7 +1630,7 @@ footer.footer {
     row-gap: 1.5rem;
   }
   .product-images {
-    z-index: -1;
+    /* z-index: -1; */
   }
   .mobile-footer-info {
     gap: 1.5rem;
