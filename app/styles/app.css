@@ -1550,7 +1550,7 @@ footer.footer {
     top: 0;
     left: 0;
     right: 0;
-    height: 60vh;
+    height: 100vh;
     margin: 0 !important;
     padding: var(--header-height) 1rem 3rem 1rem;
   }
@@ -1577,6 +1577,9 @@ footer.footer {
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     width: 100%;
+  }
+  main {
+    height: 60vh;
   }
 
   .header-menu-item-container:nth-of-type(4) {
