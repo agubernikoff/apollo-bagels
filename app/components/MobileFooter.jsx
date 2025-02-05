@@ -17,14 +17,17 @@ export default function MobileFooter({hours}) {
   const [footerY, setFooterY] = useState(0); // Start at 100% off-screen
   const ref = useRef(null);
   const isInView = useInView(ref);
-  //   useEffect(() => {
-  //     const mainElement =
-  //       document?.querySelectorAll('main')[
-  //         document?.querySelectorAll('main').length - 1
-  //       ];
-  //     if (isInView) mainElement.style.pointerEvents = 'none';
-  //     else mainElement.style.pointerEvents = 'auto';
-  //   }, [isInView]);
+  useEffect(() => {
+    const mainElement =
+      document?.querySelectorAll('main')[
+        document?.querySelectorAll('main').length - 1
+      ];
+    console.log(
+      `how tf is it registering here and not down there fuck this: ${isInView}`,
+    );
+    if (isInView) mainElement.style.pointerEvents = 'none';
+    else mainElement.style.pointerEvents = 'auto';
+  }, [isInView]);
   //   function pxToDvh(px) {
   //     return (px / window.innerHeight) * 100;
   //   }
@@ -233,25 +236,31 @@ export default function MobileFooter({hours}) {
         mainElement.scrollTop + mainElement.clientHeight >=
         mainElement.scrollHeight;
 
-      //   if (atBottom) {
-      //     // Move the document by deltaY when at the bottom of the page
-      //     window.scrollBy({
-      //       top: -deltaY * 0.1, // Pass the user's scroll velocity
-      //       //   behavior: 'smooth',
-      //     });
-      //   }
+      if (atBottom) {
+        // Move the document by deltaY when at the bottom of the page
+        window.scrollBy({
+          top: -deltaY * 0.1, // Pass the user's scroll velocity
+          //   behavior: 'smooth',
+        });
+      }
     };
 
     const applyMomentum = (e) => {
       const atBottom =
         mainElement.scrollTop + mainElement.clientHeight >=
         mainElement.scrollHeight;
-      console.log('bottom', atBottom, 'inview', isInView, e.type === 'scroll');
       if (Math.abs(velocity) > 0.1) {
         // Check if the user is at the bottom
 
         if (atBottom) {
           //   window.scrollBy(0, -velocity * 0.5); // Apply inertia
+          console.log(
+            'bottom',
+            atBottom,
+            'inview',
+            isInView,
+            e.type === 'scroll',
+          );
           document.body.scrollTo({top: 100, behavior: 'smooth'});
 
           // Slow down velocity over time to simulate friction
