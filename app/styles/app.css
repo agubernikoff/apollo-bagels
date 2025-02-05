@@ -1584,6 +1584,7 @@ footer.footer {
   }
   main {
     height: 60vh;
+    overscroll-behavior-y: none;
   }
 
   .header-menu-item-container:nth-of-type(4) {

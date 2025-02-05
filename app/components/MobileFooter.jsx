@@ -263,6 +263,15 @@ export default function MobileFooter({hours}) {
       // Start the momentum effect once touch ends
       applyMomentum(e);
     };
+    function allowScroll(e) {
+      const atBottom =
+        mainElement.scrollTop + mainElement.clientHeight >=
+        mainElement.scrollHeight;
+      console.log('allowscroll: ', atBottom);
+
+      if (atBottom) mainElement.style.overflow = 'hidden';
+      else mainElement.style.overflow = 'scroll';
+    }
 
     // mainElement.addEventListener('wheel', handleScroll);
     // mainElement.addEventListener('touchstart', handleTouchStart);
@@ -271,6 +280,7 @@ export default function MobileFooter({hours}) {
     // });
     // mainElement.addEventListener('touchend', handleTouchEnd);
     // mainElement.addEventListener('scroll', handleTouchEnd, {passive: false});
+    mainElement.addEventListener('scroll', allowScroll);
     return () => {
       mainElement.removeEventListener('wheel', handleScroll);
       mainElement.removeEventListener('touchstart', handleTouchStart);
