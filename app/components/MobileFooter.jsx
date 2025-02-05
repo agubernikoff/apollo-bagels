@@ -291,7 +291,7 @@ export default function MobileFooter({hours}) {
       ref={ref}
       className="mobile-footer"
       style={{
-        marginBottom: `calc(100dvh - ${
+        marginBottom: `calc(100lvh - ${
           ref?.current?.offsetHeight || 0
         }px - var(--header-height) )`,
         // transform: `translateY(-${footerY}dvh)`,
