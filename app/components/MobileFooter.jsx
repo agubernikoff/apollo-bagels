@@ -265,6 +265,7 @@ export default function MobileFooter({hours}) {
       // Start the momentum effect once touch ends
       applyMomentum(e);
     };
+
     function allowScroll(e) {
       const atBottom =
         mainElement.scrollTop + mainElement.clientHeight >=
@@ -276,6 +277,13 @@ export default function MobileFooter({hours}) {
         document.body.scrollTo({top: 105, behavior: 'smooth'});
       } else mainElement.style.overflow = 'scroll';
     }
+    function hanldeTouchMove2(e) {
+      if (ref.current) {
+        const rect = ref.current.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+        console.log(ref, isVisible, e);
+      }
+    }
 
     // mainElement.addEventListener('wheel', handleScroll);
     // mainElement.addEventListener('touchstart', handleTouchStart);
@@ -285,6 +293,7 @@ export default function MobileFooter({hours}) {
     // mainElement.addEventListener('touchend', handleTouchEnd);
     // mainElement.addEventListener('scroll', handleTouchEnd, {passive: false});
     mainElement.addEventListener('scroll', allowScroll);
+    mainElement.addEventListener('touchmove', hanldeTouchMove2);
     return () => {
       mainElement.removeEventListener('wheel', handleScroll);
       mainElement.removeEventListener('touchstart', handleTouchStart);
