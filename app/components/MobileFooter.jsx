@@ -194,7 +194,6 @@ export default function MobileFooter({hours}) {
     let lastY = 0;
     let velocity = 0;
     let momentumID = null;
-    let isFooterVisible = false;
 
     const handleTouchMove = (e) => {
       const touchY = e.touches[0].clientY;
@@ -252,8 +251,6 @@ export default function MobileFooter({hours}) {
       startY = e.touches[0].clientY;
       lastY = startY;
       velocity = 0;
-      const rect = ref.current.getBoundingClientRect();
-      isFooterVisible = rect.top < window.innerHeight && rect.bottom > 0;
 
       // Cancel any existing momentum animations
       if (momentumID) cancelAnimationFrame(momentumID);
@@ -265,23 +262,16 @@ export default function MobileFooter({hours}) {
         const touchY = e.touches[0].clientY;
         const deltaY = touchY - lastY;
         lastY = touchY;
-        console.log(
-          'global: ',
-          isFooterVisible,
-          'local: ',
-          isVisible,
-          'deltaY: ',
-          deltaY,
-        );
-        if (isFooterVisible && !isVisible) mainElement.scrollBy({top: -deltaY});
+
+        if (!isVisible && mainElement.style.overflow !== 'scroll') {
+          mainElement.style.overflow = 'scroll';
+          mainElement.scrollBy({top: -deltaY});
+        }
       }
     }
     const handleTouchEnd = (e) => {
       // Start the momentum effect once touch ends
       //   applyMomentum(e);
-
-      const rect = ref.current.getBoundingClientRect();
-      isFooterVisible = rect.top < window.innerHeight && rect.bottom > 0;
     };
 
     // mainElement.addEventListener('wheel', handleScroll);
@@ -289,7 +279,7 @@ export default function MobileFooter({hours}) {
     // mainElement.addEventListener('touchmove', handleTouchMove, {
     //   passive: false,
     // });
-    mainElement.addEventListener('touchend', handleTouchEnd);
+    // mainElement.addEventListener('touchend', handleTouchEnd);
     // mainElement.addEventListener('scroll', handleTouchEnd, {passive: false});
     mainElement.addEventListener('scroll', allowScroll);
     mainElement.addEventListener('touchmove', hanldeTouchMove2);
