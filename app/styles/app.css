@@ -1553,7 +1553,6 @@ footer.footer {
     height: 60vh;
     margin: 0 !important;
     padding: var(--header-height) 1rem 3rem 1rem;
-    overscroll-behavior-y: none;
   }
   html::-webkit-scrollbar {
     display: none; /* Chrome, Safari */
