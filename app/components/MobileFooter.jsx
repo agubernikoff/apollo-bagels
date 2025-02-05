@@ -17,19 +17,19 @@ export default function MobileFooter({hours}) {
   const [footerY, setFooterY] = useState(0); // Start at 100% off-screen
   const ref = useRef(null);
   const isInView = useInView(ref);
-  useEffect(() => {
-    const mainElement =
-      document?.querySelectorAll('main')[
-        document?.querySelectorAll('main').length - 1
-      ];
-    function preventScroll(e) {
-      e.preventDefault();
-    }
-    console.log('cannot deal with this anymore', isInView);
-    if (isInView)
-      mainElement.addEventListener('scroll', preventScroll, {passive: true});
-    else window.removeEventListener('scroll', preventScroll, {passive: true});
-  }, [isInView]);
+  //   useEffect(() => {
+  //     const mainElement =
+  //       document?.querySelectorAll('main')[
+  //         document?.querySelectorAll('main').length - 1
+  //       ];
+  //     function preventScroll(e) {
+  //       e.preventDefault();
+  //     }
+  //     console.log('cannot deal with this anymore', isInView);
+  //     if (isInView)
+  //       mainElement.addEventListener('scroll', preventScroll, {passive: true});
+  //     else window.removeEventListener('scroll', preventScroll, {passive: true});
+  //   }, [isInView]);
   //   function pxToDvh(px) {
   //     return (px / window.innerHeight) * 100;
   //   }
@@ -296,7 +296,7 @@ export default function MobileFooter({hours}) {
       window.removeEventListener('scroll', handleTouchEnd);
       if (momentumID) cancelAnimationFrame(momentumID);
     };
-  }, []);
+  }, [isInView]);
 
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
 
