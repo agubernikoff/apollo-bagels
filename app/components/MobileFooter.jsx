@@ -22,7 +22,7 @@ export default function MobileFooter({hours}) {
       document?.querySelectorAll('main')[
         document?.querySelectorAll('main').length - 1
       ];
-    console.log('cannot deal with this anymore', isInView);
+
     if (isInView) mainElement.style.overflow = 'hidden';
     else {
       mainElement.style.overflow = 'scroll';
@@ -275,14 +275,14 @@ export default function MobileFooter({hours}) {
     };
 
     // mainElement.addEventListener('wheel', handleScroll);
-    mainElement.addEventListener('touchstart', handleTouchStart);
+    // mainElement.addEventListener('touchstart', handleTouchStart);
     // mainElement.addEventListener('touchmove', handleTouchMove, {
     //   passive: false,
     // });
     // mainElement.addEventListener('touchend', handleTouchEnd);
     // mainElement.addEventListener('scroll', handleTouchEnd, {passive: false});
     mainElement.addEventListener('scroll', allowScroll);
-    mainElement.addEventListener('touchmove', hanldeTouchMove2);
+    // mainElement.addEventListener('touchmove', hanldeTouchMove2);
     return () => {
       mainElement.removeEventListener('touchstart', handleTouchStart);
       mainElement.removeEventListener('touchmove', hanldeTouchMove2);
