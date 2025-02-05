@@ -22,11 +22,12 @@ export default function MobileFooter({hours}) {
       document?.querySelectorAll('main')[
         document?.querySelectorAll('main').length - 1
       ];
-    console.log(
-      `how tf is it registering here and not down there fuck this: ${isInView}`,
-    );
-    if (isInView) mainElement.style.pointerEvents = 'none';
-    else mainElement.style.pointerEvents = 'auto';
+    function preventScroll(e) {
+      e.preventDefault();
+    }
+    if (isInView)
+      mainElement.addEventListener('scroll', preventScroll, {passive: true});
+    else window.removeEventListener('scroll', preventScroll, {passive: true});
   }, [isInView]);
   //   function pxToDvh(px) {
   //     return (px / window.innerHeight) * 100;
