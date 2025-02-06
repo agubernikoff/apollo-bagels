@@ -1215,6 +1215,7 @@ footer.footer {
 }
 .location-grid-item-title-container > p {
   font-size: 12px;
+  text-align: right;
 }
 
 .location-grid-item-bottom-container {
