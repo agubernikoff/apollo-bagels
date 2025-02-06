@@ -102,33 +102,12 @@ export default function Product() {
 
   const {title, descriptionHtml} = product;
 
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    window
-      .matchMedia('(max-width: 999px)') // 920px ÷ 16 = 57.5em
-      .addEventListener('change', (e) => setIsMobile(e.matches));
-    if (window.matchMedia('(max-width: 999px)').matches) setIsMobile(true);
-  }, []);
-
   useEffect(() => {
     window.scrollTo({
       top: 0,
       left: 0,
     });
-    const productPageWrapper = document.querySelector('.product-page'); // Assuming the main wrapper is `product-page`
-    // Remove margins by using position absolute
-    if (productPageWrapper && !isMobile) {
-      productPageWrapper.style.margin =
-        'calc(var(--header-height) * -1) -1rem -3rem'; // Remove margins
-    }
-
-    return () => {
-      if (productPageWrapper) {
-        // Reset the styles
-        productPageWrapper.style.margin = '';
-      }
-    };
-  }, [isMobile]);
+  }, []);
 
   const [imageIndex, setImageIndex] = useState(0);
 
