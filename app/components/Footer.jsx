@@ -40,7 +40,7 @@ export function Footer({subscribeImage}) {
           display: isMobile && pathname !== '/' ? 'none' : null,
         }}
       >
-        <div className="footer-left" style={style()}>
+        <div className="footer-left">
           {pathname !== '/' && (
             <p>© Apollo Bagels 2024, All Rights Reserved.</p>
           )}
