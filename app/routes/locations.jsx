@@ -226,7 +226,7 @@ function Location({location}) {
           }}
         >
           <h5>{location.title}</h5>
-          <p>COMING SOON</p>
+          <p style={{marginTop: '.5rem'}}>COMING SOON</p>
         </div>
       )}
     </div>
