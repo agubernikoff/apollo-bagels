@@ -117,11 +117,11 @@ export function HeaderMenu({
       if (ref.current) {
         document.documentElement.style.setProperty(
           '--header-height',
-          `calc(${ref.current.offsetHeight}px + 4rem)`,
+          `calc(${ref.current.offsetHeight}px + 3.5rem)`,
         );
         document.documentElement.style.setProperty(
           '--mobile-header-height',
-          `calc(${ref.current.offsetHeight}px + 4rem)`,
+          `calc(${ref.current.offsetHeight}px + 3.5rem)`,
         );
       }
     };

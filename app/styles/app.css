@@ -1119,6 +1119,10 @@ footer.footer {
   color: var(--blue);
 }
 
+.oc-link {
+  text-decoration: underline;
+}
+
 .location-item {
   font-family: 'HAL-BOLD';
   margin-top: 1rem;
