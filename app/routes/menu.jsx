@@ -135,7 +135,7 @@ function Bagels({
       <div>
         {bagels.quantities.map((b) => (
           <p key={b.title}>
-            <span style={{marginRight: '0.75rem'}}>{b.title}</span>
+            <span style={{marginRight: '0.5rem'}}>{b.title}</span>
             {formatPrice(b.price)}
           </p>
         ))}
@@ -178,7 +178,7 @@ function TitleAndList({title, list}) {
       </h5>
       {list.map((menuItem) => (
         <p key={menuItem._key}>
-          <span style={{marginRight: '.75rem'}}>{menuItem.title}</span>
+          <span style={{marginRight: '.5rem'}}>{menuItem.title}</span>
           {formatPrice(menuItem.price)}
         </p>
       ))}
