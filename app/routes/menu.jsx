@@ -134,7 +134,10 @@ function Bagels({
       </div>
       <div>
         {bagels.quantities.map((b) => (
-          <p key={b.title}>{`${b.title} ${formatPrice(b.price)}`}</p>
+          <p key={b.title}>
+            <span style={{marginRight: '0.75rem'}}>{b.title}</span>
+            {formatPrice(b.price)}
+          </p>
         ))}
       </div>
     </div>
@@ -170,13 +173,14 @@ function Drinks({drinks}) {
 function TitleAndList({title, list}) {
   return (
     <div>
-      <h5>
+      <h5 style={{textAlign: 'center'}}>
         <strong>{title}</strong>
       </h5>
       {list.map((menuItem) => (
-        <p key={menuItem._key}>{`${menuItem.title} ${formatPrice(
-          menuItem.price,
-        )}`}</p>
+        <p key={menuItem._key}>
+          <span style={{marginRight: '.75rem'}}>{menuItem.title}</span>
+          {formatPrice(menuItem.price)}
+        </p>
       ))}
     </div>
   );
