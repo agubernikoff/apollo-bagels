@@ -28,6 +28,13 @@ export default async function handleRequest(
       'https://cdn.sanity.io/files/gnnsqgu6/production/',
       'https://cdn.shopify.com/',
     ],
+    connectSrc: [
+      'https://klaviyo.com',
+      'https://*.klaviyo.com',
+      'https://cdn.shopify.com',
+      'http://localhost:3000',
+      'https://*.klaviyo.com/*',
+    ],
   });
 
   const body = await renderToReadableStream(

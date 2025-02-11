@@ -95,10 +95,68 @@ export function Footer({subscribeImage}) {
 }
 
 export function SubscribeForm({close}) {
+  const [placeholder, setPlaceholder] = useState('ENTER A VALID EMAIL');
   const [email, setEmail] = useState('');
   function isValidEmail(x) {
     const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
     return emailRegex.test(x);
+  }
+  function handleSubmit() {
+    const payload = {
+      data: {
+        type: 'subscription',
+        attributes: {
+          custom_source: 'Newsletter',
+          profile: {
+            data: {
+              type: 'profile',
+              attributes: {
+                email: `${email}`,
+              },
+            },
+          },
+        },
+        relationships: {
+          list: {
+            data: {
+              type: 'list',
+              id: 'TJqYhR',
+            },
+          },
+        },
+      },
+    };
+
+    var requestOptions = {
+      mode: 'cors',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        revision: '2023-12-15',
+      },
+      body: JSON.stringify(payload),
+    };
+
+    fetch(
+      'https://a.klaviyo.com/client/subscriptions/?company_id=XYhjyw',
+      requestOptions,
+    )
+      .then((result) => {
+        setEmail('');
+        setPlaceholder('Thank you for signing up.');
+        setTimeout(() => {
+          close();
+        }, 1500);
+      })
+      .catch((error) => {
+        console.log('error', error);
+        setPlaceholder('Error, please try again.');
+        setTimeout(() => {
+          setPlaceholder(
+            'Join our newsletter for the latest news and releases.',
+          );
+        }, 1500);
+      });
   }
   return (
     <>
@@ -132,7 +190,7 @@ export function SubscribeForm({close}) {
                 : {background: 'transparent', color: 'var(--color-creme)'}
             }
             disabled={!isValidEmail(email)}
-            onClick={close}
+            onClick={handleSubmit}
           >
             <AnimatePresence mode="popLayout">
               <motion.span
@@ -142,7 +200,7 @@ export function SubscribeForm({close}) {
                 exit={{opacity: 0}}
                 style={{width: '100%', display: 'block'}}
               >
-                {isValidEmail(email) ? 'SUBSCRIBE' : 'ENTER A VALID EMAIL'}
+                {isValidEmail(email) ? 'SUBSCRIBE' : placeholder}
               </motion.span>
             </AnimatePresence>
           </button>
