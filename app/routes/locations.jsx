@@ -207,7 +207,8 @@ function Location({location}) {
                 ? 'COMING SOON'
                 : 'CATERING'}
             </motion.a>
-            <motion.p
+            <motion.a
+              href={`tel:${location.phoneNumber}`}
               onMouseEnter={() => setHovered('phone')}
               onMouseLeave={() => setHovered(null)}
               initial={{background: 'var(--blue)'}}
@@ -215,7 +216,7 @@ function Location({location}) {
                 background:
                   hovered === 'phone' ? 'var(--green)' : 'var(--blue)',
               }}
-            >{`p. ${location.phoneNumber}`}</motion.p>
+            >{`p. ${location.phoneNumber}`}</motion.a>
           </div>
         </>
       ) : (
