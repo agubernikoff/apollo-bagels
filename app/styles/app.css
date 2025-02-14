@@ -1647,6 +1647,9 @@ footer.footer {
   .products-grid {
     row-gap: 1.5rem;
   }
+  .product-box {
+    padding: 1rem;
+  }
   .product-images {
     /* z-index: -1; */
   }
