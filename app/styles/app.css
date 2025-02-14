@@ -1641,6 +1641,9 @@ footer.footer {
   .location-grid-item h5 {
     font-size: 43px;
   }
+  .location-grid-item-title-container > p {
+    text-align: left;
+  }
   .shop-page {
     margin-top: 1rem;
   }
