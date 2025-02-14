@@ -121,7 +121,7 @@ export function HeaderMenu({
         );
         document.documentElement.style.setProperty(
           '--mobile-header-height',
-          `calc(${ref.current.offsetHeight}px + 3.5rem)`,
+          `calc(${ref.current.offsetHeight}px + 1.25rem)`,
         );
       }
     };
