@@ -1628,6 +1628,9 @@ footer.footer {
   .info-announcement-container {
     bottom: 6rem;
   }
+  .order-cater-text-container > p {
+    letter-spacing: -0.4px;
+  }
   .locations-grid {
     grid-template-columns: repeat(1, 1fr);
   }
