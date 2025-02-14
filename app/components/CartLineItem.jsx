@@ -134,6 +134,7 @@ function CartLineRemoveButton({lineIds, disabled}) {
           padding: 0,
           fontFamily: 'HAL-BOLD',
           textDecoration: 'underline',
+          fontWeight: 'normal',
         }}
         className="remove-btn"
       >
