@@ -158,7 +158,7 @@ export function HeaderMenu({
       className={className}
       role="navigation"
       ref={ref}
-      initial={{y: -100}}
+      initial={{y: -500}}
       animate={{y: 0}}
       transition={{ease: 'easeInOut', delay: 0.3}}
     >
