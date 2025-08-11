@@ -46,7 +46,7 @@ export function PageLayout({
           hours={hours}
         />
       )}
-      <Hours hours={hours} />
+      {/* <Hours hours={hours} /> */}
       <main>{children}</main>
       <Footer subscribeImage={subscribeImage} />
       {pathname !== '/' && isMobile ? <MobileFooter hours={hours} /> : null}
