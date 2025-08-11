@@ -158,6 +158,9 @@ export function HeaderMenu({
       className={className}
       role="navigation"
       ref={ref}
+      initial={{y: -100}}
+      animate={{y: 0}}
+      transition={{ease: 'easeInOut', delay: 0.3}}
     >
       {dynamicMenu.map((item) => {
         if (!item.url) return null;

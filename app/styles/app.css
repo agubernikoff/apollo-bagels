@@ -1517,7 +1517,7 @@ footer.footer {
 }
 @media (max-width: 837px) {
   .header-menu {
-    width: calc(100vw - 1rem);
+    width: calc(100vw - 2rem);
   }
   .header-menu {
     gap: clamp(3.915px, 0.75vw, 10px);
