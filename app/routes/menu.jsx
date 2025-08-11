@@ -118,14 +118,14 @@ function Bagels({
         {bagels.flavors.map((b) => (
           <h4
             key={b.title}
-            onMouseEnter={() => {
-              setDisplayImage(b.image.asset.url);
-              setAlt(b.title);
-            }}
-            onMouseLeave={() => {
-              resetDisplayImage();
-              resetAlt();
-            }}
+            // onMouseEnter={() => {
+            //   setDisplayImage(b.image.asset.url);
+            //   setAlt(b.title);
+            // }}
+            // onMouseLeave={() => {
+            //   resetDisplayImage();
+            //   resetAlt();
+            // }}
             style={{margin: 0}}
           >
             <strong>{b.title}</strong>
