@@ -42,7 +42,9 @@ export function Footer({subscribeImage}) {
       >
         <div className="footer-left">
           {pathname !== '/' && (
-            <p>© Apollo Bagels 2024, All Rights Reserved.</p>
+            <p style={{color: pathname === '/info' ? '#f1f0e47d' : '#b4beca'}}>
+              © Apollo Bagels 2024, All Rights Reserved.
+            </p>
           )}
         </div>
         <div className="footer-right">
