@@ -24,8 +24,9 @@ export default async function handleRequest(
     },
     imgSrc: [
       "'self'",
-      'https://cdn.sanity.io/images/gnnsqgu6/production/',
-      'https://cdn.sanity.io/files/gnnsqgu6/production/',
+      'https://cdn.sanity.io',
+      'https://apicdn.sanity.io',
+      'https://gnnsqgu6.apicdn.sanity.io',
       'https://cdn.shopify.com/',
     ],
     connectSrc: [
@@ -34,6 +35,7 @@ export default async function handleRequest(
       'https://cdn.shopify.com',
       'http://localhost:3000',
       'https://*.klaviyo.com/*',
+      'https://cdn.sanity.io',
     ],
   });
 

@@ -1,6 +1,6 @@
 import {defer} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {sanityClient} from '~/sanity/SanityClient';
 import {AnimatePresence, motion} from 'framer-motion';
 
@@ -67,6 +67,8 @@ export default function Menu() {
   function resetAlt() {
     setAlt('Apollo Bagels');
   }
+
+  console.log(displayImage);
   return (
     <div className="menu-grid">
       <CoverImage image={displayImage} alt={alt} />
@@ -88,18 +90,49 @@ export default function Menu() {
 }
 
 function CoverImage({image, alt}) {
+  const [svgContent, setSvgContent] = useState(null);
+  const isSvg = image.toLowerCase().includes('.svg');
+
+  useEffect(() => {
+    if (isSvg) {
+      fetch(image)
+        .then((res) => res.text())
+        .then(setSvgContent)
+        .catch(console.error);
+    }
+  }, [image, isSvg]);
+
+  console.log(isSvg, svgContent);
+
   return (
     <div style={{padding: 0}}>
       <AnimatePresence mode="popLayout">
-        <motion.img
-          src={image}
-          alt={alt}
-          key={image}
-          initial={{opacity: 0}}
-          animate={{opacity: 1}}
-          exit={{opacity: 0}}
-          style={{height: '100%', width: '100%'}}
-        />
+        {isSvg && svgContent ? (
+          <motion.div
+            key={image}
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+            style={{
+              height: '100%',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            dangerouslySetInnerHTML={{__html: svgContent}}
+          />
+        ) : (
+          <motion.img
+            src={image}
+            alt={alt}
+            key={image}
+            initial={{opacity: 0}}
+            animate={{opacity: 1}}
+            exit={{opacity: 0}}
+            style={{height: '100%', width: '100%'}}
+          />
+        )}
       </AnimatePresence>
     </div>
   );
