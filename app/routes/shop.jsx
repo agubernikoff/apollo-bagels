@@ -54,10 +54,16 @@ export default function ShopPage() {
 function ProductItem({product}) {
   const [image, setImage] = useState(product.images.nodes[0]);
 
+  const externalUrl = product.externalLink
+    ? JSON.parse(product.externalLink.value).url
+    : null;
+
   return (
     <Link
       className="product-item"
-      to={`/products/${product.handle}`}
+      to={externalUrl || `/products/${product.handle}`}
+      target={externalUrl ? '_blank' : undefined}
+      rel={externalUrl ? 'noopener noreferrer' : undefined}
       preventScrollReset={true}
     >
       <AnimatePresence mode="popLayout">
@@ -87,7 +93,11 @@ function ProductItem({product}) {
       <div className="product-info">
         <p>{product.title}</p>
         <small>
-          <Money data={product.priceRange.minVariantPrice} />
+          {externalUrl ? (
+            <div>$5.00 - $500.00</div>
+          ) : (
+            <Money data={product.priceRange.minVariantPrice} />
+          )}
         </small>
       </div>
     </Link>
@@ -124,6 +134,9 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
       minVariantPrice {
         ...MoneyProductItem
       }
+    }
+    externalLink: metafield(namespace: "custom", key: "link_gift_card") {
+      value
     }
   }
 `;
