@@ -102,8 +102,6 @@ function CoverImage({image, alt}) {
     }
   }, [image, isSvg]);
 
-  console.log(isSvg, svgContent);
-
   return (
     <div style={{padding: 0}}>
       <AnimatePresence mode="popLayout">
