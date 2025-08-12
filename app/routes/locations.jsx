@@ -150,9 +150,18 @@ function Location({location}) {
   }, [isSizeExceeded, isLargest]);
   const formattedAddress = (
     <>
-      {location.address.street},{<br />}
-      {location.address.city}, {location.address.state}{' '}
-      {location.address.postalCode}
+      <a
+        href={location.googleMapsLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          cursor: location.googleMapsLink ? 'pointer' : 'auto',
+        }}
+      >
+        {location.address.street},{<br />}
+        {location.address.city}, {location.address.state}{' '}
+        {location.address.postalCode}
+      </a>
       <br />
       MON-SUN: 7A-5P
     </>

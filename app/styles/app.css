@@ -1221,6 +1221,9 @@ footer.footer {
   font-size: 12px;
   text-align: right;
 }
+.location-grid-item-title-container > p > a {
+  color: inherit;
+}
 
 .location-grid-item-bottom-container {
   text-align: center;
