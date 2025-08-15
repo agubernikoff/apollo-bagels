@@ -131,7 +131,17 @@ export default function Homepage() {
           </motion.div>
         </>
       ) : (
-        <div className="home-mobile">
+        <motion.div
+          className="home-mobile"
+          key={'home-mobile'}
+          initial={{opacity: 0, y: '100vh'}}
+          animate={isLoaded ? {opacity: 1, y: 0} : {opacity: 0, y: '100vh'}}
+          transition={{
+            delay: shouldAnimate ? 1 : 0,
+            duration: shouldAnimate ? 1 : 0,
+            ease: 'easeInOut',
+          }}
+        >
           <InfiniteCarousel
             images={[
               ...data.sanityData.leftSideImages,
@@ -139,7 +149,7 @@ export default function Homepage() {
             ].map((image) => image.asset.url)}
             scrollDirection="down"
           />
-        </div>
+        </motion.div>
       )}
       <Announcement
         data={data.sanityData.announcement}
