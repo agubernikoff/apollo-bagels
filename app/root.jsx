@@ -18,6 +18,7 @@ import {PageLayout} from '~/components/PageLayout';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import {AnimatePresence, motion} from 'framer-motion';
 import {sanityClient} from './sanity/SanityClient';
+import {AnimationProvider} from './contexts/AnimationContext';
 
 const variants = {
   initial: {opacity: 0},
@@ -175,9 +176,11 @@ export function Layout({children}) {
             shop={data.shop}
             consent={data.consent}
           >
-            <PageLayout {...data}>
-              <PageTransition>{children}</PageTransition>
-            </PageLayout>
+            <AnimationProvider>
+              <PageLayout {...data}>
+                <PageTransition>{children}</PageTransition>
+              </PageLayout>
+            </AnimationProvider>
           </Analytics.Provider>
         ) : (
           children

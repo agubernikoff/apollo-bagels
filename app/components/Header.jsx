@@ -3,6 +3,7 @@ import {Await, NavLink, useAsyncValue, useLocation} from '@remix-run/react';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
 import {motion, AnimatePresence} from 'framer-motion';
+import {useAnimation} from '~/contexts/AnimationContext';
 /**
  * @param {HeaderProps}
  */
@@ -151,8 +152,12 @@ export function HeaderMenu({
   useEffect(() => {
     setTimeout(() => setIsChanged(false), 1000); // Reset after 1 second
   }, [changed]);
+
+  const {shouldAnimate} = useAnimation();
+
   return (
     <motion.nav
+      key={shouldAnimate ? 'animating' : 'instant'} // 👈 Forces remount
       layoutRoot
       layout
       className={className}
@@ -160,7 +165,11 @@ export function HeaderMenu({
       ref={ref}
       initial={{y: -500}}
       animate={{y: 0}}
-      transition={{ease: 'easeInOut', delay: 0.3}}
+      transition={{
+        ease: 'easeInOut',
+        delay: shouldAnimate ? 2 : 0,
+        duration: 0.6,
+      }}
     >
       {dynamicMenu.map((item) => {
         if (!item.url) return null;

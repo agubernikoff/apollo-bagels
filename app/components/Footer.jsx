@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {useLocation} from '@remix-run/react';
 import {motion, AnimatePresence} from 'framer-motion';
+import {useAnimation} from '~/contexts/AnimationContext';
 
 export function Footer({subscribeImage}) {
   const [time, setTime] = useState('');
@@ -31,13 +32,23 @@ export function Footer({subscribeImage}) {
   }
 
   const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
+
+  const {shouldAnimate} = useAnimation();
   return (
     <>
       {' '}
-      <footer
+      <motion.footer
+        key={shouldAnimate ? 'animating' : 'instant'} // 👈 Forces remount
         className="footer"
         style={{
           display: isMobile && pathname !== '/' ? 'none' : null,
+        }}
+        initial={{opacity: 0}}
+        animate={{opacity: 1}}
+        transition={{
+          ease: 'easeInOut',
+          delay: shouldAnimate ? 2 : 0,
+          duration: 0.3,
         }}
       >
         <div className="footer-left">
@@ -68,7 +79,7 @@ export function Footer({subscribeImage}) {
             </button>
           </div>
         </div>
-      </footer>
+      </motion.footer>
       <AnimatePresence>
         {isSubscribeOpen && (
           <motion.div
