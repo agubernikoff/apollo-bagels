@@ -157,7 +157,7 @@ function Bagels({
             //   resetDisplayImage();
             //   resetAlt();
             // }}
-            style={{margin: 0}}
+            style={{margin: '-.25rem'}}
           >
             <strong>{b.title}</strong>
           </h4>

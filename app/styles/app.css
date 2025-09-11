@@ -1286,7 +1286,7 @@ footer.footer {
 */
 
 .menu-grid {
-  max-width: 1044px;
+  max-width: 1000px;
   display: grid;
   grid-template-columns: repeat(3, minmax(300px, 1fr));
   gap: 1rem;
