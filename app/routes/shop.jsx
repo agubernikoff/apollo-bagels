@@ -51,12 +51,130 @@ export default function ShopPage() {
  * Product item component.
  * @param {{product: ProductItemFragment}}
  */
+// Updated ProductItem component to handle different media types
 function ProductItem({product}) {
-  const [image, setImage] = useState(product.images.nodes[0]);
+  const [currentMedia, setCurrentMedia] = useState(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Initialize with first media item or fallback to featuredImage
+  useState(() => {
+    if (product.media.nodes.length > 0) {
+      setCurrentMedia(product.media.nodes[0]);
+    } else if (product.featuredImage) {
+      setCurrentMedia({
+        mediaContentType: 'IMAGE',
+        image: product.featuredImage,
+      });
+    }
+  }, [product]);
 
   const externalUrl = product.externalLink
     ? JSON.parse(product.externalLink.value).url
     : null;
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    // Switch to second media item if available
+    if (product.media.nodes.length > 1) {
+      setCurrentMedia(product.media.nodes[1]);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    // Switch back to first media item
+    if (product.media.nodes.length > 0) {
+      setCurrentMedia(product.media.nodes[0]);
+    }
+  };
+
+  const renderMedia = (media) => {
+    if (!media) return null;
+
+    switch (media.mediaContentType) {
+      case 'IMAGE':
+        return (
+          <Image
+            alt={media.image?.altText || media.alt || product.title}
+            aspectRatio="1/1"
+            data={media.image}
+            sizes="(min-width: 45em) 400px, 100vw"
+          />
+        );
+
+      case 'VIDEO':
+        return (
+          <video
+            autoPlay={true}
+            muted
+            loop
+            playsInline
+            poster={media.previewImage?.url}
+            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+          >
+            {media.sources.map((source) => (
+              <source
+                key={source.url}
+                src={source.url}
+                type={source.mimeType}
+              />
+            ))}
+            Your browser does not support the video tag.
+          </video>
+        );
+
+      case 'EXTERNAL_VIDEO':
+        // For external videos, show preview image and handle click
+        return (
+          <div style={{position: 'relative', width: '100%', height: '100%'}}>
+            <Image
+              alt={media.alt || product.title}
+              aspectRatio="1/1"
+              data={media.previewImage}
+              sizes="(min-width: 45em) 400px, 100vw"
+            />
+            {isHovered && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  background: 'rgba(0,0,0,0.7)',
+                  color: 'white',
+                  padding: '8px',
+                  borderRadius: '4px',
+                  fontSize: '12px',
+                }}
+              >
+                Play Video
+              </div>
+            )}
+          </div>
+        );
+
+      case 'MODEL_3D':
+        return (
+          <Image
+            alt={media.alt || product.title}
+            aspectRatio="1/1"
+            data={media.previewImage}
+            sizes="(min-width: 45em) 400px, 100vw"
+          />
+        );
+
+      default:
+        // Fallback to featuredImage
+        return product.featuredImage ? (
+          <Image
+            alt={product.featuredImage.altText || product.title}
+            aspectRatio="1/1"
+            data={product.featuredImage}
+            sizes="(min-width: 45em) 400px, 100vw"
+          />
+        ) : null;
+    }
+  };
 
   return (
     <Link
@@ -69,25 +187,15 @@ function ProductItem({product}) {
       <AnimatePresence mode="popLayout">
         <motion.div
           className="image-container"
-          onMouseEnter={() => {
-            if (product.images.nodes.length > 1)
-              setImage(product.images.nodes[1]);
-          }}
-          onMouseLeave={() => setImage(product.images.nodes[0])}
-          key={image.url}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          key={currentMedia?.id || 'fallback'}
           initial={false}
           animate={{opacity: 1}}
           exit={{opacity: 0}}
           transition={{duration: 0.5}}
         >
-          {image && (
-            <Image
-              alt={product.featuredImage.altText || product.title}
-              aspectRatio="1/1"
-              data={image}
-              sizes="(min-width: 45em) 400px, 100vw"
-            />
-          )}
+          {renderMedia(currentMedia)}
         </motion.div>
       </AnimatePresence>
       <div className="product-info">
@@ -104,7 +212,7 @@ function ProductItem({product}) {
   );
 }
 
-// GraphQL query for products
+// Updated GraphQL query fragments and query with media support
 const PRODUCT_ITEM_FRAGMENT = `#graphql
   fragment MoneyProductItem on MoneyV2 {
     amount
@@ -128,6 +236,69 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
         altText
         width
         height
+      }
+    }
+    media(first: 10) {
+      nodes {
+        ... on MediaImage {
+          id
+          alt
+          image {
+            id
+            url
+            altText
+            width
+            height
+          }
+          mediaContentType
+        }
+        ... on Video {
+          id
+          alt
+          mediaContentType
+          sources {
+            url
+            mimeType
+            format
+            height
+            width
+          }
+          previewImage {
+            url
+            altText
+            width
+            height
+          }
+        }
+        ... on Model3d {
+          id
+          alt
+          mediaContentType
+          sources {
+            url
+            mimeType
+            format
+          }
+          previewImage {
+            url
+            altText
+            width
+            height
+          }
+        }
+        ... on ExternalVideo {
+          id
+          alt
+          mediaContentType
+          embedUrl
+          host
+          previewImage {
+            url
+            altText
+            width
+            height
+          }
+        }
       }
     }
     priceRange {

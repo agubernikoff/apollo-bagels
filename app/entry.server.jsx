@@ -37,6 +37,7 @@ export default async function handleRequest(
       'https://*.klaviyo.com/*',
       'https://cdn.sanity.io',
     ],
+    mediaSrc: ['https://6e4049-eb.myshopify.com/'],
   });
 
   const body = await renderToReadableStream(
