@@ -10,7 +10,7 @@ const InfiniteCarousel = ({images, scrollDirection = 'down'}) => {
   const [itemHeight, setItemHeight] = useState(1); // Height of each carousel item set to 100vh
   const [startY, setStartY] = useState(0); // Track touch start position
   const totalHeight = images.length * itemHeight; // Total height of the carousel
-  const speed = 1.6; // Auto scrolling speed
+  const speed = 1.28; // Auto scrolling speed
   const deceleration = 0.95; // Deceleration factor for swipe momentum
 
   useEffect(() => {
