@@ -53,19 +53,19 @@ function loadDeferredData({context}) {
 export default function Locations() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
-  const condition = (loc) => loc.comingSoon;
+  const condition = (loc) =>
+    loc.comingSoon ||
+    loc.phoneNumber === undefined ||
+    Object.keys(loc.address).length <= 2;
   const condition2 = (loc) => loc.videoBackground === null;
-  const condition3 = (loc) => loc.phoneNumber === undefined;
-  const condition4 = (loc) => Object.keys(loc.address).length <= 2;
 
   return (
     <div className="locations-grid">
-      {reorderArray(data.sanityData.locations, [
-        condition,
-        condition2,
-        condition3,
-        condition4,
-      ]).map((loc) => (
+      {reorderArray(
+        data.sanityData.locations,
+        [condition, condition2],
+        (a, b) => a.title.localeCompare(b.title),
+      ).map((loc) => (
         <Location key={loc._id} location={loc} />
       ))}
     </div>

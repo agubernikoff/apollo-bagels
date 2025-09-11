@@ -54,17 +54,26 @@ export default function Catering() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
 
-  const condition = (loc) => loc.comingSoon;
-  const condition2 = (loc) => Object.keys(loc.address).length <= 2;
-  const condition3 = (loc) => loc.cateringLink === undefined;
+  const condition = (loc) =>
+    loc.comingSoon ||
+    Object.keys(loc.address).length <= 2 ||
+    loc.cateringLink === undefined;
 
+  console.log(
+    data.sanityData.locations.map((loc) => {
+      return {
+        t: loc.title,
+        c: loc.comingSoon,
+        a: loc.address,
+        cl: loc.cateringLink,
+      };
+    }),
+  );
   return (
     <div>
       <OrdersCaterers
-        data={reorderArray(
-          data?.sanityData?.locations,
-          [condition, condition2, condition3],
-          (a, b) => a.title.localeCompare(b.title),
+        data={reorderArray(data?.sanityData?.locations, [condition], (a, b) =>
+          a.title.localeCompare(b.title),
         )}
       />
     </div>

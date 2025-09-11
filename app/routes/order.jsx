@@ -53,18 +53,14 @@ export default function Order() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
 
-  const condition = (loc) => loc.comingSoon;
-  const condition2 = (loc) => Object.keys(loc.address).length <= 2;
-  const condition3 = (loc) => !loc.orderLink;
+  const condition = (loc) =>
+    loc.comingSoon || Object.keys(loc.address).length <= 2 || !loc.orderLink;
 
-  console.log(data.sanityData.locations);
   return (
     <div>
       <OrdersCaterers
-        data={reorderArray(
-          data?.sanityData?.locations,
-          [condition, condition2, condition3],
-          (a, b) => a.title.localeCompare(b.title),
+        data={reorderArray(data?.sanityData?.locations, [condition], (a, b) =>
+          a.title.localeCompare(b.title),
         )}
       />
     </div>
