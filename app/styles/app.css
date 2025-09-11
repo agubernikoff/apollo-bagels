@@ -312,6 +312,8 @@ footer.footer {
   font-size: 11px;
   font-family: 'HAL';
   color: var(--blue);
+  z-index: 10;
+  justify-content: flex-end;
 }
 
 .footer-left {
@@ -320,6 +322,7 @@ footer.footer {
   align-items: flex-end;
   padding: 1rem;
   pointer-events: auto;
+  justify-content: flex-end;
 }
 
 .footer-left p {
@@ -330,12 +333,12 @@ footer.footer {
 }
 
 .footer-right {
-  width: 50%;
+  /* width: 50%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 1rem;
+  padding: 1rem; */
   pointer-events: auto;
   font-family: 'HAL';
 }
@@ -349,8 +352,10 @@ footer.footer {
 
 .footer-right .links {
   display: flex;
-  justify-content: flex-end;
-  gap: 2rem;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  align-items: flex-end;
 }
 
 .footer-right .links button,
@@ -760,18 +765,14 @@ footer.footer {
   width: 325px;
   max-width: 40vw;
   padding: 1rem;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
-.announcement-container p:first-of-type {
-  font-size: 9px;
-  font-family: 'HAL-BOLD';
-}
 .announcement-container h3 {
   font-size: 18px;
   font-family: 'HAL-BOLD';
 }
-.announcement-container p:last-of-type {
+.announcement-container p {
   font-size: 12px;
 }
 

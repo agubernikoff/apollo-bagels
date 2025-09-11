@@ -4,22 +4,12 @@ import {motion, AnimatePresence} from 'framer-motion';
 import {useAnimation} from '~/contexts/AnimationContext';
 
 export function Footer({subscribeImage}) {
-  const [time, setTime] = useState('');
-
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     window
       .matchMedia('(max-width: 501px)')
       .addEventListener('change', (e) => setIsMobile(e.matches));
     if (window.matchMedia('(max-width: 501px)').matches) setIsMobile(true);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date();
-      setTime(now.toLocaleTimeString('en-US', {timeZone: 'America/New_York'}));
-    }, 1000);
-    return () => clearInterval(interval);
   }, []);
 
   const {pathname} = useLocation();
@@ -52,16 +42,11 @@ export function Footer({subscribeImage}) {
         }}
       >
         <div className="footer-left">
-          {pathname !== '/' && (
-            <p style={{color: pathname === '/info' ? '#f1f0e47d' : '#b4beca'}}>
-              © Apollo Bagels 2024, All Rights Reserved.
-            </p>
-          )}
+          <p style={{color: pathname === '/info' ? '#f1f0e47d' : '#b4beca'}}>
+            © Apollo Bagels 2024, All Rights Reserved.
+          </p>
         </div>
-        <div className="footer-right">
-          <div className="clock" style={style()}>
-            {time}
-          </div>
+        <div className="footer-right hours-container">
           <div className="links">
             <a
               href="https://www.instagram.com/apollobagels/"
@@ -69,13 +54,13 @@ export function Footer({subscribeImage}) {
               rel="noopener noreferrer"
               style={style()}
             >
-              ig. @apollobagels
+              @apollobagels
             </a>
             <a href="mailto:hello@apollobagels.com" style={style()}>
-              e. hello@apollobagels.com
+              hello@apollobagels.com
             </a>
             <button style={style()} onClick={() => setIsSubscribeOpen(true)}>
-              SUBSCRIBE
+              subscribe
             </button>
           </div>
         </div>

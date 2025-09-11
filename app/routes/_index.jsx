@@ -5,7 +5,11 @@ import {Image, Money} from '@shopify/hydrogen';
 import InfiniteCarousel from '~/components/InfiniteCarousel';
 import {sanityClient} from '~/sanity/SanityClient';
 import {motion} from 'framer-motion';
+import {PortableText} from '@portabletext/react';
 import {useAnimation} from '~/contexts/AnimationContext';
+import SanityEmailLink from '~/sanity/SanityEmailLink';
+import SanityExternalLink from '~/sanity/SanityExternalLink';
+import SanityProductLink from '~/sanity/SanityProductLink';
 
 /**
  * @type {MetaFunction}
@@ -40,7 +44,32 @@ async function loadCriticalData({context}) {
 
   const homePage = await sanityClient
     .fetch(
-      "*[_type == 'home'][0]{...,leftSideImages[]{...,asset->{url}},rightSideImages[]{...,asset->{url}}}",
+      `*[_type == 'home'][0]{
+        ...,
+        leftSideImages[]{...,asset->{url}},
+        rightSideImages[]{...,asset->{url}},
+        announcement{
+          ...,
+          description[]{
+            ...,
+            markDefs[]{
+              ...,
+              _type == "linkProduct" => {
+                ...,
+                productWithVariant{
+                  ...,
+                  product->{
+                    ...,
+                    store{
+                      ...
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`,
     )
     .then((response) => response);
 
@@ -233,6 +262,29 @@ function Announcement({data, isLoaded, shouldAnimate}) {
     const [year, month, day] = dateString.split('-');
     return `${month}/${day}/${year}`;
   }
+
+  const components = {
+    marks: {
+      linkEmail: SanityEmailLink,
+      linkExternal: SanityExternalLink,
+      linkProduct: SanityProductLink,
+    },
+    block: {
+      normal: ({children}) => {
+        // Handle empty blocks as line breaks
+        if (
+          !children ||
+          children.length === 0 ||
+          children.every((child) => child === '')
+        ) {
+          return <br />;
+        }
+
+        return <p>{children}</p>;
+      },
+    },
+  };
+
   return (
     <motion.div
       className="announcement-container"
@@ -249,7 +301,7 @@ function Announcement({data, isLoaded, shouldAnimate}) {
       <h3 style={{marginBottom: '.25rem', marginTop: '.25rem'}}>
         {data.title}
       </h3>
-      <p>{data.description}</p>
+      <PortableText value={data.description} components={components} />
     </motion.div>
   );
 }
