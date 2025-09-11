@@ -41,11 +41,11 @@ export function Footer({subscribeImage}) {
           duration: 0.3,
         }}
       >
-        <div className="footer-left">
+        {/* <div className="footer-left">
           <p style={{color: pathname === '/info' ? '#f1f0e47d' : '#b4beca'}}>
             © Apollo Bagels 2024, All Rights Reserved.
           </p>
-        </div>
+        </div> */}
         <div className="footer-right hours-container">
           <div className="links">
             <a

@@ -776,6 +776,11 @@ footer.footer {
   font-size: 12px;
 }
 
+.announcement-container > p > a > span {
+  color: var(--blue);
+  text-decoration: underline;
+}
+
 .featured-collection {
   display: block;
   margin-bottom: 2rem;
