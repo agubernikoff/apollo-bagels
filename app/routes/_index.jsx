@@ -245,7 +245,7 @@ function Announcement({data, isLoaded, shouldAnimate}) {
       }}
       key={'announce'}
     >
-      <p style={{fontWeight: 'bold'}}>{formatDateToMmDdYyyy(data.date)}</p>
+      {/* <p style={{fontWeight: 'bold'}}>{formatDateToMmDdYyyy(data.date)}</p> */}
       <h3 style={{marginBottom: '.25rem', marginTop: '.25rem'}}>
         {data.title}
       </h3>
