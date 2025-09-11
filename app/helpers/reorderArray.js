@@ -1,27 +1,43 @@
-export default function reorderArray(array, conditions) {
-  // Base case: if no more conditions to apply, return the array
+export default function reorderArray(array, conditions, sortingFunction) {
   if (conditions.length === 0) {
-    return array;
+    return sortingFunction ? array.slice().sort(sortingFunction) : array;
   }
 
-  const condition = conditions[0]; // Get the first condition
-  const matching = [];
-  const nonMatching = [];
+  // Process all conditions first to create groups
+  const groups = [];
+  let remainingElements = [...array];
 
-  // Separate elements based on the current condition
-  for (const element of array) {
-    if (condition(element)) {
-      matching.push(element);
-    } else {
-      nonMatching.push(element);
+  // Apply each condition in order, removing matched elements
+  for (let i = 0; i < conditions.length; i++) {
+    const condition = conditions[i];
+    const matching = [];
+    const nonMatching = [];
+
+    for (const element of remainingElements) {
+      if (condition(element)) {
+        matching.push(element);
+      } else {
+        nonMatching.push(element);
+      }
     }
+
+    // Sort the matching group if we have a sorting function
+    if (matching.length > 0) {
+      groups.push(sortingFunction ? matching.sort(sortingFunction) : matching);
+    }
+
+    // Continue with non-matching elements for next condition
+    remainingElements = nonMatching;
   }
 
-  // Recurse for the remaining conditions, passing the non-matching elements
-  const reordered = reorderArray(
-    [...nonMatching, ...matching],
-    conditions.slice(1),
-  );
+  // Add any remaining elements (those that didn't match any condition) at the beginning
+  if (remainingElements.length > 0) {
+    const sortedRemaining = sortingFunction
+      ? remainingElements.sort(sortingFunction)
+      : remainingElements;
+    groups.unshift(sortedRemaining); // Add to beginning
+  }
 
-  return reordered;
+  // Flatten all groups
+  return groups.flat();
 }

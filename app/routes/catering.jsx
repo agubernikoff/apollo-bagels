@@ -61,11 +61,11 @@ export default function Catering() {
   return (
     <div>
       <OrdersCaterers
-        data={reorderArray(data?.sanityData?.locations, [
-          condition,
-          condition2,
-          condition3,
-        ])}
+        data={reorderArray(
+          data?.sanityData?.locations,
+          [condition, condition2, condition3],
+          (a, b) => a.title.localeCompare(b.title),
+        )}
       />
     </div>
   );

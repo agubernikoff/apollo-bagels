@@ -57,15 +57,15 @@ export default function Order() {
   const condition2 = (loc) => Object.keys(loc.address).length <= 2;
   const condition3 = (loc) => !loc.orderLink;
 
-  // console.log(reorderArray(data.sanityData.locations, [condition]));
+  console.log(data.sanityData.locations);
   return (
     <div>
       <OrdersCaterers
-        data={reorderArray(data?.sanityData?.locations, [
-          condition,
-          condition2,
-          condition3,
-        ])}
+        data={reorderArray(
+          data?.sanityData?.locations,
+          [condition, condition2, condition3],
+          (a, b) => a.title.localeCompare(b.title),
+        )}
       />
     </div>
   );
