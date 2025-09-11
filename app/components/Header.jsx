@@ -13,23 +13,25 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const mainElement =
-      document?.querySelectorAll('main')[
-        document?.querySelectorAll('main').length - 1
-      ];
     const handleScroll = () => {
-      setScrolled(mainElement.scrollTop > 0); // Check if the user has scrolled down
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+      setScrolled(scrollTop > 0);
     };
 
-    mainElement.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, {passive: true});
 
-    // Cleanup listener on component unmount
+    // Check initial scroll position
+    handleScroll();
+
     return () => {
-      mainElement.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   const {pathname} = useLocation();
+
+  console.log(scrolled);
 
   return (
     <header className="header">
