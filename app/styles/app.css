@@ -1116,8 +1116,8 @@ footer.footer {
 
 .order-cater-text-container > p,
 .oc-link {
-  font-family: 'HAL';
-  font-size: 12px;
+  font-family: 'HAL-BOLD';
+  font-size: 24px;
   color: var(--blue);
 }
 
@@ -1633,8 +1633,11 @@ footer.footer {
   .info-announcement-container {
     bottom: 6rem;
   }
-  .order-cater-text-container > p {
+  .order-cater-text-container > p,
+  .oc-link {
     letter-spacing: -0.4px;
+    font-family: 'HAL';
+    font-size: 12px;
   }
   .locations-grid {
     grid-template-columns: repeat(1, 1fr);
