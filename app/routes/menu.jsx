@@ -68,7 +68,6 @@ export default function Menu() {
     setAlt('Apollo Bagels');
   }
 
-  console.log(displayImage);
   return (
     <div className="menu-grid">
       <CoverImage image={displayImage} alt={alt} />
@@ -94,14 +93,11 @@ function CoverImage({image, alt}) {
   const isSvg = image.toLowerCase().includes('.svg');
 
   useEffect(() => {
-    console.log('CoverImage source:', image);
-    console.log('Is SVG:', isSvg);
-
     if (isSvg) {
       fetch(image)
         .then((res) => {
           const contentType = res.headers.get('Content-Type');
-          console.log('Fetched content-type:', contentType);
+
           if (contentType && contentType.includes('image/svg+xml')) {
             return res.text();
           } else {
@@ -110,7 +106,6 @@ function CoverImage({image, alt}) {
         })
         .then(setSvgContent)
         .catch((err) => {
-          console.error('Failed to fetch inline SVG:', err);
           setSvgContent(null);
         });
     }
