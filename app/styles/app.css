@@ -197,7 +197,7 @@ button.reset:hover:not(:has(> *)) {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1;
+  z-index: 2;
   font-family: 'HAL-BOLD';
   font-size: clamp(28.5px, 5.65vw, 48px);
 }
@@ -1225,6 +1225,7 @@ footer.footer {
   color: var(--blue);
   /* overflow: hidden; */
   aspect-ratio: 6/5;
+  margin-bottom: 16px;
 }
 .location-grid-item-bottom-container {
   display: flex;
@@ -1251,7 +1252,7 @@ footer.footer {
   color: var(--blue);
   -webkit-text-stroke: 2.5px var(--creme);
   margin-top: -2.8rem;
-  z-index: 10;
+  z-index: 1;
   margin-left: 1.25rem;
 }
 .location-grid-item-title-container > p {
