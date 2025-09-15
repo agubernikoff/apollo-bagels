@@ -94,11 +94,25 @@ function CoverImage({image, alt}) {
   const isSvg = image.toLowerCase().includes('.svg');
 
   useEffect(() => {
+    console.log('CoverImage source:', image);
+    console.log('Is SVG:', isSvg);
+
     if (isSvg) {
       fetch(image)
-        .then((res) => res.text())
+        .then((res) => {
+          const contentType = res.headers.get('Content-Type');
+          console.log('Fetched content-type:', contentType);
+          if (contentType && contentType.includes('image/svg+xml')) {
+            return res.text();
+          } else {
+            throw new Error('Not an SVG: ' + contentType);
+          }
+        })
         .then(setSvgContent)
-        .catch(console.error);
+        .catch((err) => {
+          console.error('Failed to fetch inline SVG:', err);
+          setSvgContent(null);
+        });
     }
   }, [image, isSvg]);
 
