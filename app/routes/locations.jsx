@@ -149,23 +149,22 @@ function Location({location}) {
       }
   }, [isSizeExceeded, isLargest]);
   const formattedAddress = (
-    <>
-      <a
-        href={location.googleMapsLink}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          cursor: location.googleMapsLink ? 'pointer' : 'auto',
-        }}
-      >
-        {location.address.street},{<br />}
-        {location.address.city}, {location.address.state}{' '}
-        {location.address.postalCode}
-      </a>
-      <br />
-      MON-SUN: 7A-5P
-    </>
+    <a
+      href={location.googleMapsLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        cursor: location.googleMapsLink ? 'pointer' : 'auto',
+        display: 'inline-block',
+      }}
+    >
+      {location.address.street},<br />
+      {location.address.city}, {location.address.state}{' '}
+      {location.address.postalCode}
+    </a>
   );
+
+  const formattedHours = <p style={{marginTop: '.25rem'}}>MON-SUN: 7A-5P</p>;
 
   return (
     <div
@@ -183,9 +182,10 @@ function Location({location}) {
       Object.keys(location.address).length > 2 ? (
         <>
           <MediaViewer file={location.videoBackground?.asset} />
+          <h5 ref={h5Ref}>{location.title}</h5>
           <div ref={parentRef} className="location-grid-item-title-container">
-            <h5 ref={h5Ref}>{location.title}</h5>
-            <p>{formattedAddress}</p>
+            <div className="location-grid-addy">{formattedAddress}</div>
+            <div className="location-grid-hours">{formattedHours}</div>
           </div>
           <div className="location-grid-item-bottom-container">
             <motion.a
@@ -216,7 +216,7 @@ function Location({location}) {
                 ? 'COMING SOON'
                 : 'CATERING'}
             </motion.a>
-            <motion.a
+            {/* <motion.a
               href={`tel:${location.phoneNumber}`}
               onMouseEnter={() => setHovered('phone')}
               onMouseLeave={() => setHovered(null)}
@@ -225,7 +225,7 @@ function Location({location}) {
                 background:
                   hovered === 'phone' ? 'var(--green)' : 'var(--blue)',
               }}
-            >{`p. ${location.phoneNumber}`}</motion.a>
+            >{`p. ${location.phoneNumber}`}</motion.a> */}
           </div>
         </>
       ) : (

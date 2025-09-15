@@ -93,7 +93,7 @@ export function Footer({subscribeImage}) {
 }
 
 export function SubscribeForm({close}) {
-  const [placeholder, setPlaceholder] = useState('ENTER A VALID EMAIL');
+  const [placeholder, setPlaceholder] = useState('Enter Valid Email');
   const [email, setEmail] = useState('');
   function isValidEmail(x) {
     const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
@@ -184,8 +184,16 @@ export function SubscribeForm({close}) {
           <button
             style={
               isValidEmail(email)
-                ? {background: 'var(--color-creme)', color: 'var(--blue)'}
-                : {background: 'transparent', color: 'var(--color-creme)'}
+                ? {
+                    background: 'var(--color-creme)',
+                    color: 'var(--blue)',
+                    fontFamily: 'HAL-BOLD',
+                  }
+                : {
+                    background: 'var(--color-creme)',
+                    color: 'var(--blue)',
+                    fontFamily: 'HAL-BOLD',
+                  }
             }
             disabled={!isValidEmail(email)}
             onClick={handleSubmit}
@@ -198,7 +206,7 @@ export function SubscribeForm({close}) {
                 exit={{opacity: 0}}
                 style={{width: '100%', display: 'block'}}
               >
-                {isValidEmail(email) ? 'SUBSCRIBE' : placeholder}
+                {isValidEmail(email) ? 'SUBMIT' : placeholder}
               </motion.span>
             </AnimatePresence>
           </button>
