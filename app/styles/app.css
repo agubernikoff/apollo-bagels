@@ -1728,16 +1728,18 @@ footer.footer {
     aspect-ratio: auto;
   }
   .location-grid-item-title-container {
-    margin-left: 0;
+    /* margin-left: 0; */
     width: 100%;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 16px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    gap: 8px;
   }
   .location-grid-item h5 {
     font-size: 34px;
     margin-top: -1rem;
-    margin-left: 1rem;
+    --web-stroke-kit: 6.5px var(--creme);
   }
 
   .location-grid-addy {
@@ -1747,7 +1749,7 @@ footer.footer {
     font-size: 11px;
   }
   .location-grid-item-bottom-container {
-    margin-left: 0;
+    /* margin-left: 0; */
   }
 
   .location-grid-item-title-container > p {
