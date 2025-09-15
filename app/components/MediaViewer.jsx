@@ -51,7 +51,10 @@ const MediaViewer = ({file}) => {
       {isVideo && (
         <video
           src={file.url}
-          controls
+          autoPlay
+          loop
+          muted
+          playsInline
           onError={handleError}
           className="media-element"
         >
