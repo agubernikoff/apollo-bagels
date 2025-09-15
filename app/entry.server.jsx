@@ -31,20 +31,42 @@ export default async function handleRequest(
     },
     imgSrc: [
       "'self'",
+      'data:', // Add data: for inline SVGs
       'https://cdn.sanity.io',
       'https://apicdn.sanity.io',
       'https://gnnsqgu6.apicdn.sanity.io',
       'https://cdn.shopify.com/',
     ],
     connectSrc: [
+      "'self'", // Add 'self' for fetch requests
       'https://klaviyo.com',
       'https://*.klaviyo.com',
       'https://cdn.shopify.com',
       'http://localhost:3000',
       'https://*.klaviyo.com/*',
       'https://cdn.sanity.io',
+      'https://apicdn.sanity.io', // Add this
+      'https://gnnsqgu6.apicdn.sanity.io', // Add this
     ],
-    mediaSrc: ['https://6e4049-eb.myshopify.com/', 'https://cdn.sanity.io'],
+    mediaSrc: [
+      'https://6e4049-eb.myshopify.com/',
+      'https://cdn.sanity.io',
+      'https://apicdn.sanity.io', // Add this
+      'https://gnnsqgu6.apicdn.sanity.io', // Add this
+    ],
+    // Add these additional directives
+    fontSrc: [
+      "'self'",
+      'https://cdn.sanity.io',
+      'https://fonts.googleapis.com',
+      'https://fonts.gstatic.com',
+    ],
+    styleSrc: [
+      "'self'",
+      "'unsafe-inline'", // Often needed for dynamic styles
+      'https://cdn.sanity.io',
+      'https://fonts.googleapis.com',
+    ],
   });
 
   const body = await renderToReadableStream(
