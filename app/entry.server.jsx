@@ -19,7 +19,12 @@ export default async function handleRequest(
 ) {
   const {nonce, header, NonceProvider} = createContentSecurityPolicy({
     defaultSrc: ["'self'", 'https://cdn.sanity.io'],
-    scriptSrc: ["'self'", 'https://cdn.sanity.io'],
+    scriptSrc: [
+      "'self'",
+      'https://cdn.sanity.io',
+      'https://cdn.shopify.com',
+      'https://cdn.shopify.com/oxygen-v2',
+    ],
     shop: {
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
