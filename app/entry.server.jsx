@@ -60,6 +60,7 @@ export default async function handleRequest(
       'https://cdn.sanity.io',
       'https://fonts.googleapis.com',
       'https://fonts.gstatic.com',
+      'https://cdn.shopify.com',
     ],
     styleSrc: [
       "'self'",
