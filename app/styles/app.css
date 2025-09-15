@@ -1210,6 +1210,14 @@ footer.footer {
     grid-template-columns: repeat(2, minmax(300px, 1fr));
   }
 }
+@media (max-width: 1280px) {
+  .locations-grid {
+    grid-template-columns: repeat(1, minmax(300px, 1fr));
+  }
+  .media-viewer {
+    height: 60% !important;
+  }
+}
 @media (max-width: 645px) {
   .locations-grid {
     grid-template-columns: repeat(1, minmax(300px, 1fr));
@@ -1225,7 +1233,7 @@ footer.footer {
   color: var(--blue);
   /* overflow: hidden; */
   aspect-ratio: 6/5;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 .location-grid-item-bottom-container {
   display: flex;
@@ -1250,10 +1258,13 @@ footer.footer {
   margin: 0;
   font-family: 'HAL-BOLD';
   color: var(--blue);
-  -webkit-text-stroke: 2.5px var(--creme);
   margin-top: -2.8rem;
   z-index: 1;
   margin-left: 1.25rem;
+
+  -webkit-text-stroke: 10px var(--creme);
+  -webkit-text-fill-color: var(--blue);
+  paint-order: stroke fill;
 }
 .location-grid-item-title-container > p {
   font-size: 12px;
@@ -1463,6 +1474,10 @@ footer.footer {
     gap: 0;
     margin: auto;
     margin-bottom: 0.75rem;
+  }
+
+  .links {
+    display: none !important;
   }
 
   .mobile-footer {
@@ -1699,15 +1714,42 @@ footer.footer {
     font-size: 12px;
   }
   .locations-grid {
-    grid-template-columns: repeat(1, 1fr);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+  }
+  .location-grid-item.unavailable {
+    height: 350px;
+  }
+  .location-grid-item {
+    width: 100%;
+    margin: 0;
+    aspect-ratio: auto;
   }
   .location-grid-item-title-container {
+    margin-left: 0;
+    width: 100%;
     flex-direction: column;
     align-items: flex-start;
+    margin-top: 16px;
   }
   .location-grid-item h5 {
-    font-size: 43px;
+    font-size: 34px;
+    margin-top: -1rem;
+    margin-left: 1rem;
   }
+
+  .location-grid-addy {
+    font-size: 19px;
+  }
+  .location-grid-hours p {
+    font-size: 11px;
+  }
+  .location-grid-item-bottom-container {
+    margin-left: 0;
+  }
+
   .location-grid-item-title-container > p {
     text-align: left;
   }

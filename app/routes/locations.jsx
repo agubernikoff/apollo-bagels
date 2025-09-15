@@ -73,6 +73,11 @@ export default function Locations() {
 }
 
 function Location({location}) {
+  const isUnavailable =
+    location.comingSoon ||
+    location.phoneNumber === undefined ||
+    Object.keys(location.address).length <= 2;
+
   const [hovered, setHovered] = useState(null);
   const [isSizeExceeded, setIsSizeExceeded] = useState(false);
   const [isLargest, setIsLargest] = useState(false);
@@ -168,12 +173,14 @@ function Location({location}) {
 
   return (
     <div
-      className="location-grid-item"
+      className={`location-grid-item ${isUnavailable ? 'unavailable' : ''}`}
       style={
-        location.comingSoon ||
-        location.phoneNumber === undefined ||
-        Object.keys(location.address).length <= 2
-          ? {opacity: 0.33}
+        isUnavailable
+          ? {
+              opacity: 0.33,
+              backgroundColor: '#E0DFD1',
+              borderRadius: '12px',
+            }
           : null
       }
     >
