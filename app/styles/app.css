@@ -1233,7 +1233,7 @@ footer.footer {
   color: var(--blue);
   /* overflow: hidden; */
   aspect-ratio: 6/5;
-  margin-bottom: 24px;
+  margin-bottom: 126px;
 }
 .location-grid-item-bottom-container {
   display: flex;
