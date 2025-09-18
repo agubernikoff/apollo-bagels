@@ -52,6 +52,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
         primaryDomainUrl={header.shop.primaryDomain.url}
         publicStoreDomain={publicStoreDomain}
         cart={cart}
+        pathname={pathname}
       />
     </header>
   );
@@ -71,6 +72,7 @@ export function HeaderMenu({
   viewport,
   publicStoreDomain,
   cart,
+  pathname,
 }) {
   const className = `header-menu`;
   const {close} = useAside();
@@ -165,7 +167,7 @@ export function HeaderMenu({
       className={className}
       role="navigation"
       ref={ref}
-      initial={{y: -500}}
+      initial={{y: pathname === '/' || isMobile ? -500 : 0}}
       animate={{y: 0}}
       transition={{
         ease: 'easeInOut',
