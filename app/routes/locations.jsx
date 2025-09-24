@@ -10,7 +10,7 @@ import reorderArray from '~/helpers/reorderArray';
  * @type {MetaFunction}
  */
 export const meta = () => {
-  return [{title: 'Hydrogen | Info'}];
+  return [{title: 'Apollo Bagels | Locations'}];
 };
 
 /**

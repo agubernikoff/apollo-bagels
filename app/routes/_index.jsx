@@ -15,7 +15,28 @@ import SanityProductLink from '~/sanity/SanityProductLink';
  * @type {MetaFunction}
  */
 export const meta = () => {
-  return [{title: 'Hydrogen | Home'}];
+  const title = 'Apollo Bagels';
+  const description =
+    'Apollo Bagels is a new-school bagel shop rooted in old-school technique. Apollo is known for its naturally fermented, boiled bagels made fresh every morning and served with a carefully curated menu featuring best-in-class producers we admire.';
+  const image = 'https://apollobagles.com/social.png'; // replace with real image URL
+
+  return [
+    {title},
+    {name: 'description', content: description},
+
+    // Open Graph (Facebook, LinkedIn, etc.)
+    {property: 'og:title', content: title},
+    {property: 'og:description', content: description},
+    {property: 'og:image', content: image},
+    {property: 'og:type', content: 'website'},
+    {property: 'og:url', content: 'https://apollobagles.com/'},
+
+    // Twitter Card
+    {name: 'twitter:card', content: 'summary_large_image'},
+    {name: 'twitter:title', content: title},
+    {name: 'twitter:description', content: description},
+    {name: 'twitter:image', content: image},
+  ];
 };
 
 /**

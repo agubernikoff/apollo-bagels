@@ -8,7 +8,7 @@ import {AnimatePresence, motion} from 'framer-motion';
  * @type {MetaFunction<typeof loader>}
  */
 export const meta = () => {
-  return [{title: `Shop | All Products`}];
+  return [{title: `Apollo Bagels | Shop`}];
 };
 
 /**

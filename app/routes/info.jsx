@@ -9,7 +9,7 @@ import SanityExternalLink from '../sanity/SanityExternalLink.jsx';
  * @type {MetaFunction}
  */
 export const meta = () => {
-  return [{title: 'Hydrogen | Info'}];
+  return [{title: 'Apollo Bagels | Info'}];
 };
 
 /**

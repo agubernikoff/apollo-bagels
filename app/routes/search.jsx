@@ -9,7 +9,7 @@ import {getEmptyPredictiveSearchResult} from '~/lib/search';
  * @type {MetaFunction}
  */
 export const meta = () => {
-  return [{title: `Hydrogen | Search`}];
+  return [{title: `Apollo Bagels | Search`}];
 };
 
 /**
