@@ -82,6 +82,8 @@ export default function Menu() {
         fish={data.sanityData.menu.fish}
         spreads={data.sanityData.menu.spreads}
       />
+      <Fish fish={data.sanityData.menu.fish} />
+      <Spreads spreads={data.sanityData.menu.spreads} />
       <Sandwiches sandwiches={data.sanityData.menu.sandwiches} />
       <Drinks drinks={data.sanityData.menu.drinks} />
     </div>
@@ -112,7 +114,7 @@ function CoverImage({image, alt}) {
   }, [image, isSvg]);
 
   return (
-    <div style={{padding: 0}}>
+    <div style={{padding: 0}} className="menu-hide-on-mobile">
       <AnimatePresence mode="popLayout">
         {isSvg && svgContent ? (
           <motion.div
@@ -154,6 +156,7 @@ function Bagels({
 }) {
   return (
     <div className="bagels">
+      <h3>BAGELS</h3>
       <div>
         {bagels.flavors.map((b) => (
           <h4
@@ -186,8 +189,22 @@ function Bagels({
 
 function FishAndSpreads({fish, spreads}) {
   return (
-    <div className="fish-and-spreads">
+    <div className="fish-and-spreads menu-hide-on-mobile">
       <TitleAndList title="FISH" list={fish} />
+      <TitleAndList title="SPREADS" list={spreads} />
+    </div>
+  );
+}
+function Fish({fish}) {
+  return (
+    <div className="fish">
+      <TitleAndList title="FISH" list={fish} />
+    </div>
+  );
+}
+function Spreads({spreads}) {
+  return (
+    <div className="spreads">
       <TitleAndList title="SPREADS" list={spreads} />
     </div>
   );
@@ -204,7 +221,7 @@ function Sandwiches({sandwiches}) {
 
 function Drinks({drinks}) {
   return (
-    <div>
+    <div className="drinks">
       <TitleAndList title="DRINKS" list={drinks} />
     </div>
   );
@@ -218,8 +235,18 @@ function TitleAndList({title, list}) {
       </h5>
       {list.map((menuItem) => (
         <p key={menuItem._key}>
-          <span style={{marginRight: '.5rem'}}>{menuItem.title}</span>
+          <span style={{marginRight: '.5rem'}} className="main-menu-item">
+            {menuItem.title}
+          </span>
+          <span style={{marginRight: '.5rem'}} className="mobile-alt-menu-item">
+            {menuItem.mobileAlternateTitle}
+          </span>
           {formatPrice(menuItem.price)}
+          {menuItem.mobileSubText && (
+            <span className="mobile-alt-menu-subitem">
+              {menuItem.mobileSubText}
+            </span>
+          )}
         </p>
       ))}
     </div>
