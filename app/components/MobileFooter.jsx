@@ -299,11 +299,9 @@ export default function MobileFooter({hours}) {
       ref={ref}
       className="mobile-footer"
       style={{
-        marginBottom: `calc(100lvh - ${
+        marginBottom: `calc(80lvh - ${
           ref?.current?.offsetHeight || 0
         }px - var(--header-height) )`,
-        // transform: `translateY(-${footerY}dvh)`,
-        // visibility: isFooterActive ? 'visible' : 'hidden',
       }}
       transition={{type: 'tween', duration: 0.5}}
       initial={{background: 'var(--red)'}}
@@ -328,8 +326,13 @@ export default function MobileFooter({hours}) {
             exit={{opacity: 0}}
             className="mobile-footer-info"
           >
+            {/* Empty spacer to push logo to center */}
+            <div className="mobile-footer-spacer"></div>
+
+            {/* Centered logo */}
             <img src={Frame_89} alt="Apollo Bagels in script" />
-            <Hours hours={hours} mobile={true} />
+
+            {/* Bottom content that gets pushed to bottom */}
             <div className="mobile-footer-bottom">
               <div className="mobile-footer-links">
                 <a
@@ -342,15 +345,14 @@ export default function MobileFooter({hours}) {
                 <a href="mailto:hello@apollobagels.com">
                   e. hello@apollobagels.com
                 </a>
+                <button
+                  onClick={() => {
+                    setIsSubscribeOpen(true);
+                  }}
+                >
+                  subscribe
+                </button>
               </div>
-              <button
-                onClick={() => {
-                  setIsSubscribeOpen(true);
-                }}
-              >
-                SUBSCRIBE
-              </button>
-              <p>© Apollo Bagels 2024, All Rights Reserved.</p>
             </div>
           </motion.div>
         )}
