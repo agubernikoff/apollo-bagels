@@ -1790,7 +1790,7 @@ footer.footer {
   }
   .location-grid-item-title-container {
     /* margin-left: 0; */
-    width: 100%;
+    /* width: 100%; */
     flex-direction: column;
     align-items: flex-start;
     margin-top: 8px;
