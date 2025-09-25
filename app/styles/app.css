@@ -414,6 +414,9 @@ footer.footer {
   align-items: center;
   color: var(--color-creme);
 }
+.mobile-footer-info .subscribe-form-container {
+  margin-block: auto;
+}
 .close-subscribe-btn {
   position: absolute;
   top: 15px;
@@ -1520,6 +1523,7 @@ footer.footer {
     align-items: center;
     padding-block: 2rem;
     box-sizing: border-box;
+    position: relative;
   }
 
   .mobile-footer img {
