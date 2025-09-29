@@ -1554,6 +1554,7 @@ footer.footer {
     background: transparent;
     cursor: pointer;
     padding: 0;
+    font-family: 'HAL-BOLD';
   }
 
   .mobile-footer-bottom p {
