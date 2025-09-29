@@ -406,7 +406,7 @@ function CartBadge({count}) {
           }}
           transition={{duration: 0.5}}
         >
-          {count === null ? <span>&nbsp;</span> : `(${count})`}
+          {count === null ? <span>&nbsp;</span> : <span>&nbsp;({count})</span>}
         </motion.span>
       </motion.div>
     </motion.span>

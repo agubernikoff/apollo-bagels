@@ -1765,7 +1765,7 @@ footer.footer {
     overscroll-behavior-y: none;
   }
   .header {
-    font-size: 30px;
+    font-size: 33px;
   }
   .header-menu-item-container:nth-of-type(4) {
     background: var(--red);
@@ -1774,8 +1774,8 @@ footer.footer {
     background: var(--yellow);
   }
   .header-menu {
-    width: calc(100vw - 1rem);
-    max-width: 352px;
+    width: calc(100vw - 0rem);
+    max-width: 380px;
   }
   .header-menu-item {
     padding: 2.5352px 6.72px;
