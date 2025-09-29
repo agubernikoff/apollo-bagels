@@ -1144,7 +1144,9 @@ footer.footer {
 * order/cater
 * --------------------------------------------------
 */
-
+.order-cater-text-container {
+  margin-bottom: 46px;
+}
 .order-cater-text-container > p,
 .oc-link {
   font-family: 'HAL-BOLD';
@@ -1780,6 +1782,9 @@ footer.footer {
   }
   .info-announcement-container {
     bottom: 6rem;
+  }
+  .order-cater-text-container {
+    margin-bottom: 23px;
   }
   .order-cater-text-container > p,
   .oc-link {
