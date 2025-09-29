@@ -1526,7 +1526,8 @@ footer.footer {
     position: relative;
   }
 
-  .mobile-footer img {
+  .mobile-footer img,
+  .mobile-footer svg {
     max-width: 60vw;
     margin-top: auto; /* This will center the logo vertically */
   }
