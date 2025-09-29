@@ -1877,6 +1877,15 @@ footer.footer {
     line-height: clamp(38px, 12.6vw, 48px);
   }
 }
+@media (max-width: 375px) {
+  .header {
+    font-size: 30px;
+  }
+  .header-menu {
+    width: calc(100vw - 1rem);
+    max-width: 352px;
+  }
+}
 @media (max-width: 349px) {
   .header {
     font-size: 27px;
