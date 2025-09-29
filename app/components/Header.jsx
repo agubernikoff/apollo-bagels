@@ -143,7 +143,7 @@ export function HeaderMenu({
         resizeObserver.unobserve(ref.current);
       }
     };
-  }, []);
+  }, [dynamicMenu]);
   const analytics = useAnalytics();
   const [changed, setIsChanged] = useState(false);
 
