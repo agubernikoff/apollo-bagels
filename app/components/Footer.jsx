@@ -33,7 +33,7 @@ export function Footer({subscribeImage}) {
         style={{
           display: isMobile && pathname !== '/' ? 'none' : null,
         }}
-        initial={{opacity: 0}}
+        initial={{opacity: pathname === '/' ? 0 : 1}}
         animate={{opacity: 1}}
         transition={{
           ease: 'easeInOut',
