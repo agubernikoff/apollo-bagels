@@ -17,8 +17,8 @@
   --scarlet: #d44424;
   --loc-grid-item-title-container-align-items: flex-start;
   --loc-grid-item-title-container-flex-direction: column;
-  --add-to-cart-marginLeft: clamp(69px, 14vw, 115px);
-  --add-to-cart-marginLeft-added: clamp(100px, 20vw, 169.6px);
+  --add-to-cart-marginLeft: clamp(69px, 12.25vw, 105px);
+  --add-to-cart-marginLeft-added: clamp(105px, 19vw, 160px);
 }
 
 strong {
