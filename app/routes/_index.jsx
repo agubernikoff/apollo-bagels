@@ -10,6 +10,7 @@ import {useAnimation} from '~/contexts/AnimationContext';
 import SanityEmailLink from '~/sanity/SanityEmailLink';
 import SanityExternalLink from '~/sanity/SanityExternalLink';
 import SanityProductLink from '~/sanity/SanityProductLink';
+import {Svg} from '~/components/MobileFooter';
 
 /**
  * @type {MetaFunction}
@@ -230,6 +231,7 @@ function SVGLogo({isLoaded}) {
       transition={{duration: 1, ease: 'easeInOut'}}
       key={'logo'}
     >
+      <Svg />
       <svg
         width="926"
         height="174"

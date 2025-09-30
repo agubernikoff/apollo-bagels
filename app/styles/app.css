@@ -762,6 +762,10 @@ footer.footer {
   width: 100%;
 }
 
+.home > div > svg:first-of-type {
+  display: none;
+}
+
 .carousel {
   position: relative;
   width: 100%;
@@ -1742,6 +1746,12 @@ footer.footer {
   html {
     scrollbar-width: none;
   }
+  .home > div > svg {
+    display: none;
+  }
+  .home > div > svg:first-of-type {
+    display: block;
+  }
 }
 @media (max-width: 499px) {
   html,
@@ -1764,6 +1774,7 @@ footer.footer {
     height: 60vh;
     overscroll-behavior-y: none;
   }
+
   .header {
     font-size: 33px;
   }

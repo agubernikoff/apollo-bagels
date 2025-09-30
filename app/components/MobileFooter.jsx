@@ -362,7 +362,7 @@ export default function MobileFooter({hours}) {
   );
 }
 
-function Svg() {
+export function Svg() {
   return (
     <svg
       width="272"
