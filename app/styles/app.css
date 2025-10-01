@@ -1467,7 +1467,7 @@ footer.footer {
   }
   .announcement-container {
     padding: 1rem;
-    margin-bottom: 1.25rem;
+    /* margin-bottom: 1.25rem; */
   }
   .info-announcement-container {
     padding: 1rem;
