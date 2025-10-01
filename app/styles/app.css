@@ -1106,7 +1106,7 @@ footer.footer {
   top: 0;
   left: 0;
   right: 0;
-  height: 100dvh;
+  height: 100lvh;
 }
 
 .info-background {
@@ -1793,7 +1793,7 @@ footer.footer {
     padding: 2.5352px 6.72px;
   }
   .info-announcement-container {
-    bottom: 1rem;
+    bottom: 6rem;
   }
   .order-cater-text-container {
     margin-bottom: 23px;
