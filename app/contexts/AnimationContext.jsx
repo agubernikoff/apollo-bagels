@@ -9,26 +9,30 @@ export function AnimationProvider({children}) {
   const hasSetAnimation = useRef(false);
 
   useEffect(() => {
-  if (!hasSetAnimation.current) {
-    const navEntry = performance.getEntriesByType("navigation")[0];
-    const isPageReload = navEntry?.type === "reload";
+    // Only set shouldAnimate once when provider first mounts
+    if (!hasSetAnimation.current) {
+      // Check if this is a page reload/refresh by looking at navigation type
+      const isPageReload =
+        window.performance.navigation.type === 1 ||
+        window.performance.getEntriesByType('navigation')[0]?.type === 'reload';
 
-    // Track first visit in sessionStorage
-    const hasVisited = sessionStorage.getItem("hasVisited");
+      // Check if user came from another page on the same site
+      const isInternalNavigation =
+        document.referrer &&
+        new URL(document.referrer).origin === window.location.origin;
 
-    // Animate only if it's the very first page load, not a reload or SPA nav
-    const shouldAnimateNow = !isPageReload && !hasVisited;
+      // Only animate if it's not a reload and not internal navigation
+      setShouldAnimate(!isPageReload && !isInternalNavigation);
+      hasSetAnimation.current = true;
+    }
 
-    setShouldAnimate(shouldAnimateNow);
-    sessionStorage.setItem("hasVisited", "true");
+    // Trigger loaded state after component mounts
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 100);
 
-    hasSetAnimation.current = true;
-  }
-
-  const timer = setTimeout(() => setIsLoaded(true), 100);
-  return () => clearTimeout(timer);
-}, []);
-
+    return () => clearTimeout(timer);
+  }, []);
 
   const value = {
     shouldAnimate,
