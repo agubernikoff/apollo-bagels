@@ -1359,6 +1359,12 @@ footer.footer {
   padding: 1rem;
   border-bottom: 1px solid var(--color-creme);
 }
+
+.hours-p{
+  display:flex;
+  gap:1.5rem;
+  width:100%;
+}
 /*
 * --------------------------------------------------
 * routes/menu

@@ -168,8 +168,7 @@ function Location({location}) {
       {location.address.postalCode}
     </a>
   );
-
-  const formattedHours = <p style={{marginTop: '.25rem'}}>MON-SUN: 7A-5P</p>;
+  const formattedHours = <p style={{marginTop: '.25rem'}} className='hours-p'>{formatStoreHours(location.hours).map(f=><span key={f}>{f}</span>)}</p>
 
   return (
     <div
@@ -249,3 +248,54 @@ function Location({location}) {
     </div>
   );
 }
+
+
+const formatStoreHours = (hours) => {
+  const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  const dayAbbreviations = {
+    monday: 'MON',
+    tuesday: 'TUE',
+    wednesday: 'WED',
+    thursday: 'THU',
+    friday: 'FRI',
+    saturday: 'SAT',
+    sunday: 'SUN'
+  };
+  
+  const formatTime = (time) => {
+  const [hours, minutes] = time.split(':');
+  const hour = parseInt(hours);
+  const period = hour >= 12 ? 'P' : 'A';
+  const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+  const minutesPart = minutes !== '00' ? `:${minutes}` : '';
+  return `${displayHour}${minutesPart}${period}`;
+};
+  
+  const groups = [];
+  let currentGroup = null;
+  
+  daysOrder.forEach(day => {
+    if (!hours[day]) return;
+    
+    const { start, end } = hours[day];
+    
+    if (!currentGroup || currentGroup.start !== start || currentGroup.end !== end) {
+      currentGroup = {
+        days: [day],
+        start,
+        end
+      };
+      groups.push(currentGroup);
+    } else {
+      currentGroup.days.push(day);
+    }
+  });
+  
+  return groups.map(group => {
+    const firstDay = dayAbbreviations[group.days[0]];
+    const lastDay = dayAbbreviations[group.days[group.days.length - 1]];
+    const dayRange = group.days.length === 1 ? firstDay : `${firstDay}-${lastDay}`;
+    const timeRange = `${formatTime(group.start)}-${formatTime(group.end)}`;
+    return `${dayRange}: ${timeRange}`;
+  });
+};
