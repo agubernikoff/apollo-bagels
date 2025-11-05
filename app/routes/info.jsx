@@ -1,6 +1,6 @@
 import {defer} from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
-import {sanityClient} from '~/sanity/SanityClient';
+import {useRouteLoaderData, Await} from '@remix-run/react';
+import React, {Suspense} from 'react';
 import {PortableText} from '@portabletext/react';
 import SanityEmailLink from '../sanity/SanityEmailLink';
 import SanityExternalLink from '../sanity/SanityExternalLink.jsx';
@@ -31,13 +31,7 @@ export async function loader(args) {
  * @param {LoaderFunctionArgs}
  */
 async function loadCriticalData({context}) {
-  const infoPage = await sanityClient
-    .fetch("*[_type == 'info'][0]{...,backgroundImage{...,asset->{url}}}")
-    .then((response) => response);
-
-  return {
-    sanityData: infoPage,
-  };
+  return {};
 }
 
 /**
@@ -52,23 +46,29 @@ function loadDeferredData({context}) {
 
 export default function Info() {
   /** @type {LoaderReturnData} */
-  const data = useLoaderData();
+  const {infoPage} = useRouteLoaderData('root');
   return (
-    <div
-      className="info"
-      style={{
-        backgroundImage: `url(${data.sanityData.backgroundImage.asset.url}?blur=50&q=10)`,
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-      }}
-    >
-      <img
-        className="info-background"
-        src={data.sanityData.backgroundImage.asset.url}
-        alt="delicious bagels"
-      />
-      <Announcement data={data.sanityData.text} />
-    </div>
+    <Suspense>
+      <Await resolve={infoPage}>
+        {(iP) => (
+          <div
+            className="info"
+            style={{
+              backgroundImage: `url(${iP.backgroundImage.asset.url}?blur=50&q=10)`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+            }}
+          >
+            <img
+              className="info-background"
+              src={iP.backgroundImage.asset.url}
+              alt="delicious bagels"
+            />
+            <Announcement data={iP.text} />
+          </div>
+        )}
+      </Await>
+    </Suspense>
   );
 }
 

@@ -183,10 +183,22 @@ function loadDeferredData({context}) {
     .fetch("*[_type == 'location'][]{...,videoBackground{asset->{...,url}}}")
     .then((response) => response);
 
+  const infoPage = sanityClient
+    .fetch("*[_type == 'info'][0]{...,backgroundImage{...,asset->{url}}}")
+    .then((response) => response);
+
+  const menu = sanityClient
+    .fetch(
+      "*[_type == 'menuPage'][0]{...,defaultImage{asset->{url}},bagels{flavors[]{...,image{asset->{url}}},quantities[]{...,image{asset->{url}}}}}",
+    )
+    .then((response) => response);
+
   return {
     cart: cart.get(),
     isLoggedIn: customerAccount.isLoggedIn(),
     locations,
+    infoPage,
+    menu,
   };
 }
 

@@ -1,7 +1,6 @@
 import {defer} from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
-import React, {useState, useEffect} from 'react';
-import {sanityClient} from '~/sanity/SanityClient';
+import {useRouteLoaderData, Await} from '@remix-run/react';
+import React, {useState, useEffect, Suspense} from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
 
 /**
@@ -30,14 +29,7 @@ export async function loader(args) {
  * @param {LoaderFunctionArgs}
  */
 async function loadCriticalData({context}) {
-  const menu = await sanityClient
-    .fetch(
-      "*[_type == 'menuPage'][0]{...,defaultImage{asset->{url}},bagels{flavors[]{...,image{asset->{url}}},quantities[]{...,image{asset->{url}}}}}",
-    )
-    .then((response) => response);
-  return {
-    sanityData: {menu},
-  };
+  return {};
 }
 
 /**
@@ -55,44 +47,57 @@ function formatPrice(price) {
 }
 export default function Menu() {
   /** @type {LoaderReturnData} */
-  const data = useLoaderData();
+  const {menu} = useRouteLoaderData('root');
 
-  const [displayImage, setDisplayImage] = useState(
-    data.sanityData.menu.defaultImage.asset.url,
-  );
+  const [displayImage, setDisplayImage] = useState();
   const [alt, setAlt] = useState('Apollo Bagels');
-  function resetDisplayImage() {
-    setDisplayImage(data.sanityData.menu.defaultImage.asset.url);
-  }
+
   function resetAlt() {
     setAlt('Apollo Bagels');
   }
 
   return (
     <div className="menu-grid">
-      <CoverImage image={displayImage} alt={alt} />
-      <Bagels
-        bagels={data.sanityData.menu.bagels}
-        setDisplayImage={(url) => setDisplayImage(url)}
-        setAlt={(alt) => setAlt(alt)}
-        resetDisplayImage={resetDisplayImage}
-        resetAlt={resetAlt}
-      />
-      <FishAndSpreads
-        fish={data.sanityData.menu.fish}
-        spreads={data.sanityData.menu.spreads}
-      />
-      <Fish fish={data.sanityData.menu.fish} />
-      <Spreads spreads={data.sanityData.menu.spreads} />
-      <Sandwiches sandwiches={data.sanityData.menu.sandwiches} />
-      <Drinks drinks={data.sanityData.menu.drinks} />
+      <Suspense>
+        <Await resolve={menu}>
+          {(m) => {
+            useEffect(() => {
+              if (m?.defaultImage?.asset?.url) {
+                setDisplayImage(m.defaultImage.asset.url);
+              }
+            }, [m]);
+
+            function resetDisplayImage() {
+              setDisplayImage(m.defaultImage.asset.url);
+            }
+            console.log(m);
+            return (
+              <>
+                <CoverImage image={displayImage} alt={alt} />
+                <Bagels
+                  bagels={m.bagels}
+                  setDisplayImage={(url) => setDisplayImage(url)}
+                  setAlt={(alt) => setAlt(alt)}
+                  resetDisplayImage={resetDisplayImage}
+                  resetAlt={resetAlt}
+                />
+                <FishAndSpreads fish={m.fish} spreads={m.spreads} />
+                <Fish fish={m.fish} />
+                <Spreads spreads={m.spreads} />
+                <Sandwiches sandwiches={m.sandwiches} />
+                <Drinks drinks={m.drinks} />
+              </>
+            );
+          }}
+        </Await>
+      </Suspense>
     </div>
   );
 }
 
 function CoverImage({image, alt}) {
   const [svgContent, setSvgContent] = useState(null);
-  const isSvg = image.toLowerCase().includes('.svg');
+  const isSvg = image?.toLowerCase().includes('.svg');
 
   useEffect(() => {
     if (isSvg) {
