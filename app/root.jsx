@@ -147,9 +147,15 @@ async function loadCriticalData({context}) {
  */
 function loadDeferredData({context}) {
   const {storefront, customerAccount, cart} = context;
+
+  const locations = sanityClient
+    .fetch("*[_type == 'location'][]{...,videoBackground{asset->{...,url}}}")
+    .then((response) => response);
+
   return {
     cart: cart.get(),
     isLoggedIn: customerAccount.isLoggedIn(),
+    locations,
   };
 }
 

@@ -1,8 +1,7 @@
 import {defer} from '@shopify/remix-oxygen';
-import {useLoaderData} from '@remix-run/react';
-import React from 'react';
+import {useRouteLoaderData, Await} from '@remix-run/react';
+import React, {Suspense} from 'react';
 import OrdersCaterers from '~/components/OrdersCaterers';
-import {sanityClient} from '~/sanity/SanityClient';
 import reorderArray from '~/helpers/reorderArray';
 
 /**
@@ -31,13 +30,7 @@ export async function loader(args) {
  * @param {LoaderFunctionArgs}
  */
 async function loadCriticalData({context}) {
-  const locations = await sanityClient
-    .fetch("*[_type == 'location']")
-    .then((response) => response);
-
-  return {
-    sanityData: {locations},
-  };
+  return {};
 }
 
 /**
@@ -52,7 +45,7 @@ function loadDeferredData({context}) {
 
 export default function Catering() {
   /** @type {LoaderReturnData} */
-  const data = useLoaderData();
+  const {locations} = useRouteLoaderData('root');
 
   const condition = (loc) =>
     loc.comingSoon ||
@@ -76,11 +69,17 @@ export default function Catering() {
           Coming Soon!
         </p>
       ) : (
-        <OrdersCaterers
-          data={reorderArray(data?.sanityData?.locations, [condition], (a, b) =>
-            a.title.localeCompare(b.title),
-          )}
-        />
+        <Suspense>
+          <Await resolve={locations}>
+            {(r) => (
+              <OrdersCaterers
+                data={reorderArray(r, [condition], (a, b) =>
+                  a.title.localeCompare(b.title),
+                )}
+              />
+            )}
+          </Await>
+        </Suspense>
       )}
     </div>
   );
