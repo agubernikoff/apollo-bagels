@@ -59,23 +59,29 @@ export default function Catering() {
     Object.keys(loc.address).length <= 2 ||
     loc.cateringLink === undefined;
 
-  console.log(
-    data.sanityData.locations.map((loc) => {
-      return {
-        t: loc.title,
-        c: loc.comingSoon,
-        a: loc.address,
-        cl: loc.cateringLink,
-      };
-    }),
-  );
   return (
     <div>
-      <OrdersCaterers
-        data={reorderArray(data?.sanityData?.locations, [condition], (a, b) =>
-          a.title.localeCompare(b.title),
-        )}
-      />
+      {true ? (
+        <p
+          style={{
+            fontFamily: 'HAL-BOLD',
+            fontSize: '36px',
+            color: 'var(--blue)',
+            minHeight: 'calc(100vh - var(--header-height) - 5rem)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          Coming Soon!
+        </p>
+      ) : (
+        <OrdersCaterers
+          data={reorderArray(data?.sanityData?.locations, [condition], (a, b) =>
+            a.title.localeCompare(b.title),
+          )}
+        />
+      )}
     </div>
   );
 }
