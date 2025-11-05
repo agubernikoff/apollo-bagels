@@ -1,9 +1,8 @@
 import {defer} from '@shopify/remix-oxygen';
-import {Await, useLoaderData, Link} from '@remix-run/react';
+import {Await, useLoaderData, Link, useRouteLoaderData} from '@remix-run/react';
 import {Suspense, useEffect, useState, useRef} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import InfiniteCarousel from '~/components/InfiniteCarousel';
-import {sanityClient} from '~/sanity/SanityClient';
 import {motion} from 'framer-motion';
 import {PortableText} from '@portabletext/react';
 import {useAnimation} from '~/contexts/AnimationContext';
@@ -64,40 +63,8 @@ async function loadCriticalData({context}) {
     // Add other queries here, so that they are loaded in parallel
   ]);
 
-  const homePage = await sanityClient
-    .fetch(
-      `*[_type == 'home'][0]{
-        ...,
-        leftSideImages[]{...,asset->{url}},
-        rightSideImages[]{...,asset->{url}},
-        announcement{
-          ...,
-          description[]{
-            ...,
-            markDefs[]{
-              ...,
-              _type == "linkProduct" => {
-                ...,
-                productWithVariant{
-                  ...,
-                  product->{
-                    ...,
-                    store{
-                      ...
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }`,
-    )
-    .then((response) => response);
-
   return {
     featuredCollection: collections.nodes[0],
-    sanityData: homePage,
   };
 }
 
@@ -139,6 +106,7 @@ export default function Homepage() {
 
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
+  const {homePage} = useRouteLoaderData('root');
   return (
     <div className="home">
       <SVGLogo isLoaded={isLoaded} shouldAnimate={shouldAnimate} />
@@ -156,9 +124,7 @@ export default function Homepage() {
             }}
           >
             <InfiniteCarousel
-              images={data.sanityData.leftSideImages.map(
-                (image) => image.asset.url,
-              )}
+              images={homePage.leftSideImages.map((image) => image.asset.url)}
               scrollDirection="down"
             />
           </motion.div>
@@ -174,9 +140,7 @@ export default function Homepage() {
             }}
           >
             <InfiniteCarousel
-              images={data.sanityData.rightSideImages.map(
-                (image) => image.asset.url,
-              )}
+              images={homePage.rightSideImages.map((image) => image.asset.url)}
               scrollDirection="up"
             />
           </motion.div>
@@ -195,15 +159,15 @@ export default function Homepage() {
         >
           <InfiniteCarousel
             images={[
-              ...data.sanityData.leftSideImages,
-              ...data.sanityData.rightSideImages,
+              ...homePage.leftSideImages,
+              ...homePage.rightSideImages,
             ].map((image) => image.asset.url)}
             scrollDirection="down"
           />
         </motion.div>
       )}
       <Announcement
-        data={data.sanityData.announcement}
+        data={homePage.announcement}
         isLoaded={isLoaded}
         shouldAnimate={shouldAnimate}
       />

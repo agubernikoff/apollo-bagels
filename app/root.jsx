@@ -136,7 +136,38 @@ async function loadCriticalData({context}) {
     .fetch("*[_type == 'settings'][0]{footer{subscribeImage{...asset->{url}}}}")
     .then((response) => response.footer.subscribeImage.url);
 
-  return {header, hours, subscribeImage};
+  const homePage = await sanityClient
+    .fetch(
+      `*[_type == 'home'][0]{
+        ...,
+        leftSideImages[]{...,asset->{url}},
+        rightSideImages[]{...,asset->{url}},
+        announcement{
+          ...,
+          description[]{
+            ...,
+            markDefs[]{
+              ...,
+              _type == "linkProduct" => {
+                ...,
+                productWithVariant{
+                  ...,
+                  product->{
+                    ...,
+                    store{
+                      ...
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }`,
+    )
+    .then((response) => response);
+
+  return {header, hours, subscribeImage, homePage};
 }
 
 /**
