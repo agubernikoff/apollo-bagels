@@ -19,6 +19,7 @@ import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import {AnimatePresence, motion} from 'framer-motion';
 import {sanityClient} from './sanity/SanityClient';
 import {AnimationProvider} from './contexts/AnimationContext';
+import {optimizeImageUrl, imagePresets} from '~/sanity/imageUrlBuilder'; // ← ADD THIS
 
 const variants = {
   initial: {opacity: 0},
@@ -132,9 +133,16 @@ async function loadCriticalData({context}) {
     .fetch("*[_type == 'storeHours'][0]")
     .then((response) => response);
 
-  const subscribeImage = await sanityClient
+  // ← OPTIMIZE SUBSCRIBE IMAGE
+  const subscribeImageRaw = await sanityClient
     .fetch("*[_type == 'settings'][0]{footer{subscribeImage{...asset->{url}}}}")
     .then((response) => response.footer.subscribeImage.url);
+
+  const subscribeImage = optimizeImageUrl(subscribeImageRaw, {
+    width: 800,
+    quality: 85,
+    format: 'webp',
+  });
 
   const homePage = await sanityClient
     .fetch(
@@ -187,11 +195,43 @@ function loadDeferredData({context}) {
     .fetch("*[_type == 'info'][0]{...,backgroundImage{...,asset->{url}}}")
     .then((response) => response);
 
+  // ← OPTIMIZE MENU IMAGES
   const menu = sanityClient
     .fetch(
       "*[_type == 'menuPage'][0]{...,defaultImage{asset->{url}},bagels{flavors[]{...,image{asset->{url}}},quantities[]{...,image{asset->{url}}}}}",
     )
-    .then((response) => response);
+    .then((response) => {
+      // Optimize all menu images
+      if (response) {
+        if (response.defaultImage?.asset?.url) {
+          response.defaultImageOptimized = optimizeImageUrl(
+            response.defaultImage.asset.url,
+            imagePresets.menu,
+          );
+        }
+
+        if (response.bagels?.flavors) {
+          response.bagels.flavors = response.bagels.flavors.map((flavor) => ({
+            ...flavor,
+            imageOptimized: flavor.image?.asset?.url
+              ? optimizeImageUrl(flavor.image.asset.url, imagePresets.menu)
+              : null,
+          }));
+        }
+
+        if (response.bagels?.quantities) {
+          response.bagels.quantities = response.bagels.quantities.map(
+            (quantity) => ({
+              ...quantity,
+              imageOptimized: quantity.image?.asset?.url
+                ? optimizeImageUrl(quantity.image.asset.url, imagePresets.menu)
+                : null,
+            }),
+          );
+        }
+      }
+      return response;
+    });
 
   return {
     cart: cart.get(),

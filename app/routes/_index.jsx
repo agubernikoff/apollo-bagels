@@ -10,6 +10,7 @@ import SanityEmailLink from '~/sanity/SanityEmailLink';
 import SanityExternalLink from '~/sanity/SanityExternalLink';
 import SanityProductLink from '~/sanity/SanityProductLink';
 import {Svg} from '~/components/MobileFooter';
+import {optimizeImageUrl, imagePresets} from '~/sanity/imageUrlBuilder'; // ← ADD THIS LINE
 
 /**
  * @type {MetaFunction}
@@ -107,6 +108,16 @@ export default function Homepage() {
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
   const {homePage} = useRouteLoaderData('root');
+
+  // ← OPTIMIZE IMAGES HERE - Convert raw URLs to optimized URLs
+  const leftSideImagesOptimized = homePage.leftSideImages.map((image) =>
+    optimizeImageUrl(image.asset.url, imagePresets.carousel),
+  );
+
+  const rightSideImagesOptimized = homePage.rightSideImages.map((image) =>
+    optimizeImageUrl(image.asset.url, imagePresets.carousel),
+  );
+
   return (
     <div className="home">
       <SVGLogo isLoaded={isLoaded} shouldAnimate={shouldAnimate} />
@@ -124,7 +135,7 @@ export default function Homepage() {
             }}
           >
             <InfiniteCarousel
-              images={homePage.leftSideImages.map((image) => image.asset.url)}
+              images={leftSideImagesOptimized}
               scrollDirection="down"
             />
           </motion.div>
@@ -140,7 +151,7 @@ export default function Homepage() {
             }}
           >
             <InfiniteCarousel
-              images={homePage.rightSideImages.map((image) => image.asset.url)}
+              images={rightSideImagesOptimized}
               scrollDirection="up"
             />
           </motion.div>
@@ -158,10 +169,7 @@ export default function Homepage() {
           }}
         >
           <InfiniteCarousel
-            images={[
-              ...homePage.leftSideImages,
-              ...homePage.rightSideImages,
-            ].map((image) => image.asset.url)}
+            images={[...leftSideImagesOptimized, ...rightSideImagesOptimized]}
             scrollDirection="down"
           />
         </motion.div>

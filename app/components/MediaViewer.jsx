@@ -1,7 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
+import {optimizeImageUrl, imagePresets} from '~/sanity/imageUrlBuilder';
 
-const MediaViewer = ({file}) => {
+/**
+ * Optimized MediaViewer that only loads videos when they enter the viewport
+ * Much better UX than hover - videos play automatically when scrolled into view
+ */
+const MediaViewer = ({file, posterImage}) => {
   const [error, setError] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+  const containerRef = useRef(null);
 
   if (!file) {
     return (
@@ -12,8 +21,8 @@ const MediaViewer = ({file}) => {
   }
 
   // Determine if the file is an image or video based on its MIME type
-  const isImage = file.mimeType.startsWith('image/');
-  const isVideo = file.mimeType.startsWith('video/');
+  const isImage = file.mimeType?.startsWith('image/');
+  const isVideo = file.mimeType?.startsWith('video/');
 
   // Error message for unsupported file types
   if (!isImage && !isVideo) {
@@ -23,6 +32,48 @@ const MediaViewer = ({file}) => {
       </div>
     );
   }
+
+  // Use Intersection Observer to detect when video enters viewport
+  useEffect(() => {
+    if (!isVideo || !containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Video is visible - load and play it
+            setShouldLoadVideo(true);
+            setTimeout(() => {
+              if (videoRef.current) {
+                videoRef.current.play().catch(() => {
+                  // Ignore autoplay errors
+                });
+                setIsPlaying(true);
+              }
+            }, 100);
+          } else {
+            // Video is out of view - pause it
+            if (videoRef.current && isPlaying) {
+              videoRef.current.pause();
+              setIsPlaying(false);
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.5, // Video must be 50% visible to start playing
+        rootMargin: '50px', // Start loading slightly before it enters viewport
+      },
+    );
+
+    observer.observe(containerRef.current);
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, [isVideo, isPlaying]);
 
   // Handle errors during loading
   const handleError = () => {
@@ -39,27 +90,62 @@ const MediaViewer = ({file}) => {
   }
 
   return (
-    <div className="media-viewer">
+    <div ref={containerRef} className="media-viewer">
       {isImage && (
         <img
-          src={file.url}
+          src={optimizeImageUrl(file.url, imagePresets.location)}
           alt="Uploaded content"
           onError={handleError}
           className="media-element"
         />
       )}
       {isVideo && (
-        <video
-          src={file.url}
-          autoPlay
-          loop
-          muted
-          playsInline
-          onError={handleError}
-          className="media-element"
-        >
-          <track kind="captions" />
-        </video>
+        <>
+          {/* Show poster image before video loads */}
+          {!shouldLoadVideo && posterImage?.asset?.url && (
+            <img
+              src={optimizeImageUrl(
+                posterImage.asset.url,
+                imagePresets.location,
+              )}
+              alt="Video thumbnail"
+              className="media-element"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            />
+          )}
+
+          {/* Fallback if no poster image */}
+          {!shouldLoadVideo && !posterImage?.asset?.url && (
+            <div
+              className="media-element video-placeholder"
+              style={{
+                backgroundColor: '#E0DFD1',
+                width: '100%',
+                height: '100%',
+              }}
+            />
+          )}
+
+          {/* Only load video when in viewport - saves massive bandwidth! */}
+          {shouldLoadVideo && (
+            <video
+              ref={videoRef}
+              src={file.url}
+              loop
+              muted
+              playsInline
+              preload="auto"
+              onError={handleError}
+              className="media-element"
+            >
+              <track kind="captions" />
+            </video>
+          )}
+        </>
       )}
     </div>
   );

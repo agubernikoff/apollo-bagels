@@ -4,6 +4,7 @@ import React, {Suspense} from 'react';
 import {PortableText} from '@portabletext/react';
 import SanityEmailLink from '../sanity/SanityEmailLink';
 import SanityExternalLink from '../sanity/SanityExternalLink.jsx';
+import {optimizeImageUrl, imagePresets} from '~/sanity/imageUrlBuilder'; // ← ADD THIS
 
 /**
  * @type {MetaFunction}
@@ -50,23 +51,37 @@ export default function Info() {
   return (
     <Suspense>
       <Await resolve={infoPage}>
-        {(iP) => (
-          <div
-            className="info"
-            style={{
-              backgroundImage: `url(${iP.backgroundImage.asset.url}?blur=50&q=10)`,
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-            }}
-          >
-            <img
-              className="info-background"
-              src={iP.backgroundImage.asset.url}
-              alt="delicious bagels"
-            />
-            <Announcement data={iP.text} />
-          </div>
-        )}
+        {(iP) => {
+          // ← OPTIMIZE THE BACKGROUND IMAGE HERE
+          const backgroundImageUrl = optimizeImageUrl(
+            iP.backgroundImage.asset.url,
+            imagePresets.background,
+          );
+
+          // Ultra-low quality placeholder for blur effect
+          const blurredBackgroundUrl = optimizeImageUrl(
+            iP.backgroundImage.asset.url,
+            {width: 100, quality: 10, format: 'webp'},
+          );
+
+          return (
+            <div
+              className="info"
+              style={{
+                backgroundImage: `url(${blurredBackgroundUrl})`,
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+              }}
+            >
+              <img
+                className="info-background"
+                src={backgroundImageUrl}
+                alt="delicious bagels"
+              />
+              <Announcement data={iP.text} />
+            </div>
+          );
+        }}
       </Await>
     </Suspense>
   );
