@@ -39,35 +39,6 @@ function loadDeferredData({context}) {
       "*[_type == 'menuPage'][0]{...,defaultImage{asset->{url}},bagels{flavors[]{...,image{asset->{url}}},quantities[]{...,image{asset->{url}}}}}",
     )
     .then((response) => {
-      if (response) {
-        // Optimize all menu images
-        if (response.defaultImage?.asset?.url) {
-          response.defaultImageOptimized = optimizeImageUrl(
-            response.defaultImage.asset.url,
-            imagePresets.menu,
-          );
-        }
-
-        if (response.bagels?.flavors) {
-          response.bagels.flavors = response.bagels.flavors.map((flavor) => ({
-            ...flavor,
-            imageOptimized: flavor.image?.asset?.url
-              ? optimizeImageUrl(flavor.image.asset.url, imagePresets.menu)
-              : null,
-          }));
-        }
-
-        if (response.bagels?.quantities) {
-          response.bagels.quantities = response.bagels.quantities.map(
-            (quantity) => ({
-              ...quantity,
-              imageOptimized: quantity.image?.asset?.url
-                ? optimizeImageUrl(quantity.image.asset.url, imagePresets.menu)
-                : null,
-            }),
-          );
-        }
-      }
       return response;
     })
     .catch((error) => {
@@ -94,21 +65,20 @@ export default function Menu() {
     setAlt('Apollo Bagels');
   }
 
+  useEffect(() => {
+    menu.then((m) => {
+      if (m?.defaultImage?.asset?.url) {
+        setDisplayImage(m.defaultImage.asset.url);
+      }
+    });
+  }, [menu]);
+
   return (
     <div className="menu-grid">
       <Suspense fallback={<div>Loading menu...</div>}>
         <Await resolve={menu}>
           {(m) => {
             if (!m) return <div>Error loading menu</div>;
-
-            useEffect(() => {
-              // Use optimized default image
-              if (m?.defaultImageOptimized) {
-                setDisplayImage(m.defaultImageOptimized);
-              } else if (m?.defaultImage?.asset?.url) {
-                setDisplayImage(m.defaultImage.asset.url);
-              }
-            }, [m]);
 
             function resetDisplayImage() {
               setDisplayImage(
