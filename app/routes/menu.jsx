@@ -1,54 +1,92 @@
 import {defer} from '@shopify/remix-oxygen';
-import {useRouteLoaderData, Await} from '@remix-run/react';
+import {useLoaderData, Await} from '@remix-run/react';
 import React, {useState, useEffect, Suspense} from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
+import {sanityClient} from '~/sanity/SanityClient';
+import {optimizeImageUrl, imagePresets} from '~/sanity/imageUrlBuilder';
 
-/**
- * @type {MetaFunction}
- */
 export const meta = () => {
   return [{title: 'Apollo Bagels | Menu'}];
 };
 
-/**
- * @param {LoaderFunctionArgs} args
- */
-export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
+// ✅ Add caching headers
+export const headers = () => ({
+  'Cache-Control': 'public, max-age=300, s-maxage=600',
+});
 
-  // Await the critical data required to render initial state of the page
+export async function loader(args) {
+  const deferredData = loadDeferredData(args);
   const criticalData = await loadCriticalData(args);
 
-  return defer({...deferredData, ...criticalData});
+  return defer(
+    {...deferredData, ...criticalData},
+    {
+      headers: {
+        'Cache-Control': 'public, max-age=300, s-maxage=600',
+      },
+    },
+  );
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {LoaderFunctionArgs}
- */
 async function loadCriticalData({context}) {
   return {};
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {LoaderFunctionArgs}
- */
 function loadDeferredData({context}) {
-  return {};
+  // ✅ Load menu data ONLY on /menu route
+  const menu = sanityClient
+    .fetch(
+      "*[_type == 'menuPage'][0]{...,defaultImage{asset->{url}},bagels{flavors[]{...,image{asset->{url}}},quantities[]{...,image{asset->{url}}}}}",
+    )
+    .then((response) => {
+      if (response) {
+        // Optimize all menu images
+        if (response.defaultImage?.asset?.url) {
+          response.defaultImageOptimized = optimizeImageUrl(
+            response.defaultImage.asset.url,
+            imagePresets.menu,
+          );
+        }
+
+        if (response.bagels?.flavors) {
+          response.bagels.flavors = response.bagels.flavors.map((flavor) => ({
+            ...flavor,
+            imageOptimized: flavor.image?.asset?.url
+              ? optimizeImageUrl(flavor.image.asset.url, imagePresets.menu)
+              : null,
+          }));
+        }
+
+        if (response.bagels?.quantities) {
+          response.bagels.quantities = response.bagels.quantities.map(
+            (quantity) => ({
+              ...quantity,
+              imageOptimized: quantity.image?.asset?.url
+                ? optimizeImageUrl(quantity.image.asset.url, imagePresets.menu)
+                : null,
+            }),
+          );
+        }
+      }
+      return response;
+    })
+    .catch((error) => {
+      console.error('Error fetching menu:', error);
+      return null;
+    });
+
+  return {
+    menu,
+  };
 }
+
 function formatPrice(price) {
   if (price.toString().split('.').length > 1) return price.toFixed(2);
   else return price;
 }
-export default function Menu() {
-  /** @type {LoaderReturnData} */
-  const {menu} = useRouteLoaderData('root');
 
+export default function Menu() {
+  const {menu} = useLoaderData();
   const [displayImage, setDisplayImage] = useState();
   const [alt, setAlt] = useState('Apollo Bagels');
 
@@ -58,19 +96,26 @@ export default function Menu() {
 
   return (
     <div className="menu-grid">
-      <Suspense>
+      <Suspense fallback={<div>Loading menu...</div>}>
         <Await resolve={menu}>
           {(m) => {
+            if (!m) return <div>Error loading menu</div>;
+
             useEffect(() => {
-              if (m?.defaultImage?.asset?.url) {
+              // Use optimized default image
+              if (m?.defaultImageOptimized) {
+                setDisplayImage(m.defaultImageOptimized);
+              } else if (m?.defaultImage?.asset?.url) {
                 setDisplayImage(m.defaultImage.asset.url);
               }
             }, [m]);
 
             function resetDisplayImage() {
-              setDisplayImage(m.defaultImage.asset.url);
+              setDisplayImage(
+                m.defaultImageOptimized || m.defaultImage?.asset?.url,
+              );
             }
-            console.log(m);
+
             return (
               <>
                 <CoverImage image={displayImage} alt={alt} />
@@ -104,7 +149,6 @@ function CoverImage({image, alt}) {
       fetch(image)
         .then((res) => {
           const contentType = res.headers.get('Content-Type');
-
           if (contentType && contentType.includes('image/svg+xml')) {
             return res.text();
           } else {
@@ -141,6 +185,7 @@ function CoverImage({image, alt}) {
             src={image}
             alt={alt}
             key={image}
+            loading="lazy"
             initial={{opacity: 0}}
             animate={{opacity: 1}}
             exit={{opacity: 0}}
@@ -164,18 +209,7 @@ function Bagels({
       <h3>BAGELS</h3>
       <div>
         {bagels.flavors.map((b) => (
-          <h4
-            key={b.title}
-            // onMouseEnter={() => {
-            //   setDisplayImage(b.image.asset.url);
-            //   setAlt(b.title);
-            // }}
-            // onMouseLeave={() => {
-            //   resetDisplayImage();
-            //   resetAlt();
-            // }}
-            style={{margin: '-.25rem'}}
-          >
+          <h4 key={b.title} style={{margin: '-.25rem'}}>
             <strong>{b.title}</strong>
           </h4>
         ))}
@@ -200,6 +234,7 @@ function FishAndSpreads({fish, spreads}) {
     </div>
   );
 }
+
 function Fish({fish}) {
   return (
     <div className="fish">
@@ -207,6 +242,7 @@ function Fish({fish}) {
     </div>
   );
 }
+
 function Spreads({spreads}) {
   return (
     <div className="spreads">

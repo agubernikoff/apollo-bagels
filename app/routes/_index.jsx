@@ -1,6 +1,6 @@
 import {defer} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link, useRouteLoaderData} from '@remix-run/react';
-import {Suspense, useEffect, useState, useRef} from 'react';
+import {Suspense, useEffect, useState} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
 import InfiniteCarousel from '~/components/InfiniteCarousel';
 import {motion} from 'framer-motion';
@@ -10,29 +10,21 @@ import SanityEmailLink from '~/sanity/SanityEmailLink';
 import SanityExternalLink from '~/sanity/SanityExternalLink';
 import SanityProductLink from '~/sanity/SanityProductLink';
 import {Svg} from '~/components/MobileFooter';
-import {optimizeImageUrl, imagePresets} from '~/sanity/imageUrlBuilder'; // ← ADD THIS LINE
 
-/**
- * @type {MetaFunction}
- */
 export const meta = () => {
   const title = 'Apollo Bagels';
   const description =
     'Apollo Bagels is a new-school bagel shop rooted in old-school technique. Apollo is known for its naturally fermented, boiled bagels made fresh every morning and served with a carefully curated menu featuring best-in-class producers we admire.';
-  const image = 'https://apollobagles.com/social.png'; // replace with real image URL
+  const image = 'https://apollobagles.com/social.png';
 
   return [
     {title},
     {name: 'description', content: description},
-
-    // Open Graph (Facebook, LinkedIn, etc.)
     {property: 'og:title', content: title},
     {property: 'og:description', content: description},
     {property: 'og:image', content: image},
     {property: 'og:type', content: 'website'},
     {property: 'og:url', content: 'https://apollobagles.com/'},
-
-    // Twitter Card
     {name: 'twitter:card', content: 'summary_large_image'},
     {name: 'twitter:title', content: title},
     {name: 'twitter:description', content: description},
@@ -40,28 +32,15 @@ export const meta = () => {
   ];
 };
 
-/**
- * @param {LoaderFunctionArgs} args
- */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
   return defer({...deferredData, ...criticalData});
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {LoaderFunctionArgs}
- */
 async function loadCriticalData({context}) {
   const [{collections}] = await Promise.all([
     context.storefront.query(FEATURED_COLLECTION_QUERY),
-    // Add other queries here, so that they are loaded in parallel
   ]);
 
   return {
@@ -69,17 +48,10 @@ async function loadCriticalData({context}) {
   };
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {LoaderFunctionArgs}
- */
 function loadDeferredData({context}) {
   const recommendedProducts = context.storefront
     .query(RECOMMENDED_PRODUCTS_QUERY)
     .catch((error) => {
-      // Log query errors, but don't throw them so the page can still render
       console.error(error);
       return null;
     });
@@ -105,17 +77,16 @@ export default function Homepage() {
     };
   }, []);
 
-  /** @type {LoaderReturnData} */
   const data = useLoaderData();
   const {homePage} = useRouteLoaderData('root');
 
-  // ← OPTIMIZE IMAGES HERE - Convert raw URLs to optimized URLs
-  const leftSideImagesOptimized = homePage.leftSideImages.map((image) =>
-    optimizeImageUrl(image.asset.url, imagePresets.carousel),
+  // ✅ Use pre-optimized URLs from root loader (already optimized there!)
+  const leftSideImagesOptimized = homePage.leftSideImages.map(
+    (image) => image.optimizedUrl,
   );
 
-  const rightSideImagesOptimized = homePage.rightSideImages.map((image) =>
-    optimizeImageUrl(image.asset.url, imagePresets.carousel),
+  const rightSideImagesOptimized = homePage.rightSideImages.map(
+    (image) => image.optimizedUrl,
   );
 
   return (
@@ -179,8 +150,6 @@ export default function Homepage() {
         isLoaded={isLoaded}
         shouldAnimate={shouldAnimate}
       />
-      {/* <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} /> */}
     </div>
   );
 }
@@ -266,7 +235,6 @@ function Announcement({data, isLoaded, shouldAnimate}) {
     },
     block: {
       normal: ({children}) => {
-        // Handle empty blocks as line breaks
         if (
           !children ||
           children.length === 0 ||
@@ -274,7 +242,6 @@ function Announcement({data, isLoaded, shouldAnimate}) {
         ) {
           return <br />;
         }
-
         return <p>{children}</p>;
       },
     },
@@ -292,7 +259,6 @@ function Announcement({data, isLoaded, shouldAnimate}) {
       }}
       key={'announce'}
     >
-      {/* <p style={{fontWeight: 'bold'}}>{formatDateToMmDdYyyy(data.date)}</p> */}
       <h3 style={{marginBottom: '.25rem', marginTop: '.25rem'}}>
         {data.title}
       </h3>
@@ -301,11 +267,6 @@ function Announcement({data, isLoaded, shouldAnimate}) {
   );
 }
 
-/**
- * @param {{
- *   collection: FeaturedCollectionFragment;
- * }}
- */
 function FeaturedCollection({collection}) {
   if (!collection) return null;
   const image = collection?.image;
@@ -324,11 +285,6 @@ function FeaturedCollection({collection}) {
   );
 }
 
-/**
- * @param {{
- *   products: Promise<RecommendedProductsQuery | null>;
- * }}
- */
 function RecommendedProducts({products}) {
   return (
     <div className="recommended-products">

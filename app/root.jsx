@@ -19,12 +19,11 @@ import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import {AnimatePresence, motion} from 'framer-motion';
 import {sanityClient} from './sanity/SanityClient';
 import {AnimationProvider} from './contexts/AnimationContext';
-import {optimizeImageUrl, imagePresets} from '~/sanity/imageUrlBuilder'; // ← ADD THIS
+import {optimizeImageUrl, imagePresets} from '~/sanity/imageUrlBuilder';
 
 const variants = {
   initial: {opacity: 0},
   animate: {opacity: 1},
-  // exit: {opacity: 0},
 };
 
 export function PageTransition({children}) {
@@ -34,7 +33,6 @@ export function PageTransition({children}) {
       <motion.div
         initial="initial"
         animate="animate"
-        // exit="exit"
         variants={variants}
         transition={{duration: 0.8}}
         key={location.pathname}
@@ -45,22 +43,14 @@ export function PageTransition({children}) {
   );
 }
 
-/**
- * This is important to avoid re-fetching root queries on sub-navigations
- * @type {ShouldRevalidateFunction}
- */
 export const shouldRevalidate = ({
   formMethod,
   currentUrl,
   nextUrl,
   defaultShouldRevalidate,
 }) => {
-  // revalidate when a mutation is performed e.g add to cart, login...
   if (formMethod && formMethod !== 'GET') return true;
-
-  // revalidate when manually revalidating via useRevalidator
   if (currentUrl.toString() === nextUrl.toString()) return true;
-
   return defaultShouldRevalidate;
 };
 
@@ -68,28 +58,15 @@ export function links() {
   return [
     {rel: 'stylesheet', href: resetStyles},
     {rel: 'stylesheet', href: appStyles},
-    {
-      rel: 'preconnect',
-      href: 'https://cdn.shopify.com',
-    },
-    {
-      rel: 'preconnect',
-      href: 'https://shop.app',
-    },
+    {rel: 'preconnect', href: 'https://cdn.shopify.com'},
+    {rel: 'preconnect', href: 'https://shop.app'},
     {rel: 'icon', type: 'image/png', href: favicon},
   ];
 }
 
-/**
- * @param {LoaderFunctionArgs} args
- */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
   const {storefront, env} = args.context;
 
   return defer({
@@ -104,18 +81,12 @@ export async function loader(args) {
       checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
       storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
       withPrivacyBanner: false,
-      // localize the privacy banner
       country: args.context.storefront.i18n.country,
       language: args.context.storefront.i18n.language,
     },
   });
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {LoaderFunctionArgs}
- */
 async function loadCriticalData({context}) {
   const {storefront} = context;
 
@@ -123,17 +94,15 @@ async function loadCriticalData({context}) {
     storefront.query(HEADER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
-        headerMenuHandle: 'ss-menu', // Adjust to your header menu handle
+        headerMenuHandle: 'ss-menu',
       },
     }),
-    // Add other queries here, so that they are loaded in parallel
   ]);
 
   const hours = await sanityClient
     .fetch("*[_type == 'storeHours'][0]")
     .then((response) => response);
 
-  // ← OPTIMIZE SUBSCRIBE IMAGE
   const subscribeImageRaw = await sanityClient
     .fetch("*[_type == 'settings'][0]{footer{subscribeImage{...asset->{url}}}}")
     .then((response) => response.footer.subscribeImage.url);
@@ -173,81 +142,44 @@ async function loadCriticalData({context}) {
         }
       }`,
     )
-    .then((response) => response);
-
-  return {header, hours, subscribeImage, homePage};
-}
-
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {LoaderFunctionArgs}
- */
-function loadDeferredData({context}) {
-  const {storefront, customerAccount, cart} = context;
-
-  const locations = sanityClient
-    .fetch("*[_type == 'location'][]{...,videoBackground{asset->{...,url}}}")
-    .then((response) => response);
-
-  const infoPage = sanityClient
-    .fetch("*[_type == 'info'][0]{...,backgroundImage{...,asset->{url}}}")
-    .then((response) => response);
-
-  // ← OPTIMIZE MENU IMAGES
-  const menu = sanityClient
-    .fetch(
-      "*[_type == 'menuPage'][0]{...,defaultImage{asset->{url}},bagels{flavors[]{...,image{asset->{url}}},quantities[]{...,image{asset->{url}}}}}",
-    )
     .then((response) => {
-      // Optimize all menu images
       if (response) {
-        if (response.defaultImage?.asset?.url) {
-          response.defaultImageOptimized = optimizeImageUrl(
-            response.defaultImage.asset.url,
-            imagePresets.menu,
-          );
-        }
-
-        if (response.bagels?.flavors) {
-          response.bagels.flavors = response.bagels.flavors.map((flavor) => ({
-            ...flavor,
-            imageOptimized: flavor.image?.asset?.url
-              ? optimizeImageUrl(flavor.image.asset.url, imagePresets.menu)
-              : null,
+        if (response.leftSideImages) {
+          response.leftSideImages = response.leftSideImages.map((img) => ({
+            ...img,
+            optimizedUrl: optimizeImageUrl(
+              img.asset.url,
+              imagePresets.carousel,
+            ),
           }));
         }
-
-        if (response.bagels?.quantities) {
-          response.bagels.quantities = response.bagels.quantities.map(
-            (quantity) => ({
-              ...quantity,
-              imageOptimized: quantity.image?.asset?.url
-                ? optimizeImageUrl(quantity.image.asset.url, imagePresets.menu)
-                : null,
-            }),
-          );
+        if (response.rightSideImages) {
+          response.rightSideImages = response.rightSideImages.map((img) => ({
+            ...img,
+            optimizedUrl: optimizeImageUrl(
+              img.asset.url,
+              imagePresets.carousel,
+            ),
+          }));
         }
       }
       return response;
     });
 
+  return {header, hours, subscribeImage, homePage};
+}
+
+function loadDeferredData({context}) {
+  const {storefront, customerAccount, cart} = context;
+
   return {
     cart: cart.get(),
     isLoggedIn: customerAccount.isLoggedIn(),
-    locations,
-    infoPage,
-    menu,
   };
 }
 
-/**
- * @param {{children?: React.ReactNode}}
- */
 export function Layout({children}) {
   const nonce = useNonce();
-  /** @type {RootLoader} */
   const data = useRouteLoaderData('root');
 
   return (
@@ -309,9 +241,3 @@ export function ErrorBoundary() {
     </div>
   );
 }
-
-/** @typedef {LoaderReturnData} RootLoader */
-
-/** @typedef {import('@shopify/remix-oxygen').LoaderFunctionArgs} LoaderFunctionArgs */
-/** @typedef {import('@remix-run/react').ShouldRevalidateFunction} ShouldRevalidateFunction */
-/** @typedef {import('@shopify/remix-oxygen').SerializeFrom<typeof loader>} LoaderReturnData */

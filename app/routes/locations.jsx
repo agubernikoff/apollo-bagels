@@ -1,52 +1,58 @@
 import {defer} from '@shopify/remix-oxygen';
-import {useRouteLoaderData, Await} from '@remix-run/react';
+import {useLoaderData, Await} from '@remix-run/react';
 import React, {useState, useRef, useEffect, Suspense} from 'react';
 import MediaViewer from '~/components/MediaViewer';
 import {motion} from 'framer-motion';
 import reorderArray from '~/helpers/reorderArray';
+import {sanityClient} from '~/sanity/SanityClient';
 
-/**
- * @type {MetaFunction}
- */
 export const meta = () => {
   return [{title: 'Apollo Bagels | Locations'}];
 };
 
-/**
- * @param {LoaderFunctionArgs} args
- */
-export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
+// ✅ IMPORTANT: Tell Oxygen to cache this route
+export const headers = () => ({
+  'Cache-Control': 'public, max-age=300, s-maxage=600', // Cache for 5 min (browser), 10 min (CDN)
+});
 
-  // Await the critical data required to render initial state of the page
+export async function loader(args) {
+  const deferredData = loadDeferredData(args);
   const criticalData = await loadCriticalData(args);
 
-  return defer({...deferredData, ...criticalData});
+  return defer(
+    {...deferredData, ...criticalData},
+    {
+      headers: {
+        'Cache-Control': 'public, max-age=300, s-maxage=600',
+      },
+    },
+  );
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- * @param {LoaderFunctionArgs}
- */
 async function loadCriticalData({context}) {
   return {};
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {LoaderFunctionArgs}
- */
 function loadDeferredData({context}) {
-  return {};
+  // ✅ NOW locations only load on /locations page
+  const locations = sanityClient
+    .fetch(
+      "*[_type == 'location'][]{...,videoBackground{asset->{...,url,mimeType}}}",
+    )
+    .then((response) => response)
+    .catch((error) => {
+      console.error('Error fetching locations:', error);
+      return [];
+    });
+
+  return {
+    locations,
+  };
 }
 
 export default function Locations() {
-  /** @type {LoaderReturnData} */
-  const {locations} = useRouteLoaderData('root');
+  const {locations} = useLoaderData();
+
   const condition = (loc) =>
     loc.comingSoon ||
     loc.phoneNumber === undefined ||
@@ -55,7 +61,7 @@ export default function Locations() {
 
   return (
     <div className="locations-grid">
-      <Suspense>
+      <Suspense fallback={<div>Loading locations...</div>}>
         <Await resolve={locations}>
           {(r) =>
             reorderArray(r, [(condition, condition2)], (a, b) =>
@@ -81,15 +87,13 @@ function Location({location}) {
   const parentRef = useRef(null);
 
   useEffect(() => {
-    //find all h5s
     const allH5Elements = Array.from(
       document.querySelectorAll('.location-grid-item h5'),
     );
 
-    // Find the largest h5 width excluding 'COMING SOON'
     const largestH5Width = Math.max(
       ...allH5Elements.map((h5) => {
-        if (h5.nextElementSibling.innerHTML !== 'COMING SOON')
+        if (h5.nextElementSibling?.innerHTML !== 'COMING SOON')
           return h5.offsetWidth;
         else return 0;
       }),
@@ -104,28 +108,24 @@ function Location({location}) {
         const parentWidth = parentRef.current.offsetWidth;
         const percentage = (h5Width / parentWidth) * 100;
 
-        // Update state only if the current h5 is the largest and exceeds the threshold
         if (isLargest) {
           setIsSizeExceeded(percentage > 61.99);
         }
       }
     };
 
-    // Initialize ResizeObserver
     const resizeObserver = new ResizeObserver(checkSize);
 
-    // Observe the <h5> element
     if (parentRef.current) {
       resizeObserver.observe(parentRef.current);
     }
 
-    // Cleanup on unmount
     return () => {
       if (parentRef.current) {
         resizeObserver.unobserve(parentRef.current);
       }
     };
-  }, []);
+  }, [isLargest]);
 
   useEffect(() => {
     if (isLargest)
@@ -149,6 +149,7 @@ function Location({location}) {
         );
       }
   }, [isSizeExceeded, isLargest]);
+
   const formattedAddress = (
     <a
       href={location.googleMapsLink}
@@ -164,6 +165,7 @@ function Location({location}) {
       {location.address.postalCode}
     </a>
   );
+
   const formattedHours = (
     <p style={{marginTop: '.25rem'}} className="hours-p">
       {formatStoreHours(location.hours).map((f) => (
@@ -224,16 +226,6 @@ function Location({location}) {
                 ? 'COMING SOON'
                 : 'CATERING'}
             </motion.a>
-            {/* <motion.a
-              href={`tel:${location.phoneNumber}`}
-              onMouseEnter={() => setHovered('phone')}
-              onMouseLeave={() => setHovered(null)}
-              initial={{background: 'var(--blue)'}}
-              animate={{
-                background:
-                  hovered === 'phone' ? 'var(--green)' : 'var(--blue)',
-              }}
-            >{`p. ${location.phoneNumber}`}</motion.a> */}
           </div>
         </>
       ) : (
