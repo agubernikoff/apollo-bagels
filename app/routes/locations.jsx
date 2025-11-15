@@ -70,7 +70,7 @@ function loadDeferredData({context}) {
 
 export default function Locations() {
   const {locations} = useLoaderData();
-  console.log(locations);
+
   const condition = (loc) =>
     loc.comingSoon ||
     loc.phoneNumber === undefined ||
