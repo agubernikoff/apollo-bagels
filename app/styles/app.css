@@ -1224,7 +1224,8 @@ footer.footer {
   .locations-grid {
     grid-template-columns: repeat(1, minmax(300px, 1fr));
   }
-  .media-viewer {
+  .media-viewer,
+  .media-placeholder {
     height: 60% !important;
   }
 }
@@ -1355,15 +1356,16 @@ footer.footer {
   height: 100%; /* Fallback height for placeholder */
   text-align: center;
   font-size: 1rem;
-  color: var(--color-creme);
+  background: var(--blue);
   padding: 1rem;
   border-bottom: 1px solid var(--color-creme);
+  border-radius: 14px;
 }
 
-.hours-p{
-  display:flex;
-  gap:1.5rem;
-  width:100%;
+.hours-p {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
 }
 /*
 * --------------------------------------------------

@@ -30,14 +30,9 @@ export async function loader(args) {
 }
 
 async function loadCriticalData({context}) {
-  return {};
-}
-
-function loadDeferredData({context}) {
-  // ✅ NOW locations only load on /locations page
-  const locations = sanityClient
+  const locations = await sanityClient
     .fetch(
-      "*[_type == 'location'][]{...,videoBackground{asset->{...,url,mimeType}}}",
+      "*[_type == 'location'][]{address,cateringLink,hours,orderLink,phoneNumber,title}",
     )
     .then((response) => response)
     .catch((error) => {
@@ -45,14 +40,37 @@ function loadDeferredData({context}) {
       return [];
     });
 
+  const shopifyVideos = await context.storefront
+    .query(SHOPIFY_LOCATIONS_QUERY)
+    .then((res) => res.metaobject)
+    .catch((err) => {
+      console.error('Error fetching Shopify location videos:', err);
+      return [];
+    });
+
   return {
-    locations,
+    locations: locations.map((loc) => {
+      return {
+        ...loc,
+        videoBackground: {
+          asset: {
+            ...shopifyVideos.fields.find(
+              (sV) => sV.key === loc.title.toLowerCase().replace(' ', '_'),
+            )?.reference,
+          },
+        },
+      };
+    }),
   };
+}
+
+function loadDeferredData({context}) {
+  return {};
 }
 
 export default function Locations() {
   const {locations} = useLoaderData();
-
+  console.log(locations);
   const condition = (loc) =>
     loc.comingSoon ||
     loc.phoneNumber === undefined ||
@@ -305,3 +323,35 @@ const formatStoreHours = (hours) => {
     return `${dayRange}: ${timeRange}`;
   });
 };
+
+const SHOPIFY_LOCATIONS_QUERY = `#graphql
+query GetLocationVideos {
+  metaobject(handle: {type: "location_videos", handle: "location-videos-ezqhtbso"}) {
+    id
+    type
+    handle
+    fields {
+      key
+      value
+      reference {
+        __typename
+        ... on MediaImage {
+          image {
+            url
+          }
+        }
+        ... on Video {
+          sources {
+            url
+            mimeType
+          }
+          previewImage {
+            url
+          }
+        }
+      }
+    }
+  }
+}
+
+`;

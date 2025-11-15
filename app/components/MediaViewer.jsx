@@ -12,6 +12,52 @@ const MediaViewer = ({file, posterImage}) => {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
 
+  // Determine if the file is an image or video based on its MIME type
+  const isImage = file?.mimeType?.startsWith('image/');
+  const isVideo =
+    file?.mimeType?.startsWith('video/') || file.__typename === 'Video';
+
+  useEffect(() => {
+    if (!isVideo) return;
+
+    const target = videoRef.current || containerRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+
+        if (entry.isIntersecting) {
+          // Load & play when visible
+          setShouldLoadVideo(true);
+
+          requestAnimationFrame(() => {
+            if (videoRef.current) {
+              videoRef.current.play().catch(() => {});
+            }
+          });
+        } else {
+          // Pause immediately when leaving viewport
+          setShouldLoadVideo(false);
+          if (videoRef.current) {
+            videoRef.current.pause();
+          }
+        }
+      },
+      {
+        threshold: 0.35, // play when 35% visible
+        rootMargin: '0px 0px 200px 0px', // preload a bit before entering
+      },
+    );
+
+    observer.observe(target);
+
+    return () => {
+      observer.unobserve(target);
+      observer.disconnect();
+    };
+  }, [isVideo]);
+
   if (!file) {
     return (
       <div className="media-placeholder">
@@ -19,10 +65,6 @@ const MediaViewer = ({file, posterImage}) => {
       </div>
     );
   }
-
-  // Determine if the file is an image or video based on its MIME type
-  const isImage = file.mimeType?.startsWith('image/');
-  const isVideo = file.mimeType?.startsWith('video/');
 
   // Error message for unsupported file types
   if (!isImage && !isVideo) {
@@ -34,46 +76,6 @@ const MediaViewer = ({file, posterImage}) => {
   }
 
   // Use Intersection Observer to detect when video enters viewport
-  useEffect(() => {
-    if (!isVideo || !containerRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // Video is visible - load and play it
-            setShouldLoadVideo(true);
-            setTimeout(() => {
-              if (videoRef.current) {
-                videoRef.current.play().catch(() => {
-                  // Ignore autoplay errors
-                });
-                setIsPlaying(true);
-              }
-            }, 100);
-          } else {
-            // Video is out of view - pause it
-            if (videoRef.current && isPlaying) {
-              videoRef.current.pause();
-              setIsPlaying(false);
-            }
-          }
-        });
-      },
-      {
-        threshold: 0.5, // Video must be 50% visible to start playing
-        rootMargin: '50px', // Start loading slightly before it enters viewport
-      },
-    );
-
-    observer.observe(containerRef.current);
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, [isVideo, isPlaying]);
 
   // Handle errors during loading
   const handleError = () => {
@@ -101,25 +103,8 @@ const MediaViewer = ({file, posterImage}) => {
       )}
       {isVideo && (
         <>
-          {/* Show poster image before video loads */}
-          {!shouldLoadVideo && posterImage?.asset?.url && (
-            <img
-              src={optimizeImageUrl(
-                posterImage.asset.url,
-                imagePresets.location,
-              )}
-              alt="Video thumbnail"
-              className="media-element"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
-            />
-          )}
-
           {/* Fallback if no poster image */}
-          {!shouldLoadVideo && !posterImage?.asset?.url && (
+          {!shouldLoadVideo && !file.previewImage && (
             <div
               className="media-element video-placeholder"
               style={{
@@ -130,11 +115,26 @@ const MediaViewer = ({file, posterImage}) => {
             />
           )}
 
+          {/* Show poster image before video loads */}
+          {!shouldLoadVideo && (
+            <img
+              src={file.previewImage?.url}
+              alt="Video thumbnail"
+              className="media-element"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+              }}
+            />
+          )}
+
           {/* Only load video when in viewport - saves massive bandwidth! */}
           {shouldLoadVideo && (
             <video
               ref={videoRef}
-              src={file.url}
+              src={file.sources.find((src) => src.url.includes('HD-1080')).url}
+              poster={file.previewImage.url}
               loop
               muted
               playsInline
