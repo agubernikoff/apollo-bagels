@@ -67,7 +67,8 @@ export function ProductForm({
                           ? 'var(--color-creme)'
                           : 'transparent',
                         color: selected ? 'var(--blue)' : 'var(--color-creme)',
-                        opacity: available ? 1 : 0.3,
+                        opacity:
+                          available || value.variant.availableForSale ? 1 : 0.3,
                       }}
                     >
                       <ProductOptionSwatch swatch={swatch} name={name} />
@@ -88,7 +89,8 @@ export function ProductForm({
                       key={option.name + name}
                       style={{
                         border: '1px solid var(--color-creme)',
-                        opacity: available ? 1 : 0.3,
+                        opacity:
+                          available || value.variant.availableForSale ? 1 : 0.3,
                       }}
                       disabled={!exists}
                       onClick={() => {

@@ -377,7 +377,7 @@ function CartBadge({count}) {
             opacity: changed ? 1 : 0,
           }}
           exit={{opacity: 0}}
-          transition={{duration: 0.5}}
+          transition={{duration: 0.5, delay: changed ? 0.25 : 0}}
           style={{position: 'absolute'}}
         >
           {'Added! '}
@@ -389,7 +389,7 @@ function CartBadge({count}) {
             opacity: !changed ? 1 : 0,
           }}
           exit={{opacity: 0}}
-          transition={{duration: 0.5}}
+          transition={{duration: 0.5, delay: !changed ? 0.25 : 0}}
           style={{position: 'absolute'}}
         >
           {'Cart '}
