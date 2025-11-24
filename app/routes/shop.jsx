@@ -40,7 +40,7 @@ export default function ShopPage() {
     <div className="shop-page">
       <div className="products-grid">
         {products.nodes
-          .filter((p) => !p.title.includes('gift'))
+          .filter((p) => p.title.includes('Gift'))
           .map((product) => (
             <ProductItem key={product.id} product={product} />
           ))}
