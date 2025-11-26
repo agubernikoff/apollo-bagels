@@ -188,9 +188,6 @@ export default function Product() {
             selectedVariant={initial ? null : selectedVariant}
             setInitial={setInitial}
           >
-            <div className="product-description">
-              <p>Johns height is 6'9</p>
-            </div>
 
             <div className="product-details">
               <p style={{fontFamily: 'HAL-BOLD', marginBottom: '-.5rem'}}>
