@@ -31,7 +31,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
 
   const {pathname} = useLocation();
 
-  console.log(scrolled);
+  // console.log(scrolled);
 
   return (
     <header className="header">

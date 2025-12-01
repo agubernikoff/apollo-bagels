@@ -1783,6 +1783,9 @@ footer.footer {
     height: 60vh;
     overscroll-behavior-y: none;
   }
+  .product-page {
+    padding-bottom: 5vh;
+  }
 
   .header {
     font-size: 33px;

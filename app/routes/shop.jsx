@@ -19,15 +19,15 @@ export async function loader({context, request}) {
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {pageBy: 12}); // Adjust number of products per page as needed
 
-  const {products} = await storefront.query(CATALOG_QUERY, {
-    variables: {...paginationVariables},
+  const {collection} = await storefront.query(CATALOG_QUERY, {
+    variables: {...paginationVariables, handle: 'frontpage'},
   });
 
-  if (!products) {
+  if (!collection?.products) {
     throw new Response('Products not found', {status: 404});
   }
 
-  return defer({products});
+  return defer({products: collection.products});
 }
 
 /**
@@ -39,11 +39,9 @@ export default function ShopPage() {
   return (
     <div className="shop-page">
       <div className="products-grid">
-        {products.nodes
-          .filter((p) => p.title.includes('Gift'))
-          .map((product) => (
-            <ProductItem key={product.id} product={product} />
-          ))}
+        {products.nodes.map((product) => (
+          <ProductItem key={product.id} product={product} />
+        ))}
       </div>
     </div>
   );
@@ -322,14 +320,28 @@ const CATALOG_QUERY = `#graphql
     $last: Int
     $startCursor: String
     $endCursor: String
+    $handle: String!
   ) @inContext(country: $country, language: $language) {
-    products(first: $first, last: $last, before: $startCursor, after: $endCursor) {
-      nodes {
-        ...ProductItem
-      }
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
+    collection(handle: $handle) {
+      id
+      handle
+      title
+      description
+      products(
+        first: $first,
+        last: $last,
+        before: $startCursor,
+        after: $endCursor
+      ) {
+        nodes {
+          ...ProductItem
+        }
+        pageInfo {
+          hasPreviousPage
+          hasNextPage
+          endCursor
+          startCursor
+        }
       }
     }
   }

@@ -240,11 +240,11 @@ export default function MobileFooter({hours}) {
       const atBottom =
         mainElement.scrollTop + mainElement.clientHeight >=
         mainElement.scrollHeight;
-      console.log('allowscroll: ', atBottom);
+      // console.log('allowscroll: ', atBottom);
 
       if (atBottom) {
         mainElement.style.overflow = 'hidden';
-        document.body.scrollTo({top: 105, behavior: 'smooth'});
+        document.body.scrollTo({top: 50, behavior: 'smooth'});
       } else mainElement.style.overflow = 'scroll';
     }
     const handleTouchStart = (e) => {

@@ -174,7 +174,7 @@ export default function Product() {
           </div>
           <ProductForm
             productOptions={
-              initial
+              initial && productOptions.find((o) => o.optionValues.length > 1)
                 ? [...productOptions].map((option) => {
                     return {
                       ...option,
@@ -185,10 +185,13 @@ export default function Product() {
                   })
                 : productOptions
             }
-            selectedVariant={initial ? null : selectedVariant}
+            selectedVariant={
+              initial && productOptions.find((o) => o.optionValues.length > 1)
+                ? null
+                : selectedVariant
+            }
             setInitial={setInitial}
           >
-
             <div className="product-details">
               <p style={{fontFamily: 'HAL-BOLD', marginBottom: '-.5rem'}}>
                 DETAILS:
