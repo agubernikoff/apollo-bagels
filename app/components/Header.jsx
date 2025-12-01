@@ -77,73 +77,6 @@ export function HeaderMenu({
   const className = `header-menu`;
   const {close} = useAside();
 
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(max-width: 499px)');
-
-    // Update state initially and on changes
-    const updateIsMobile = (e) => setIsMobile(e.matches);
-    mediaQuery.addEventListener('change', updateIsMobile);
-    setIsMobile(mediaQuery.matches);
-
-    return () => mediaQuery.removeEventListener('change', updateIsMobile);
-  }, []);
-
-  function moveArrayElement(arr, fromIndex, toIndex) {
-    const newArr = [...arr]; // Create a shallow copy of the array
-    const [element] = newArr.splice(fromIndex, 1); // Remove the element
-    newArr.splice(toIndex, 0, element); // Insert the element at the new position
-    return newArr; // Return the new array
-  }
-
-  const info = menu.items.find((i) => i.title === 'Info');
-  const indexOfInfo = menu.items.indexOf(info);
-
-  const [dynamicMenu, setDynamicMenu] = useState(
-    (menu || FALLBACK_HEADER_MENU).items,
-  );
-
-  useEffect(() => {
-    const originalMenu = (menu || FALLBACK_HEADER_MENU).items;
-    if (isMobile) {
-      const newOrder = moveArrayElement(originalMenu, indexOfInfo, 3);
-      const shop = newOrder.find((i) => i.title === 'Shop');
-      const indexOfShop = newOrder.indexOf(shop);
-      setDynamicMenu(moveArrayElement(newOrder, indexOfShop, 4));
-    } else {
-      setDynamicMenu(originalMenu); // Reset to the original order
-    }
-  }, [isMobile, menu, indexOfInfo]);
-
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const updateHeaderHeight = () => {
-      if (ref.current) {
-        document.documentElement.style.setProperty(
-          '--header-height',
-          `calc(${ref.current.offsetHeight}px + 3.5rem)`,
-        );
-        document.documentElement.style.setProperty(
-          '--mobile-header-height',
-          `calc(${ref.current.offsetHeight}px + 1.25rem)`,
-        );
-      }
-    };
-
-    // Initialize and listen to size changes
-    const resizeObserver = new ResizeObserver(updateHeaderHeight);
-    if (ref.current) {
-      resizeObserver.observe(ref.current);
-    }
-
-    // Cleanup observer on unmount
-    return () => {
-      if (ref.current) {
-        resizeObserver.unobserve(ref.current);
-      }
-    };
-  }, [dynamicMenu]);
   const analytics = useAnalytics();
   const [changed, setIsChanged] = useState(false);
 
@@ -166,8 +99,7 @@ export function HeaderMenu({
       layout
       className={className}
       role="navigation"
-      ref={ref}
-      initial={{y: pathname === '/' || isMobile ? -500 : 0}}
+      initial={{y: pathname === '/' ? -500 : 0}}
       animate={{y: 0}}
       transition={{
         ease: 'easeInOut',
@@ -175,7 +107,7 @@ export function HeaderMenu({
         duration: 0.6,
       }}
     >
-      {dynamicMenu.map((item) => {
+      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
         // If the URL is internal, strip the domain
