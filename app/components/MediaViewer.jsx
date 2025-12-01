@@ -7,7 +7,7 @@ import {optimizeImageUrl, imagePresets} from '~/sanity/imageUrlBuilder';
  */
 const MediaViewer = ({file, posterImage}) => {
   const [error, setError] = useState(false);
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -29,7 +29,7 @@ const MediaViewer = ({file, posterImage}) => {
 
         if (entry.isIntersecting) {
           // Load & play when visible
-          setShouldLoadVideo(true);
+          // setShouldLoadVideo(true);
 
           requestAnimationFrame(() => {
             if (videoRef.current) {
@@ -38,7 +38,7 @@ const MediaViewer = ({file, posterImage}) => {
           });
         } else {
           // Pause immediately when leaving viewport
-          setShouldLoadVideo(false);
+          // setShouldLoadVideo(false);
           if (videoRef.current) {
             videoRef.current.pause();
           }
@@ -46,7 +46,7 @@ const MediaViewer = ({file, posterImage}) => {
       },
       {
         threshold: 0.35, // play when 35% visible
-        rootMargin: '0px 0px 200px 0px', // preload a bit before entering
+        rootMargin: '0px 0px 0px 0px', // preload a bit before entering
       },
     );
 

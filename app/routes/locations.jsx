@@ -84,7 +84,7 @@ export default function Locations() {
           {(r) =>
             reorderArray(r, [(condition, condition2)], (a, b) =>
               a.title.localeCompare(b.title),
-            ).map((loc) => <Location key={loc._id} location={loc} />)
+            ).map((loc) => <Location key={loc.title} location={loc} />)
           }
         </Await>
       </Suspense>
