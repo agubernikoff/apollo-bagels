@@ -66,7 +66,7 @@ export default function Catering() {
             fontFamily: 'HAL-BOLD',
             fontSize: '36px',
             color: 'var(--blue)',
-            minHeight: 'calc(100vh - var(--header-height) - 5rem)',
+            minHeight: 'calc(100svh - var(--header-height) - 5rem)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

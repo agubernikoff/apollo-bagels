@@ -15,11 +15,18 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop =
-        window.pageYOffset || document.documentElement.scrollTop;
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        Array.from(document.querySelectorAll('main'))[3].scrollTop;
       setScrolled(scrollTop > 0);
     };
 
     window.addEventListener('scroll', handleScroll, {passive: true});
+    Array.from(document.querySelectorAll('main'))[3].addEventListener(
+      'scroll',
+      handleScroll,
+      {passive: true},
+    );
 
     // Check initial scroll position
     handleScroll();
@@ -36,6 +43,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain, hours}) {
   return (
     <header className="header">
       <div
+        className="header-gradient"
         style={{
           background: scrolled
             ? 'linear-gradient(to bottom, var(--color-creme),transparent)'

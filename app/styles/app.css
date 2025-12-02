@@ -1780,8 +1780,13 @@ footer.footer {
     width: 100%;
   }
   main {
-    height: 60vh;
+    /* height: 60vh; */
+    padding-bottom: calc(100lvh - 100svh + 50px + 1rem);
     overscroll-behavior-y: none;
+    box-sizing: border-box;
+  }
+  .header-gradient {
+    height: var(--mobile-header-height) !important;
   }
   .product-page {
     padding-bottom: 5vh;
