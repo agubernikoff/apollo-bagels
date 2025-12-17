@@ -296,17 +296,19 @@ const formatStoreHours = (hours) => {
   daysOrder.forEach((day) => {
     if (!hours[day]) return;
 
-    const {start, end} = hours[day];
+    const {start, end, closed} = hours[day];
 
     if (
       !currentGroup ||
       currentGroup.start !== start ||
-      currentGroup.end !== end
+      currentGroup.end !== end ||
+      Boolean(currentGroup.closed) !== Boolean(closed)
     ) {
       currentGroup = {
         days: [day],
         start,
         end,
+        closed,
       };
       groups.push(currentGroup);
     } else {
@@ -319,7 +321,9 @@ const formatStoreHours = (hours) => {
     const lastDay = dayAbbreviations[group.days[group.days.length - 1]];
     const dayRange =
       group.days.length === 1 ? firstDay : `${firstDay}-${lastDay}`;
-    const timeRange = `${formatTime(group.start)}-${formatTime(group.end)}`;
+    const timeRange = group.closed
+      ? 'CLOSED'
+      : `${formatTime(group.start)}-${formatTime(group.end)}`;
     return `${dayRange}: ${timeRange}`;
   });
 };
