@@ -32,7 +32,7 @@ export async function loader(args) {
 async function loadCriticalData({context}) {
   const locations = await sanityClient
     .fetch(
-      "*[_type == 'location'][]{address,cateringLink,hours,orderLink,phoneNumber,title}",
+      "*[_type == 'location'][]{comingSoon,address,cateringLink,hours,orderLink,phoneNumber,title}",
     )
     .then((response) => response)
     .catch((error) => {
@@ -82,7 +82,7 @@ export default function Locations() {
       <Suspense fallback={<div>Loading locations...</div>}>
         <Await resolve={locations}>
           {(r) =>
-            reorderArray(r, [(condition, condition2)], (a, b) =>
+            reorderArray(r, [condition, condition2], (a, b) =>
               a.title.localeCompare(b.title),
             ).map((loc) => <Location key={loc.title} location={loc} />)
           }
