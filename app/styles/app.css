@@ -1353,11 +1353,11 @@ footer.footer {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%; /* Fallback height for placeholder */
+  height: 75%; /* Fallback height for placeholder */
   text-align: center;
   font-size: 1rem;
   background: var(--blue);
-  padding: 1rem;
+  /* padding: 1rem; */
   border-bottom: 1px solid var(--color-creme);
   border-radius: 14px;
 }
