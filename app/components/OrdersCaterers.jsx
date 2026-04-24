@@ -97,7 +97,7 @@ function Location({
       ? orderLink
       : pathname === '/catering'
       ? cateringLink
-      : '#';
+      : null;
 
   return (
     <motion.div
@@ -106,7 +106,7 @@ function Location({
       animate={{x: hovered ? '1vw' : 0}}
       transition={{ease: 'easeInOut'}}
       style={
-        comingSoon || link === undefined || Object.keys(address).length <= 2
+        comingSoon || !link || Object.keys(address).length <= 2
           ? {opacity: 0.33}
           : null
       }
@@ -150,9 +150,7 @@ function Location({
               color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
             }}
           >
-            {!comingSoon &&
-            link !== undefined &&
-            Object.keys(address).length > 2
+            {!comingSoon && link && Object.keys(address).length > 2
               ? formattedAddress
               : 'COMING SOON'}
           </p>
@@ -214,9 +212,7 @@ function Location({
                 color: pathname === '/order' ? 'var(--creme)' : 'var(--blue)',
               }}
             >
-              {!comingSoon &&
-              link !== undefined &&
-              Object.keys(address).length > 2
+              {!comingSoon && link && Object.keys(address).length > 2
                 ? formattedAddress
                 : 'COMING SOON'}
             </a>

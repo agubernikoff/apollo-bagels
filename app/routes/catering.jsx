@@ -54,9 +54,7 @@ export default function Catering() {
   const {locations} = useLoaderData();
 
   const condition = (loc) =>
-    loc.comingSoon ||
-    Object.keys(loc.address).length <= 2 ||
-    loc.cateringLink === undefined;
+    loc.comingSoon || Object.keys(loc.address).length <= 2 || !loc.cateringLink;
 
   return (
     <div>
