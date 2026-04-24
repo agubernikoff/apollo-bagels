@@ -60,7 +60,7 @@ export default function Catering() {
 
   return (
     <div>
-      {true ? (
+      {/* {true ? (
         <p
           style={{
             fontFamily: 'HAL-BOLD',
@@ -74,19 +74,19 @@ export default function Catering() {
         >
           Coming Soon!
         </p>
-      ) : (
-        <Suspense fallback={<div>Loading...</div>}>
-          <Await resolve={locations}>
-            {(r) => (
-              <OrdersCaterers
-                data={reorderArray(r, [condition], (a, b) =>
-                  a.title.localeCompare(b.title),
-                )}
-              />
-            )}
-          </Await>
-        </Suspense>
-      )}
+      ) : ( */}
+      <Suspense fallback={<div>Loading...</div>}>
+        <Await resolve={locations}>
+          {(r) => (
+            <OrdersCaterers
+              data={reorderArray(r, [condition], (a, b) =>
+                a.title.localeCompare(b.title),
+              )}
+            />
+          )}
+        </Await>
+      </Suspense>
+      {/* )} */}
     </div>
   );
 }
