@@ -1,4 +1,10 @@
-import {useNonce, getShopAnalytics, Analytics} from '@shopify/hydrogen';
+import {
+  useNonce,
+  getShopAnalytics,
+  Analytics,
+  createWithCache,
+  CacheLong,
+} from '@shopify/hydrogen';
 import {defer} from '@shopify/remix-oxygen';
 import {
   Links,
@@ -43,15 +49,12 @@ export function PageTransition({children}) {
   );
 }
 
-export const shouldRevalidate = ({
-  formMethod,
-  currentUrl,
-  nextUrl,
-  defaultShouldRevalidate,
-}) => {
+// FIX 1: return false instead of defaultShouldRevalidate
+// This stops the root loader from re-running on every navigation
+export const shouldRevalidate = ({formMethod, currentUrl, nextUrl}) => {
   if (formMethod && formMethod !== 'GET') return true;
   if (currentUrl.toString() === nextUrl.toString()) return true;
-  return defaultShouldRevalidate;
+  return false;
 };
 
 export function links() {
@@ -90,81 +93,86 @@ export async function loader(args) {
 async function loadCriticalData({context}) {
   const {storefront} = context;
 
-  const [header] = await Promise.all([
+  // FIX 2: wrap Sanity fetches with createWithCache so Oxygen caches them at the edge
+  const withCache = createWithCache({
+    cache: context.cache,
+    waitUntil: context.waitUntil,
+    request: context.request,
+  });
+
+  const [header, hours, subscribeImageRaw, homePage] = await Promise.all([
     storefront.query(HEADER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
         headerMenuHandle: 'ss-menu',
       },
     }),
-  ]);
-
-  const hours = await sanityClient
-    .fetch("*[_type == 'storeHours'][0]")
-    .then((response) => response);
-
-  const subscribeImageRaw = await sanityClient
-    .fetch("*[_type == 'settings'][0]{footer{subscribeImage{...asset->{url}}}}")
-    .then((response) => response.footer.subscribeImage.url);
-
-  const subscribeImage = optimizeImageUrl(subscribeImageRaw, {
-    width: 800,
-    quality: 85,
-    format: 'webp',
-  });
-
-  const homePage = await sanityClient
-    .fetch(
-      `*[_type == 'home'][0]{
-        ...,
-        leftSideImages[]{...,asset->{url}},
-        rightSideImages[]{...,asset->{url}},
-        announcement{
+    withCache.run(
+      {cacheKey: ['sanity', 'hours'], cacheStrategy: CacheLong()},
+      () => sanityClient.fetch("*[_type == 'storeHours'][0]"),
+    ),
+    withCache.run(
+      {cacheKey: ['sanity', 'subscribeImage'], cacheStrategy: CacheLong()},
+      () =>
+        sanityClient.fetch(
+          "*[_type == 'settings'][0]{footer{subscribeImage{...asset->{url}}}}",
+        ),
+    ),
+    withCache.run(
+      {cacheKey: ['sanity', 'homePage'], cacheStrategy: CacheLong()},
+      () =>
+        sanityClient.fetch(
+          `*[_type == 'home'][0]{
           ...,
-          description[]{
+          leftSideImages[]{...,asset->{url}},
+          rightSideImages[]{...,asset->{url}},
+          announcement{
             ...,
-            markDefs[]{
+            description[]{
               ...,
-              _type == "linkProduct" => {
+              markDefs[]{
                 ...,
-                productWithVariant{
+                _type == "linkProduct" => {
                   ...,
-                  product->{
+                  productWithVariant{
                     ...,
-                    store{
-                      ...
+                    product->{
+                      ...,
+                      store{
+                        ...
+                      }
                     }
                   }
                 }
               }
             }
           }
-        }
-      }`,
-    )
-    .then((response) => {
-      if (response) {
-        if (response.leftSideImages) {
-          response.leftSideImages = response.leftSideImages.map((img) => ({
-            ...img,
-            optimizedUrl: optimizeImageUrl(
-              img.asset.url,
-              imagePresets.carousel,
-            ),
-          }));
-        }
-        if (response.rightSideImages) {
-          response.rightSideImages = response.rightSideImages.map((img) => ({
-            ...img,
-            optimizedUrl: optimizeImageUrl(
-              img.asset.url,
-              imagePresets.carousel,
-            ),
-          }));
-        }
-      }
-      return response;
-    });
+        }`,
+        ),
+    ),
+  ]);
+
+  const subscribeImage = optimizeImageUrl(
+    subscribeImageRaw.footer.subscribeImage.url,
+    {
+      width: 800,
+      quality: 85,
+      format: 'webp',
+    },
+  );
+
+  if (homePage?.leftSideImages) {
+    homePage.leftSideImages = homePage.leftSideImages.map((img) => ({
+      ...img,
+      optimizedUrl: optimizeImageUrl(img.asset.url, imagePresets.carousel),
+    }));
+  }
+  if (homePage?.rightSideImages) {
+    homePage.rightSideImages = homePage.rightSideImages.map((img) => ({
+      ...img,
+      optimizedUrl: optimizeImageUrl(img.asset.url, imagePresets.carousel),
+    }));
+  }
 
   return {header, hours, subscribeImage, homePage};
 }
